@@ -1018,7 +1018,10 @@ const generateRandomAppointment = () => ({
 
 const generateRandomAppointments = num =>
   Array(num)
-    .fill(0)
+    .fill(0) // why fill with 0 before mapping? The undefineds are replaced by zeros, but why?
+    /* see MDN ( https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Array ): A JavaScript array is initialized with the given elements, except in the case where a single argument is passed to the Array constructor and that argument is a number (see the arrayLength parameter below). 
+    imho: skip fill(0)
+    */
     .map(_ => generateRandomAppointment());
 
 export default generateRandomAppointments;
