@@ -1,8 +1,8 @@
 # Design and plan to implement dentist app:
 
 # June 27th
-Time to make design below (today and June 26th combined): 2 hours
-Time left to implement: 11.5 hours (challenge: trying to complete assignment in 16 hours)
+Time to make design below (today and June 26th combined): 5 hours
+Time left to implement: 8.5 hours (challenge: trying to complete assignment in 16 hours)
 
 * create branch 'create_mock-data' (see June 26th) and checkout this branch.
   scope of work on this branch: 
@@ -71,13 +71,16 @@ Time left to implement: 11.5 hours (challenge: trying to complete assignment in 
                 time= "2010",
                 patient= Darwish_953462,
                 treatmentType= "parodontology", --> implement later as bonus assignment.
-                dentist= Ayad_083596,
+                dentistId= Ayad_083596,
                 assistant= Bakir_03949463,
                 key={index}    
                 isUpdateAppointment: false, --> while appointment is updated (see use case 'update an appointment' below), the boolean is set to true. 
             }
     
-    Add this data (nrs 1-3) each separately to (winc requirement:) 'one JavaScript object with all data as the state of the app'. For each data (nrs 1-3) use a different redux-toolkit-slice 'Action.Type'. Put the data (nrs 1-3) into the global state inside the useEffect hook. Put this useEffect hook inside component Appointment.js . 
+    Add this data (nrs 1-3) each separately to (winc requirement:) 'one JavaScript object with all data as the state of the app'. For each data (nrs 1-3) use a different redux-toolkit-slice 'Action.Type'. Put the data (nrs 1-3) into the global state inside the useEffect hook. Put this useEffect hook inside component App.js . 
+    Currently the global state is loaded into App.js with line:
+    const appointments = generateRandomAppointments(70);
+    problem with this: after each re-render the data in appointments will be reset with "generateRandomAppointments(70);". So using a useEffect hook is a must here.
  
     use case: create dentist appointment:
     - step 01: 
@@ -93,7 +96,7 @@ Time left to implement: 11.5 hours (challenge: trying to complete assignment in 
 
         Naming:
         Components Patient.js, Dentist.js and Assistant.js are subdivided in e.g. AddPatient.js and DisplayPatient.js. But "Appointment.js" has the calendar(month) and day view to display the appointments. So I call "Appointment.js" instead "AddAppointment.js", because that is what the component does. 
-        
+
 
     - step 02: Then validations will be performed:
         1. Is dentist available timewise? --> if not, show alert 'dentist already appointment scheduled at this day and time.
@@ -111,10 +114,192 @@ Time left to implement: 11.5 hours (challenge: trying to complete assignment in 
     - step 03: 
         If dentist and assistant are availabe, then (after click on button 'add appointment') the appointment will be added to the global state object, and from there rendered to the Calendar (month) View and the Day View. 
 
-        time, dentist and assistant together would serve as an alternative primary key, if dentist-appointments were stored in a relational db. 
+        time, dentist and assistant together would not serve as an alternative primary key, if dentist-appointments were stored in a relational db, because both the dentist as well as the assistent are optional fields and the patient can have 2 appointments scheduled for the upcoming month. 
+
+Branches (updated from  June 26th):
+
+Feature branches: 18 in total:
+1. create_mock_data  --> see https://www.mockaroo.com/ 
+    When you start your React app, the following entities have to be in your system:
+    4 dentists
+    2 assistants
+    50 clients
+    150 appointments
+    Use one JaveScript object with all data as the state of the app.
 
 
-    Design phase / thinking upfront / proof of concept is ready. Time to write code. 
+
+2. add_dentist: 
+    - add a dentist: newState = addDentist(state, "Toos", "Trekker", "06-12345678", "toos@tandartspraktijkbvt.nl")
+        example dentist object:
+            Ayad_083596 = {
+                dentistId= Ayad_083596,
+                firstName= "James",
+                lastName= Ayad,
+                phoneNr="0612345678",
+                email="James.Ayad@dentistcompanybvt.com",
+                treatmentType= ["periodontalDisease", "filling", "brace", "crown", "dentalVeneer"]     --> implement later as bonus assignment
+                key={index}   --> use randomn nr as index
+            }
+
+3. add_assistant: no winc-requirements about CRUD assistants.
+  - so I will use Mockaroo to load 6 assistants (minimum of 2 is required)
+        example assistant object:
+            Bakir_03949463 = {
+                dentistId= Bakir_03949463,
+                firstName= "Michael",
+                lastName= Bakir,
+                phoneNr="0600345678",
+                email="Michael.Bakir@dentistcompanybvt.com",
+                key={index}   --> use randomn nr as index
+            }
+
+
+4. add_client:
+    - add a client: newState = addPatient(state, "Piet", "Auw", "06-12345679", "piet@wincacademy.nl", 1985)
+        example client object:
+            Johnson05439432 = {
+                clientId=   Johnson05439432,
+                firstName= "Abhilash",
+                lastName= Johnson,
+                phoneNr="0612340012",
+                email="Abhilash.Johnson@hotmail.com",
+                key={index}   --> use randomn nr as index
+            }
+
+
+5. add_appointment_without_assistant
+    - add an appointment without an assistant: newState = addAppointment(state, dayNumber, time, patientId, dentistId) Note: an appointment on a day + time can only be added when the choosen dentist and/or assistant is available.
+
+    winc-requirements:
+    An appointment is always with one client.
+    An appointment is always with one dentist.
+    The practice is closed on the weekend.
+
+
+
+6. add_appointment_with_assistant
+    - add an appointment with an assistant: newState = addAppointment(state, dayNumber, time, patientId, dentistId, assistentId)
+
+    winc-requirements:
+    An appointment is always with one client.
+    An appointment is always with one dentist.
+    The practice is closed on the weekend.
+
+7. delete_appointment
+    - delete an appointment: newState = removeAppointment(state, appointmentId)
+    --> later in the bonus requirements: replace this fn call (inside the business logic of component Appointments) by a button 'delete (this) appointment' (with default inverse data flow) in the Calender (month) View and in the Day View.     
+    
+    If you compare this functionality to that of 'cancel_appointments_because_client_is_ill' (see the next item): here you delete 1 appointment at a time and there can be many reasons to delete this appointment (you could even misuse it to  delete an appointment because the patient is ill :) ).
+
+
+
+
+
+8. give_appointment_without_dentist_red_background_color
+   winc-requirement: When an appointment does not have a dentist due to e.g. sickness then give this appointment a red background color. 
+   --> the reason could also be e.g. holiday, stuck in  traffic, etc.
+   --> scope: 1 specific appointment 
+   --> where to implement: select appointment in either the Day View, or the Calender (month) view (and use inverse data flow to update state)
+   --> so you could remove the dentist from multiple appointments manually in the Calender (month) and Day View, but you do this sequentially, 1 at a time. 
+   --> what needs to be built: remove dentist from existing appointment. If (optional) field dentist is empty, then via conditional rendering add red_background_color.
+
+
+9. give_appointments_of_sick_dentist_a_red_background_color
+   winc-requirement: "a dentist becomes sick. Give each of his or her appointments a red background colour". --> do this in the Day View and in the Calendar (month) View: 
+   newState = makeDentistSick(state, dentistId)" 
+   winc-requirement: "dentists (and assistants) can become sick. They won't be able to work that day."
+    sick = affected by physical or mental illness.
+   --> Appointments are scheduled for next month. Possible that a dentist will still be ill (part of) the next month. So if a dentist gets ill (right now) then automatically a red_background_color around will be added to all of his/her appointments. This mechanism serves as an early warning to the planner of the dentist appointments. 
+   --> scope: all working days of the upcoming month.
+   --> where to implement: in component Dentist.js --> subcomponent DisplayDentist.js check checkbox 'dentist is ill'. As a result of this all of his appointments (0, 1 or more) will get a red background color. 
+
+
+    --> later in the bonus requirements: replace this fn call (inside the business logic of component Appointments) by a button 'put_red_background_around_appointments_of_sick_dentist' in the Calender (month) View and in the Day View. 
+
+
+10. give_appointments_of_sick_assistant_an_orange_background_color
+   winc-requirement: "(dentists and) assistants can become sick. They won't be able to work that day."
+   There are no requirements about what needs to happen when an assistant becomes sick.
+   Suggestion (if time left): "if an assistant becomes sick. Give each of his or her appointments an orange background colour".
+   The rest of the code is the same as when a dentist becomes sick (see give_appointments_of_sick_dentist_a_red_background_color )
+   corner case: if dentist and assistant are sick, then show orange (inner) and red (outer) background color.
+
+
+
+11. cancel_appointments_because_client_is_ill
+    - a client is sick, delete his appointments: newState = makePatientSick(state, patientId)
+    --> later in the bonus requirements: replace this fn call (inside the business logic of component Appointments) by a button (or stateful checkbox) in the component Patient.js . If you click this button (or check the checkbox), then all appointments (0, 1 or more) in the upcoming month will be deleted for this patient. 
+    If time left then implement use case: if the checkbox in component Patient.js indicates that that a patient is ill (i.e. is switched on), any attempt to add a new appointment (in component AddAppointment ) will display the alert('Please check that patient has cured and is fit enough for a new appointment. If so, please uncheck checkbox 'patient is ill' on webpage Patient ). Patient will get its own Route and Link in React Router. 
+
+
+12. move_appointment
+    - move an appointment: newState = moveAppointment(state, appointmentId, newDayNumber, newTime) Note: dentists and assistants can't have two appointments simultaneously.   
+    Reuse the same logic from component 'AddAppointment' for checking if the dentist and/or assistant already has an appointment on that day-time. 
+    If possible, put this logic inside of a Redux-toolkit-slice. 
+
+13. sort_calendar_view
+    - In the calendar view, the appointments are currently not sorted based on time. You still have to build this.
+    - In the day view, the appointments are not sorted on time. You will also have to implement this.
+    I expect the same solution to sort both the calendar view as well as the day view, so I put them together into 1 feature branch.
+    I expect to be able to reuse my sort function from assignment Songsaver-App. 
+
+(end of nr 13.)
+
+
+
+    bonus_treatment_types: 
+    a) each dentist has a set of skills. E.g. pulling teeth, dental fillings, surgery, etc.
+    b) not every dentist has each skill.
+    c) each appointment has one treatment type.
+    d) in the calendar, view you cannot see the treatment type.
+    e) in the day view, you can see the treatment type.
+    
+    arbitrary choice: I will give each of the 4 dentists (that must be in the system when the application starts) randomnly 50% of all skills.
+    1 skill = the abililty to do 1 treatment of a certain type (e.g. dentalImplant). 
+    
+    bonus_treatment_types a), b) and c) combined together require 3 todo items to implement:
+
+14. bonus_treatment_types_todo1
+    todo1: modify random generation of the 150 appointments (that must be in the system when the application renders (npm) starts):
+        example:
+        const generateRandomAppointment = () => ({
+            day: getRandomDay(),
+            time: getRandomTime(),
+            patient: getRandomName(),
+            treatmentType: "filling",
+            dentist: getRandomName("dentalImplant"),
+            assistant: getRandomName(),
+        });
+        So a randomly selected dentist must be skilled to perform the treatment (here: fillings).
+        How to do this: 
+        use "filling" to filter the array with dentist objects. Then randomly select a dentist.
+
+15. bonus_treatment_types_todo2
+    todo2: add an appointment (with component AddForm that will be created as part of the first bonus requirement) must be modified:
+        selected dentist must be skilled to perform the dental treatment (here: dentalImplant) on the patient.
+        How to do this: 
+        use "filling" to filter the array with dentist objects. Then put the dentists that can do fillings into the selectbox to select a dentist, as part of the form to add an appointment in component AddAppointment.
+    
+16. bonus_treatment_types_todo3
+    todo3: update an appointment: there are no winc requirements about being able to select another dentist with the same skill (here: dentalImplant) to take over the appointment. --> (if time left) reuse the logic from 'todo2' to implement this. 
+
+
+17. bonus_treatment_type_in_day_view_but_not_in_calender_view:
+    d) in the calendar, view you cannot see the treatment type.
+    e) in the day view, you can see the treatment type.
+
+18.  bonus_working_form_and_buttons_for_all_operations
+      add patient (form)
+      add dentist (form)
+      add assistant (form)
+      add appointment (form)
+      add button to delete appointment (to each appointment in the calendar (month) View and day View).
+      add button to update (to be more precise: 'move an') appointment (to each appointment in the calendar (month) View and day View).
+
+    Design phase / proof of concept is ready. Time to write code. 
+
+
 
 
 # June 26th
@@ -265,7 +450,7 @@ use case 2of3: a an assistant I delete a dental appointment for a patient in the
 3. result: appointment will disappear from calender (month) view and day view, due to automatic re-render.
 
 
-use case 3of3: a an assistant I update a dental appointment for a patient in the dentist-app: (e.g. bonus requirement: move appointment to other day-time: e.g. "2010" becomes "0211"):
+use case 3of3: as an assistant I update a dental appointment for a patient in the dentist-app: (e.g. bonus requirement: move appointment to other day-time: e.g. "2010" becomes "0211"):
 1. make immutable copy of appointment-to-update.
 2. delete the appointment-to-update from state. 
 3. in component DisplayAppointments (is child of component Appointments) click update-button on the row that contains the appointment-to-update. --> Each appointment will have its own button 'update'.
