@@ -10,7 +10,7 @@
 }
 
 .dayview .time,
-.dayview .patient {
+.dayview .client {
   height: 30px;
   padding: 10px;
 }
@@ -20,7 +20,12 @@
   background-color: aquamarine;
 }
 
-.dayview .patient {
+.dayview .dayAsNumber {
+  float: right;
+  background-color: yellow;
+}
+
+.dayview .client {
   font-weight: bold;
   background-color: deepskyblue;
 }

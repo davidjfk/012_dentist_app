@@ -26,10 +26,21 @@
   background-color: lightyellow;
 }
 
-.calendarview .patient {
+.appointment {
+  /* display: flex;
+  flex-direction: row; */
+  padding: 0.1rem;
+}
+
+/* .dayAsNumber {
+  margin-right: 0.5 rem;
+} */
+
+.calendarview .client {
   margin-left: 0.5rem;
 }
 
 .calendarview .time {
+  margin-left: 0.5rem;
   color: yellowgreen;
 }

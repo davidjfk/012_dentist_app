@@ -1,9 +1,20 @@
 import React from "react";
-import AppointmentInMonth from "./AppointmentInMonth";
+import {AppointmentInMonthDay} from "./AppointmentInMonthDay";
 
-export default ({ appointments }) => {
-  const appointmentsJSX = appointments.map(({ time, patient }, index) => (
-    <AppointmentInMonth time={time} patient={patient} key={index} />
+export const DayInMonth = ({ appointments }) => {
+  
+  const appointmentsJSX = appointments
+    .sort((appointment1, appointment2) => appointment2.time - appointment1.time).reverse()
+    .map(({ time, day, client }, index) => (
+    <AppointmentInMonthDay  day={day} time={time}  client={client} key={index} />
   ));
-  return <div className="day">{appointmentsJSX}</div>;
+  // you are mapping all appointments on 1 day.
+  return(
+    <div className="day">{appointmentsJSX}</div>
+  );
+  
 };
+
+
+
+
