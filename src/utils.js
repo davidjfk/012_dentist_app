@@ -1,37 +1,32 @@
 
+
+// remove imports after use case 1 has been completed. See fn generateRandomAppointment below.
 import clientsDentistCompanyBVT from "./dataInDentistAppWhenDentistAppStarts/clients"
 import dentistsDentistCompanyBVT from "./dataInDentistAppWhenDentistAppStarts/dentists"
 import assistantsDentistCompanyBVT from "./dataInDentistAppWhenDentistAppStarts/assistants"
-//2do: import data and put in a global state. From there, load this data into the app in a useEffect hook. 
 
-
-//const nrOfAppointments = 150;  // must be 150
 
 export const generateRandomAppointmentId = () => Math.floor(10000000 + Math.random() * 9000000); // 7 digits
 export const generateRandomPersonId = () => Math.floor(1000000 + Math.random() * 900000); // 6 digits
 
 
-export const getRandomPersonId = (personCategory) => {
-  // personCategory is an array with either only randomly generated clients, dentists, or assistants.
-  // I have created the person categories in Mockaroo.
-  // I create the personIds in this fn instead of (also) in Mockaroo, just to keep as much of the data random as possible. 
-  const person = personCategory[Math.floor(Math.random() * personCategory.length)];
+export const getRandomPersonId = (personCategoryInCompanyBVT) => {
+  /*
+    personCategory is an array with either only randomly generated clients, dentists, or assistants.
+    I have created the person categories in Mockaroo, as well as random person ids.
+    As an alternative (yagni?...) I have created this fn to create a random person ids.
+  */
+  const person = personCategoryInCompanyBVT[Math.floor(Math.random() * personCategoryInCompanyBVT.length)];
   return `${person["lastName"]}-${generateRandomPersonId()}`; 
 };
 
 
 
-const getRandomName = (personCategory) => {
-  const person = personCategory[Math.floor(Math.random() * personCategory.length)];
+const getRandomName = (personCategoryInCompanyBVT) => {
+  const person = personCategoryInCompanyBVT[Math.floor(Math.random() * personCategoryInCompanyBVT.length)];
   return `${person["firstName"]} ${person["lastName"]}`;
 };
 
-// export const getRandomPersons = (personCategory, nrOfPersons) => {
-  
-  
-//   const person = personCategory[Math.floor(Math.random() * personCategory.length)];
-//   return person;
-// };
 
 
 export const getRandomPersons = (personCategoryInCompanyBVT, nrOfPersons) => {
@@ -69,7 +64,7 @@ export const isValidWorkingDay = (dayNumber) => (![6, 7, 13, 14, 20, 21, 27, 28]
 export const isValidWorkingTime = (hourNumber) => (hourNumber > 7 && hourNumber < 19 ? true : false)
 
 
-
+//2do: update this fn as part of use case 1. 
 const generateRandomAppointment = () => ({
   appointmentId: generateRandomAppointmentId(), // appointmentId not part of the kick-start code. 
   day: getRandomDay(),
@@ -78,18 +73,15 @@ const generateRandomAppointment = () => ({
   dentist: getRandomName(dentistsDentistCompanyBVT),
   assistant: getRandomName(assistantsDentistCompanyBVT),
 });
-// 2do: this data must get its input from a global state instead.
-/* 
-  day and time combined as dayTime could be easier to do validations: e.g. dentist may not have 2 appointmennts at the same day-time-combination. 
-  Added value of saving appointment as 'dayTime' instead of separate 'day' and 'time' is negligible. 
-*/
+
 
 export const generateRandomAppointments = num =>
   Array(num)
     .fill(0) // why fill with 0 before mapping? The undefineds are replaced by zeros, but why?
-    /* see MDN ( https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Array ): A JavaScript array is initialized with the given elements, except in the case where a single argument is passed to the Array constructor and that argument is a number (see the arrayLength parameter below). 
-    imho: skip fill(0)
+    /* see MDN ( https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Array ): A JavaScript array is 
+      initialized with the given elements, except in the case where a single argument is passed to the Array constructor and that 
+      argument is a number (see the arrayLength parameter below). 
+      imho: skip fill(0)
     */
     .map(_ => generateRandomAppointment());
 
-// export default generateRandomAppointments;
