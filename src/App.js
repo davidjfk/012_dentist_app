@@ -1,67 +1,299 @@
 import React from "react";
+import { useState } from "react";
+import { useEffect, useRef } from "react";
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import "./App.css";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
+
+import clientsDentistCompanyBVT from "./dataInDentistAppWhenDentistAppStarts/clients"
+import dentistsDentistCompanyBVT from "./dataInDentistAppWhenDentistAppStarts/dentists"
+import assistantsDentistCompanyBVT from "./dataInDentistAppWhenDentistAppStarts/assistants"
+
+import { addClient } from "./redux/clientSlice";
+import { addDentist } from "./redux/dentistSlice";
+import { addAssistant } from "./redux/assistantSlice";
+import { addAppointment } from "./redux/appointmentSlice";
+import {addDayTimeClient} from "./redux/clientDayTimeSlice";
+import {addDayTimeDentist} from "./redux/dentistDayTimeSlice";
+import {addDayTimeAssistant} from "./redux/assistantDayTimeSlice";
+import {addAppointsments} from "./redux/appointmentSlice";
+import {checkIfPersonWithDayAndTimeIsUnique, createCombiOfPersonAndDayAndTime, generateRandomAppointmentId, getRandomPersonId, getRandomPersonIdAsync, getRandomDay, getRandomName, getRandomPersons, getRandomTime, selectObjectsByArrayObjectKey } from './utils';
+
+
 import AddAppointment from "./AddAppointment";
+
+
 import {Calendar} from "./Calendar";
-import Day from "./Day";
-
-import {generateRandomAppointments} from "./utils";
-
-/*
-
-  dentists (4), assistants (2) and clients (150) are added to the state of the app. each in a separate redux-toolkit-slice. 
-
-  appointments is the (wannabe) "state" of the app and is rendered as props in the components 'Calender' and 'Day' below. 
-  This "state" must be moved to a global state first (step 1), and then as a final step be rendered to the screen.
-  The steps in between will handle the business logic. 
-
-*/
+import {Day} from "./Day";
+import {generateRandomAppointmentsFromWinc} from "./utils";
 
 
-// step1: use case 0: put 50 clients, 4 dentists, 2 assistants into global state.
-// step1: use case 1: put 150 appointments into global state.
-
-const appointments = generateRandomAppointments(150);
+let appointmentsOld = generateRandomAppointmentsFromWinc(150);
+// appointmentsOld = []
+// console.log(appointmentsOld)
 /* 
-  problem: after each re-render the data in appointments will be reset with "generateRandomAppointments(150);". 
-  solution: useEffect hook inside component initialSetupForMakingAppointments.js 
+  after each re-render the data in appointments will be reset with "generateRandomAppointments(150);". 
+  So using a useEffect hook is a must here.
 */
 
-// step3 : get global state from  redux-toolkit to render data in 'Calendar' and 'Day' components:
 
 
 
-const App = () => (
-  <Router>
+const App = ()  => {
+  
+  const dispatch = useDispatch();
+    // helper variables (of which the values need not persist between renders). 
+    let randomClients;
+    let randomDentists;
+    let randomAssistants;
+  
+      useEffect(() => {
+          randomClients = getRandomPersons(clientsDentistCompanyBVT, 50);
+          dispatch(addClient(randomClients));
+      
+          randomDentists = getRandomPersons(dentistsDentistCompanyBVT, 4);
+          dispatch(addDentist(randomDentists));
+      
+          randomAssistants = getRandomPersons(assistantsDentistCompanyBVT, 2); 
+          // interesting metric: with 1 assistant a max of  147 or 148 appointments is possible (in the 20 working days of next month), if the change of adding an assistant to an appointment is 40%. 
+          dispatch(addAssistant(randomAssistants));
+      } , [] 
+    );
+    
+    let clientDayTimes = useRef([]);
+    let dentistDayTimes = useRef([]);
+    let assistantDayTimes = useRef([]);
+    
+    function checkIfPersonWithDayAndTimeIsUnique (personId, day, time, personType) {
+      // 2do at the end (if time left): improve performance. Check useMemo( ). 
+        let arrayWithDayAndTimeCombinationsThatAreTaken = [];
+        let uniqueValue = false;
+        switch (personType) {
+            case 'client':
+                arrayWithDayAndTimeCombinationsThatAreTaken = clientDayTimes.current; 
+                break;
+            case 'dentist':
+                arrayWithDayAndTimeCombinationsThatAreTaken = dentistDayTimes.current; 
+                break;
+            case 'assistant':
+                arrayWithDayAndTimeCombinationsThatAreTaken = assistantDayTimes.current; 
+                break;
+            default:
+                console.error(`this ${personType} does not exist`)
+                break;  
+        }
+        let PersonIdAndDayAndTimeCombi = personId +"_" + day + "_" + time;
+        // console.log(PersonIdAndDayAndTimeCombi)
+        uniqueValue = !arrayWithDayAndTimeCombinationsThatAreTaken.includes(PersonIdAndDayAndTimeCombi) 
+        // console.log('fn checkIfPersonWithDayAndTimeIsUnique: return uniqueValue:')
+        // console.log(uniqueValue)
+        // console.log('fn checkIfPersonWithDayAndTimeIsUnique: return PersonIdAndDayAndTimeCombi:')
+        // console.log(PersonIdAndDayAndTimeCombi)
+        // console.log('fn checkIfPersonWithDayAndTimeIsUnique: return clientDayTimes.current:')
+        // console.log(assistantDayTimes.current)
+        return uniqueValue
+    }
+
+    
+        
+      function generateRandomAppointment () {
+          let assistantId;
+          let clientId;
+          let dentistId;
+          let personType;
+          let day = getRandomDay()  
+          let time = getRandomTime() 
+          clientId = getRandomPersonIdAsync(randomClients, 'clientId')
+          dentistId = getRandomPersonIdAsync(randomDentists, 'dentistId');
+    
+        
+    
+          /*
+          40% chance that appointment requires the presence of an assistant:
+          */
+          let isAssistantNeededForAppointment = false;
+          let randomNrThatDecidesIfAssistantMustBePresentAtAppointment = Math.random();
+          if (randomNrThatDecidesIfAssistantMustBePresentAtAppointment < 0.99){    // arbitrary default value: < 0.4 
+              isAssistantNeededForAppointment = true;
+              assistantId = getRandomPersonIdAsync(randomAssistants, 'assistantId');
+              // console.log(assistantId);
+          } 
+          
+          if (isAssistantNeededForAppointment) {
+              if (
+                  checkIfPersonWithDayAndTimeIsUnique(clientId, day, time, personType="client") &&
+                  checkIfPersonWithDayAndTimeIsUnique(dentistId, day, time, personType = "dentist") &&
+                  checkIfPersonWithDayAndTimeIsUnique(assistantId, day, time, personType = "assistant")
+                  )
+              {
+    
+                  let objToDispatch;
+                  objToDispatch = createCombiOfPersonAndDayAndTime(clientId, day, time)
+                  // console.log(objToDispatch)
+                  dispatch(addDayTimeClient(objToDispatch));
+                  clientDayTimes.current.push(objToDispatch)
+    
+                  objToDispatch = createCombiOfPersonAndDayAndTime(dentistId, day, time)
+                  // console.log(objToDispatch)
+                  dispatch(addDayTimeDentist(objToDispatch));
+                  dentistDayTimes.current.push(objToDispatch)
+
+                  objToDispatch = createCombiOfPersonAndDayAndTime(assistantId, day, time)
+                  // console.log(objToDispatch)
+                  dispatch(addDayTimeAssistant(objToDispatch));
+                  assistantDayTimes.current.push(objToDispatch)
+
+                  let getClient = client => client.clientId === clientId
+                  // console.log(clientId)
+                  let clientForWhomAnAppointmentIsBeingMade = selectObjectsByArrayObjectKey(randomClients, getClient)
+                  // variable client inside obj appointment is derived data from  the object client.
+                  let client = (`${(clientForWhomAnAppointmentIsBeingMade[0].firstName)} ${(clientForWhomAnAppointmentIsBeingMade[0].lastName)}`)
+                  // console.log(client)
+
+
+                  let getDentist = dentist => dentist.dentistId === dentistId
+                  // console.log(dentistId)
+                  let dentistForWhomAnAppointmentIsBeingMade = selectObjectsByArrayObjectKey(randomDentists, getDentist)
+                  // variable dentist inside obj appointment is derived data from  the object dentist.
+                  let dentist = (`${(dentistForWhomAnAppointmentIsBeingMade[0].firstName)} ${(dentistForWhomAnAppointmentIsBeingMade[0].lastName)}`)
+                  // console.log(dentist)
+
+                  let getAssistant = assistant => assistant.assistantId === assistantId
+                  // console.log(assistantId)
+                  let assistantForWhomAnAppointmentIsBeingMade = selectObjectsByArrayObjectKey(randomAssistants, getAssistant)
+                  // variable assistant inside obj appointment is derived data from  the object assistant.
+                  let assistant = (`${(assistantForWhomAnAppointmentIsBeingMade[0].firstName)} ${(assistantForWhomAnAppointmentIsBeingMade[0].lastName)}`)
+                  // console.log(assistant)
+
+                  let appointmentId = generateRandomAppointmentId();
+                  let newAppointmentObject = {appointmentId, clientId, client, day, time, dentistId, dentist, assistantId, assistant, isSick:false, isNowUpdatingAppointment:false } // bonus: 1 treatmentType
+                  dispatch(addAppointment(newAppointmentObject));
+                  
+              } else {
+                  // console.log('the else way')
+                  generateRandomAppointment(); //
+                  // return
+                   
+              } 
+          } else {
+              if (checkIfPersonWithDayAndTimeIsUnique(clientId, day, time, personType = "client") &&
+                  checkIfPersonWithDayAndTimeIsUnique(dentistId, day, time, personType = "dentist"))
+              {
+    
+                  let objToDispatch;
+                  objToDispatch = createCombiOfPersonAndDayAndTime(clientId, day, time)
+                  // console.log(objToDispatch)
+                  dispatch(addDayTimeClient(objToDispatch));
+                  clientDayTimes.current.push(objToDispatch)
+    
+                  objToDispatch = createCombiOfPersonAndDayAndTime(dentistId, day, time)
+                  // console.log(objToDispatch)
+                  dispatch(addDayTimeDentist(objToDispatch));
+                  dentistDayTimes.current.push(objToDispatch)
+
+                  let getClient = client => client.clientId === clientId
+                  // console.log(clientId)
+                  let clientForWhomAnAppointmentIsBeingMade = selectObjectsByArrayObjectKey(randomClients, getClient)
+                  // variable client inside obj appointment is derived data from  the object client.
+                  let client = (`${(clientForWhomAnAppointmentIsBeingMade[0].firstName)} ${(clientForWhomAnAppointmentIsBeingMade[0].lastName)}`)
+                  // console.log(client)
+
+
+                  let getDentist = dentist => dentist.dentistId === dentistId
+                  // console.log(dentistId)
+                  let dentistForWhomAnAppointmentIsBeingMade = selectObjectsByArrayObjectKey(randomDentists, getDentist)
+                  // variable dentist inside obj appointment is derived data from  the object dentist.
+                  let dentist = (`${(dentistForWhomAnAppointmentIsBeingMade[0].firstName)} ${(dentistForWhomAnAppointmentIsBeingMade[0].lastName)}`)
+                  //console.log(dentist)
+
+    
+                  let appointmentId = generateRandomAppointmentId();
+                  let newAppointmentObject = {appointmentId, clientId, client, day, time, dentistId, dentist, assistantId:null, assistant:null, isSick:false, isNowUpdatingAppointment:false } // bonus: 1 treatmentType
+                  dispatch(addAppointment(newAppointmentObject));
+                    
+              } else {            
+                  generateRandomAppointment();
+              }
+          } 
+      }
+          
+          useEffect(() => {
+                
+                  const generateRandomAppointments = num => {
+               
+                  
+                  Array(num)
+                      .fill(0) 
+                      .map(_ => generateRandomAppointment());
+                  }
+                  generateRandomAppointments(150)
+    
+              } , [] 
+          );
+  
+
+      {/* alternative: instead of the code above, I run the code in component CreateRandomAppointmentsWhenAppStarts.js .  
+          That keeps component App.js cleaner.   */}
+
+
+    let appointmentsfromReduxToolkit = useSelector((state) => state.appointment)
+    // console.log(`inside comp App: right before the return: next 2 outputs: `)
+    // console.log(appointmentsfromReduxToolkit)
+    // console.log(appointmentsfromReduxToolkit.appointments.length)
+
+
+
+
+    // let clientDayTimefromReduxToolkit = useSelector((state) => state.clientDayTime)
+    // console.log(`inside comp App: right before the return: next 2 outputs: `)
+    // console.log(clientDayTimefromReduxToolkit)
+    // console.log(clientDayTimefromReduxToolkit.clientDayTimes.length)
+   
+ 
+
+  return(
     <div>
-      <nav>
-        <ul>
-          <li>
-            <Link to="/">Add appointment</Link>
-          </li>         
-          <li>
-            <Link to="/calendar">Calendar view</Link>
-          </li>
-          <li>
-            <Link to="/day">Day view</Link>
-          </li>
-        </ul>
-      </nav>
-      <main>
-        <Switch>
-          <Route path="/calendar">
-            <Calendar appointments={appointments} />
-          </Route>
-          <Route path="/day">
-            <Day appointments={appointments.filter(app => app.day === 1)} />
-          </Route>
-          <Route path="/">
-            <AddAppointment />
-          </Route>
-        </Switch>
-      </main>
-    </div>
-  </Router>
-);
+     {/* {(appointmentsfromReduxToolkit.appointments.length === 150 ) &&   */}
+  
+    
+    
+        <Router>
+          <div>
+            <nav>
+              <ul>
+                <li>
+                  <Link to="/">Add appointment</Link>
+                </li>         
+                <li>
+                  <Link to="/calendar">Calendar view</Link>
+                </li>
+                <li>
+                  <Link to="/day">Day view</Link>
+                </li>
+              </ul>
+            </nav>
+            <main>
+          
+
+              <Switch>
+                <Route path="/calendar">
+                  <Calendar appointments={appointmentsfromReduxToolkit} />
+                </Route>
+                <Route path="/day">
+                  <Day appointments={appointmentsfromReduxToolkit.appointments.filter(app => app.day === "02")} />
+                </Route>
+                <Route path="/">
+                  <AddAppointment />
+                </Route>
+              </Switch>
+            </main>
+          </div>
+        </Router>
+    {/* } */}
+  </div>
+  );
+  
+};
 export default App;

@@ -3,6 +3,8 @@ import "./Calendar.css";
 import {DayInMonth} from "./DayInMonth";
 
 const divideByDay = appointments => {
+  // console.log('hier')
+  // console.log(appointments)
   const appointmentsByDay = {};
   appointments.forEach(appointment => {
     const day = appointment.day;
@@ -14,8 +16,13 @@ const divideByDay = appointments => {
   return appointmentsByDay;
 };
 
-export const Calendar = ({ appointments }) => {
-  const appointmentsByDay = divideByDay(appointments);
+export const Calendar = ( {appointments} ) => {
+
+  // let {appointments} = foo;
+  // console.log(appointments)
+  // console.log(typeof(appointments[0].time))
+  // console.log(appointments[0].time)
+  const appointmentsByDay = divideByDay(appointments.appointments);
   /* appointmentsByDay is an obj with each key signifiying a day 
     number and its corresponding value being an array with appointments on that day.
 {
@@ -52,4 +59,7 @@ export const Calendar = ({ appointments }) => {
       <div className="table">{daysInMonthJSX}</div>
     </div>
   );
+
+
+
 };
