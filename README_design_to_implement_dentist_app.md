@@ -257,11 +257,14 @@
             appointmentObject = {
                 appointmentId: 0569464, // 7 digits
                 clientId: Darwish_953462,
+                client: firstName lastName, --> derived data from object client. usage: display in calendar view and day view.
                 day: 20,
                 time: 10,
                 treatmentType: ["parodontology", "fillings"], --> implement later as bonus assignment.
                 dentistId: Ayad_083596,
+                dentist: firstName lastName, --> derived data from object dentist. usage: display in day view.
                 assistantId: Bakir_03949463,
+                assistant: firstName lastName, --> derived data from object assistant. usage: display in day view.
                 isNowUpdatingThisAppointment: false, --> while appointment is updated (see use case 'update an appointment' below), the boolean is set to true. 
             }
 
@@ -555,7 +558,7 @@
                 client by rescheduling the appointment from dentist 'foo' to dentist 'bar'.        
             
 
-        4.  create component CreateRandomAppointmentsWhenAppStarts.js
+        4.  Inside component AddAppointment, create component CreateRandomAppointmentsWhenAppStarts.js
             Inside component CreateRandomAppointmentsWhenAppStarts, fn generateRandomAppointments (plural) in a useEffect with [] as a dependency, will call fn generateRandomAppointment (singular) 150 times.
 
             I can make use of the winc kick-start code:
@@ -574,7 +577,7 @@
                     key: appointmentId  // React needs a key property to ierate over an array (e.g. with map fn)
                 });
 
-                // left 2 do in this fn: client nor dentist nor assistant can have 2 appointments at the same moment / day-time-combi.
+                // left 2 do in this fn: validate that client nor dentist nor assistant can have 2 appointments at the same moment / day-time-combi.
                 
                 const generateRandomAppointments = num =>
                     Array(num)
@@ -590,7 +593,7 @@
            
 
             /*
-                Suppose that in 40% of all appointments an assistant needs to take part in the appointment:
+                Suppose that in 40% of all appointments, an assistant needs to take part in the appointment:
                 20 days * 4 dentists * 8 appointments per day * 0.6 (change of dentist not needing an assistant) = 384
                 20 days * 2 assistants * 8 appointments per day * 0.4 (change of dentist needing an assistant) = 128
                 So in 20 working days 384 + 128 = 512 appointments can be scheduled.
@@ -725,10 +728,10 @@
 
         6. create fn checkIfPersonWithDayAndTimeIsUnique (personId, day, time, personType) {}:
             
-            function checkIfPersonWithDayAndTimeIsUnique (person, day, time, personType) {
+            function checkIfPersonWithDayAndTimeIsUnique (personId, day, time, personType) {
                 const { reservedCombinationsOfClientAndDayAndTime } = useSelector((state) => state.clientDayTime);
-                const { reservedCombinationsOfDentistAndTime } = useSelector((state) => state.dentistDayTime);
-                const { reservedCombinationsOfAssistantAndTime } = useSelector((state) => state.assistantDayTime);
+                const { reservedCombinationsOfDentistAndDayAndTime } = useSelector((state) => state.dentistDayTime);
+                const { reservedCombinationsOfAssistantAndDayAndTime } = useSelector((state) => state.assistantDayTime);
                 // 2do at the end (if time left): improve performance of how to load data from global state into this fn. Use e.g. useMemo( ). 2do: investigate.
 
                 let arrayWithDayAndTimeCombinationsThatAreTaken = [];
@@ -743,14 +746,14 @@
                         arrayWithDayAndTimeCombinationsThatAreTaken = reservedCombinationsOfAssistantAndDayAndTime; 
                         break;
                     default:
-                        console.log(console.error(this {personType} does not exist.))
+                        console.error(`this ${personType} does not exist`)
                 }
-                return (arrayWithDayAndTimeCombinationsThatAreTaken.includes((`${personId}{day}{time}`) ? false : true )
-                }
+                return (arrayWithDayAndTimeCombinationsThatAreTaken.includes((`${personId}${day}${time}`) ? false : true ))
+                
             }
         /*    
             7. create 150 appointments: generateRandomAppointment(150)
-            8. put these 150 appointments into global state (redux-toolkit slice)  --> this is done inside fn generateRandomAppointment. Arguably now the fn has 2 responsibilities instead of 1. This is not a problem in the Dentist App.
+            8. put these 150 appointments into global state (redux-toolkit slice)  --> this is done inside the winc-starter-code fn generateRandomAppointments. 
             9. In component App.js in child components Calendar and Day, display the 150 appointments from global state.
             10. In component App.js remove ' import generateRandomAppointments from "./utils";  '.
             11. End result: the 150 appointments have been created once while the application starts and have been put into global state. From there they are imported in component App.js and rendered in the Calendar View and Day View. 
@@ -780,14 +783,14 @@
             so while creating an appointment you cannot create e.g. a client, nor assistant, nor dentist. You must do that before you create an appointment, because these are separate workflows. 
         
         use case:  a an assistant or dentist I enter a dental appointment for a client into the dentist-app: 
-        For fn checkIfPersonWithDayAndTimeIsUnique, see USECASE 1OF2 above.
+        For fn checkIfPersonWithDayAndTimeIsUnique, see  USECASE 1OF2 above.
         The core functionality of the dentist app is about making appointments, because different types of state get together here.
 
         use case steps: 
         1.  assumption: before doing this use case, use cases 0 and 1 must be ready (i.e. implemented).
 
         2. 
-        3. Inside component App.js --> inside component Home.js: create component 'CreateManualAppointmentAfterDentistAppHasStarted'. 
+        3. Inside component App.js --> inside component AddAppointment.js: create component 'CreateManualAppointmentAfterDentistAppHasStarted'. 
 
         4. There are 2 phases to make an appointment in the application:
             "phase 1:" at first with a fn call to fn addAppointment (see step 5 below). This fn call serves as a proxy/"substitute" for creating an 
@@ -830,12 +833,12 @@
                     6. click save appointment 
                         Then validations will be performed:
                         1. Does the selected client already have an appointment on this  day and  time? Filter (state) array with all client appointments on
-                            time and client (e.g. if (time==="20" && day==="10" && client="Mitterand_0469436") {alert("this client {client} already has an appointment on this day and time")})
+                            time and client (e.g. if (time==="20" && day==="10" && client="Mitterand-0469436") {alert("this client {client} already has an appointment on this day and time")})
                         2. Does selected dentist already have appointment on this day and time? Filter (state) array with all dentist appointments on time
-                            and dentist (e.g. if (time==="20" && day==="10" && dentist="Ayad_083596") {alert("this dentist {dentist} already has an appointment on this day and time")})
+                            and dentist (e.g. if (time==="20" && day==="10" && dentist="Ayad-083596") {alert("this dentist {dentist} already has an appointment on this day and time")})
                         3. does selected  dentist have the required skill?  --> later in bonus requirement.
                         4. Does selected assistant already have appointment on this day and time? Filter (state) array with all dentist appointments on time 
-                            and assistant (e.g. if (time==="20" && day==="10" && assistant= "Bakir_03949463") {alert("this assistant {assistant} already has an appointment on this day and time")})
+                            and assistant (e.g. if (time==="20" && day==="10" && assistant= "Bakir-03949463") {alert("this assistant {assistant} already has an appointment on this day and time")})
 
                     7. by performing a separate validation for availability of dentist and assistant, it is easier to display to fill the correct 
                         alert-message, also because assistant is an optional value when creating a dentist appointment.
@@ -868,7 +871,7 @@
 
         6. "phase 2"  (step 4 above describes phase 2, and its 4 generic steps)
         
-            a) create form to add an appointment. Do this inside component 'CreateManualAppointmentAfterDentistAppHasStarted.js'
+            a) create form to add an appointment. Do this inside component 'CreateManualAppointmentAfterDentistAppHasStarted.js'. This component is a child  of component AddAppointment.js 
             b) select / fill out data on the form (selectboxes and input fields).  
             c) (2do if time left: perform the validations before the saving the form. The form controls (e.g. selectbox, input field) instantly update local state. So after each change you can validate if the  input is valid. But at this stage you do not want alerts to pop up, but just a warning message instead )
             c) click 'save appointment'.
