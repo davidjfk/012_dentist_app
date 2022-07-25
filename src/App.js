@@ -22,8 +22,8 @@ import {addAppointsments} from "./redux/appointmentSlice";
 import {checkIfPersonWithDayAndTimeIsUnique, createCombiOfPersonAndDayAndTime, generateRandomAppointmentId, getRandomPersonId, getRandomPersonIdAsync, getRandomDay, getRandomName, getRandomPersons, getRandomTime, selectObjectsByArrayObjectKey } from './utils';
 
 
-import AddAppointment from "./AddAppointment";
-
+import {Appointment} from "./Appointment";
+import DeleteAppointment from "./DeleteAppointment";
 
 import {Calendar} from "./Calendar";
 import {Day} from "./Day";
@@ -45,7 +45,7 @@ const App = ()  => {
           randomDentists = getRandomPersons(dentistsDentistCompanyBVT, 4);
           dispatch(addDentist(randomDentists));
       
-          randomAssistants = getRandomPersons(assistantsDentistCompanyBVT, 2); 
+          randomAssistants = getRandomPersons(assistantsDentistCompanyBVT, 3); 
           dispatch(addAssistant(randomAssistants));
       } , [] 
     );
@@ -97,7 +97,7 @@ const App = ()  => {
     
           let isAssistantNeededForAppointment = false;
           let randomNrThatDecidesIfAssistantMustBePresentAtAppointment = Math.random();
-          if (randomNrThatDecidesIfAssistantMustBePresentAtAppointment < 0.99){    // arbitrary default value: < 0.4 
+          if (randomNrThatDecidesIfAssistantMustBePresentAtAppointment < 0.99999){    // arbitrary default value: < 0.4 
               isAssistantNeededForAppointment = true;
               assistantId = getRandomPersonIdAsync(randomAssistants, 'assistantId');
               // console.log(assistantId);
@@ -221,6 +221,8 @@ const App = ()  => {
     let appointmentsfromReduxToolkit = useSelector((state) => state.appointment)
 
   return(
+    
+    
     <div>
      {(appointmentsfromReduxToolkit.appointments.length > 149 ) &&   
      /*
@@ -241,14 +243,14 @@ const App = ()  => {
       
       Later, as part of the bonus requirements, inside component CreateManualAppointmentAfterDentistAppHasStarted I create a FORM to call fn createAppointment instead. 
       */ ///
-    
+        
         <Router>
           <div>
             <nav>
               <ul>
                 <li>
-                  <Link to="/">Add appointment</Link>
-                </li>         
+                  <Link to="/">CRUD appointment</Link>
+                </li>      
                 <li>
                   <Link to="/calendar">Calendar view</Link>
                 </li>
@@ -259,16 +261,18 @@ const App = ()  => {
             </nav>
             <main>
           
-
               <Switch>
                 <Route path="/calendar">
                   <Calendar appointments={appointmentsfromReduxToolkit} />
+                </Route>
+                <Route path="/deleteAppointment">  
+                <DeleteAppointment  />
                 </Route>
                 <Route path="/day">
                   <Day appointments={appointmentsfromReduxToolkit.appointments.filter(app => app.day === "02")} />
                 </Route>
                 <Route path="/">
-                  <AddAppointment  />
+                  <Appointment  />
                 </Route>
               </Switch>
             </main>
@@ -276,6 +280,7 @@ const App = ()  => {
         </Router>
      }
   </div>
+
   );
   
 };

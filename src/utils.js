@@ -3,6 +3,43 @@ import clientsDentistCompanyBVT from "./dataInDentistAppWhenDentistAppStarts/cli
 import dentistsDentistCompanyBVT from "./dataInDentistAppWhenDentistAppStarts/dentists"
 import assistantsDentistCompanyBVT from "./dataInDentistAppWhenDentistAppStarts/assistants"
 
+import { addAppointment, deleteAppointment } from "./redux/appointmentSlice";
+import {addDayTimeClient} from "./redux/clientDayTimeSlice";
+import {addDayTimeDentist} from "./redux/dentistDayTimeSlice";
+import {addDayTimeAssistant} from "./redux/assistantDayTimeSlice";
+
+const log = console.log;
+
+export function checkIfPersonWithDayAndTimeIsUnique (personId, day, time, personType, clientDayTimes, dentistDayTimes, assistantDayTimes) {
+  // I only call this fn from within fn createAppointment.
+  // 2do at the end (if time left): improve performance. Check useMemo( ). 
+  let arrayWithDayAndTimeCombinationsThatAreTaken = [];
+  let uniqueValue = false;
+  switch (personType) {
+      case 'client':
+          arrayWithDayAndTimeCombinationsThatAreTaken = clientDayTimes.current; 
+          break;
+      case 'dentist':
+          arrayWithDayAndTimeCombinationsThatAreTaken = dentistDayTimes.current; 
+          break;
+      case 'assistant':
+          arrayWithDayAndTimeCombinationsThatAreTaken = assistantDayTimes.current; 
+          break;
+      default:
+          console.error(`this ${personType} does not exist`)
+          break;  
+  }
+  let PersonIdAndDayAndTimeCombi = personId +"_" + day + "_" + time;
+  // console.log(PersonIdAndDayAndTimeCombi)
+  uniqueValue = !arrayWithDayAndTimeCombinationsThatAreTaken.includes(PersonIdAndDayAndTimeCombi) 
+  // console.log('fn checkIfPersonWithDayAndTimeIsUnique: return uniqueValue:')
+  // console.log(uniqueValue)
+  // console.log('fn checkIfPersonWithDayAndTimeIsUnique: return PersonIdAndDayAndTimeCombi:')
+  // console.log(PersonIdAndDayAndTimeCombi)
+  // console.log('fn checkIfPersonWithDayAndTimeIsUnique: return clientDayTimes.current:')
+  // console.log(assistantDayTimes.current)
+  return uniqueValue
+}
 
 
 
@@ -12,7 +49,23 @@ export const createCombiOfPersonAndDayAndTime = (personId, day, time) => personI
 
 
 
+
+
+
 export const generateRandomPersonId = () => Math.floor(1000000 + Math.random() * 900000); // 6 digits
+
+
+export function getAppointmentId(appointmentsfromReduxToolkit, indexOfAppointment) {
+  const appointment = appointmentsfromReduxToolkit.appointments[indexOfAppointment]
+  console.log('appointmentThatWillBeDeleted:')
+  console.log(appointment)
+  let appointmentId = appointment.appointmentId
+  return appointmentId
+}
+
+
+
+
 
 
 export const getRandomDay = () => {
@@ -174,4 +227,153 @@ export const generateRandomAppointmentsFromWinc = num =>
   export const selectObjectsByArrayObjectKey  = (array, filterFunction) => {
       let filteredArr = array.filter(filterFunction)
       return filteredArr;
+  }
+
+
+  export function createAppointment (clientId, day, time, dentistId, isAssistantNeededForAppointment, assistantId, clientsFromReduxToolkit, dentistsFromReduxToolkit, assistantsFromReduxToolkit, clientDayTimes, dentistDayTimes, assistantDayTimes, dispatch) {
+    let personType;
+    // let dispatch; // dispatch must be declared as a variable. Otherwise not possible to put fn createAppointment inside this  file utils.js 
+  
+    if (isAssistantNeededForAppointment) {
+        console.log(clientId)
+        if (
+            checkIfPersonWithDayAndTimeIsUnique(clientId, day, time, personType="client",  clientDayTimes, dentistDayTimes, assistantDayTimes) &&
+            checkIfPersonWithDayAndTimeIsUnique(dentistId, day, time, personType = "dentist",  clientDayTimes, dentistDayTimes, assistantDayTimes) &&
+            checkIfPersonWithDayAndTimeIsUnique(assistantId, day, time, personType = "assistant",  clientDayTimes, dentistDayTimes, assistantDayTimes)
+            )
+        {
+  
+            let objToDispatch;
+            objToDispatch = createCombiOfPersonAndDayAndTime(clientId, day, time)
+            // console.log(objToDispatch)
+            dispatch(addDayTimeClient(objToDispatch));
+            clientDayTimes.current.push(objToDispatch)
+  
+            objToDispatch = createCombiOfPersonAndDayAndTime(dentistId, day, time)
+            // console.log(objToDispatch)
+            dispatch(addDayTimeDentist(objToDispatch));
+            dentistDayTimes.current.push(objToDispatch)
+  
+            objToDispatch = createCombiOfPersonAndDayAndTime(assistantId, day, time)
+            // console.log(objToDispatch)
+            dispatch(addDayTimeAssistant(objToDispatch));
+            assistantDayTimes.current.push(objToDispatch)
+  
+            let getClient = client => client.clientId === clientId
+            // console.log(clientId)
+            console.log(clientsFromReduxToolkit.clients)
+            let clientForWhomAnAppointmentIsBeingMade = selectObjectsByArrayObjectKey(clientsFromReduxToolkit.clients, getClient)
+            // variable client inside obj appointment is derived data from  the object client.
+                               
+            
+            let client = (`${(clientForWhomAnAppointmentIsBeingMade[0].firstName)} ${(clientForWhomAnAppointmentIsBeingMade[0].lastName)}`)
+            // console.log(client)
+            // let client = "David Sneek";
+  
+            
+            let getDentist = dentist => dentist.dentistId === dentistId
+            // console.log(dentistId)
+            let dentistForWhomAnAppointmentIsBeingMade = selectObjectsByArrayObjectKey(dentistsFromReduxToolkit.dentists, getDentist)
+            // variable dentist inside obj appointment is derived data from  the object dentist.
+            let dentist = (`${(dentistForWhomAnAppointmentIsBeingMade[0].firstName)} ${(dentistForWhomAnAppointmentIsBeingMade[0].lastName)}`)
+            // console.log(dentist)
+            // let dentist = "jan bakker"
+  
+            let getAssistant = assistant => assistant.assistantId === assistantId
+            // console.log(assistantId)
+            let assistantForWhomAnAppointmentIsBeingMade = selectObjectsByArrayObjectKey(assistantsFromReduxToolkit.assistants, getAssistant)
+            // variable assistant inside obj appointment is derived data from  the object assistant.
+            
+           
+            let assistant = (`${(assistantForWhomAnAppointmentIsBeingMade[0].firstName)} ${(assistantForWhomAnAppointmentIsBeingMade[0].lastName)}`)
+            // console.log(assistant)
+            // let assistant = "de boor"
+  
+            let appointmentId = generateRandomAppointmentId();
+            let newAppointmentObject = {appointmentId, clientId, client, day, time, dentistId, dentist, assistantId, assistant, isSick:false, isNowUpdatingAppointment:false } // bonus: 1 treatmentType
+            dispatch(addAppointment(newAppointmentObject));
+        } 
+        else {            
+            alert('please check if client, dentist and/or assistant have an appointment on this day and time');
+            return;
+        }
+    } else {
+        if (checkIfPersonWithDayAndTimeIsUnique(clientId, day, time, personType = "client",  clientDayTimes, dentistDayTimes, assistantDayTimes) &&
+            checkIfPersonWithDayAndTimeIsUnique(dentistId, day, time, personType = "dentist",  clientDayTimes, dentistDayTimes, assistantDayTimes))
+        {
+  
+            let objToDispatch;
+            objToDispatch = createCombiOfPersonAndDayAndTime(clientId, day, time)
+            // console.log(objToDispatch)
+            dispatch(addDayTimeClient(objToDispatch));
+            clientDayTimes.current.push(objToDispatch)
+  
+            objToDispatch = createCombiOfPersonAndDayAndTime(dentistId, day, time)
+            // console.log(objToDispatch)
+            dispatch(addDayTimeDentist(objToDispatch));
+            dentistDayTimes.current.push(objToDispatch)
+  
+  
+            let getClient = client => client.clientId === clientId
+            // console.log(clientId)
+            let clientForWhomAnAppointmentIsBeingMade = selectObjectsByArrayObjectKey(clientsFromReduxToolkit.clients, getClient)
+            // variable client inside obj appointment is derived data from  the object client.
+            
+            // let client = "david sneek"
+            let client = (`${(clientForWhomAnAppointmentIsBeingMade[0].firstName)} ${(clientForWhomAnAppointmentIsBeingMade[0].lastName)}`)
+            // console.log(client)
+  
+  
+            let getDentist = dentist => dentist.dentistId === dentistId
+            // console.log(dentistId)
+            let dentistForWhomAnAppointmentIsBeingMade = selectObjectsByArrayObjectKey(dentistsFromReduxToolkit.dentists, getDentist)
+            // variable dentist inside obj appointment is derived data from  the object dentist.
+            
+            // let dentist = "mr boor"
+            let dentist = (`${(dentistForWhomAnAppointmentIsBeingMade[0].firstName)} ${(dentistForWhomAnAppointmentIsBeingMade[0].lastName)}`)
+            //console.log(dentist)
+  
+            
+            let appointmentId = generateRandomAppointmentId();
+            let newAppointmentObject = {appointmentId, clientId, client, day, time, dentistId, dentist, assistantId:null, assistant:null, isSick:false, isNowUpdatingAppointment:false } // bonus: 1 treatmentType
+            dispatch(addAppointment(newAppointmentObject));
+            
+        }
+        else {            
+            alert('please check if client and/or dentist have an appointment on this day and time');
+            return;
+        }
+    } 
+  } // fn create Appointment
+
+
+  export function deleteDentalAppointment (appointmentsfromReduxToolkit, appointmentId, appointmentIndexInAppointmentsArray, deleteDayTimeClient, deleteDayTimeDentist, deleteDayTimeAssistant, dispatch) {
+    log('inside fn deleteAppointment: ')
+    console.log(appointmentId)
+  
+    let getAppointment = appointment => appointment.appointmentId === appointmentId
+    let appointmentThatIsAboutToBeDeleted = selectObjectsByArrayObjectKey(appointmentsfromReduxToolkit.appointments, getAppointment)
+    console.log('here:')
+    console.log(appointmentThatIsAboutToBeDeleted[0])
+  
+    let {clientId, day, time, dentistId, assistantId} = appointmentThatIsAboutToBeDeleted[0];
+    log(clientId, day, time, dentistId, assistantId)
+  
+    
+    let objToDispatch;
+    objToDispatch = createCombiOfPersonAndDayAndTime(clientId, day, time)
+     console.log(objToDispatch)
+    dispatch(deleteDayTimeClient(objToDispatch));
+    
+    objToDispatch = createCombiOfPersonAndDayAndTime(dentistId, day, time)
+    dispatch(deleteDayTimeDentist(objToDispatch));
+  
+  
+    if (assistantId !== null) {
+        objToDispatch = createCombiOfPersonAndDayAndTime(assistantId, day, time)
+        dispatch(deleteDayTimeAssistant(objToDispatch));
+    }
+  
+    dispatch(deleteAppointment(appointmentIndexInAppointmentsArray))
+    
   }

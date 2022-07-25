@@ -9,9 +9,12 @@ export const dentistDayTimeSlice = createSlice({
     addDayTimeDentist: (state, action) => {
       const stuffToSave = action.payload;
       state.dentistDayTimes.push(stuffToSave);
-    }}
+    },
+    deleteDayTimeDentist: (state, action) => {
+      state.dentistDayTimes.splice(action.payload, 1)
+    }},
 })
-export const { addDayTimeDentist } = dentistDayTimeSlice.actions;
+export const { addDayTimeDentist, deleteDayTimeDentist } = dentistDayTimeSlice.actions;
 
 export default dentistDayTimeSlice.reducer;    
 

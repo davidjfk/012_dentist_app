@@ -9,9 +9,12 @@ export const assistantDayTimeSlice = createSlice({
     addDayTimeAssistant: (state, action) => {
       const stuffToSave = action.payload;
       state.assistantDayTimes.push(stuffToSave);
-    }}
+    },
+    deleteDayTimeAssistant: (state, action) => {
+      state.assistantDayTimes.splice(action.payload, 1)
+    }},
 })
-export const { addDayTimeAssistant } = assistantDayTimeSlice.actions;
+export const { addDayTimeAssistant, deleteDayTimeAssistant } = assistantDayTimeSlice.actions;
 
 export default assistantDayTimeSlice.reducer;    
 

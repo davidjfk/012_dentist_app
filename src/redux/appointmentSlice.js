@@ -13,10 +13,14 @@ export const appointmentSlice = createSlice({
     addAppointment: (state, action) => {
       const appointmentToSave = action.payload;
       state.appointments.push(appointmentToSave);
-//
+
+    },
+    deleteAppointment: (state, action) => {
+      state.appointments.splice(action.payload, 10)
+
     }}
 })
-export const { addAppointments, addAppointment } = appointmentSlice.actions;
+export const { addAppointments, addAppointment, deleteAppointment } = appointmentSlice.actions;
 
 export default appointmentSlice.reducer;    
 
