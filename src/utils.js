@@ -3,12 +3,12 @@ import clientsDentistCompanyBVT from "./dataInDentistAppWhenDentistAppStarts/cli
 import dentistsDentistCompanyBVT from "./dataInDentistAppWhenDentistAppStarts/dentists"
 import assistantsDentistCompanyBVT from "./dataInDentistAppWhenDentistAppStarts/assistants"
 
-import { addAppointment } from "./redux/appointmentSlice";
+import { addAppointment, deleteAppointment } from "./redux/appointmentSlice";
 import {addDayTimeClient} from "./redux/clientDayTimeSlice";
 import {addDayTimeDentist} from "./redux/dentistDayTimeSlice";
 import {addDayTimeAssistant} from "./redux/assistantDayTimeSlice";
 
-
+const log = console.log;
 
 export function checkIfPersonWithDayAndTimeIsUnique (personId, day, time, personType, clientDayTimes, dentistDayTimes, assistantDayTimes) {
   // I only call this fn from within fn createAppointment.
@@ -49,7 +49,23 @@ export const createCombiOfPersonAndDayAndTime = (personId, day, time) => personI
 
 
 
+
+
+
 export const generateRandomPersonId = () => Math.floor(1000000 + Math.random() * 900000); // 6 digits
+
+
+export function getAppointmentId(appointmentsfromReduxToolkit, indexOfAppointment) {
+  const appointment = appointmentsfromReduxToolkit.appointments[indexOfAppointment]
+  console.log('appointmentThatWillBeDeleted:')
+  console.log(appointment)
+  let appointmentId = appointment.appointmentId
+  return appointmentId
+}
+
+
+
+
 
 
 export const getRandomDay = () => {
@@ -329,3 +345,35 @@ export const generateRandomAppointmentsFromWinc = num =>
         }
     } 
   } // fn create Appointment
+
+
+  export function deleteDentalAppointment (appointmentsfromReduxToolkit, appointmentId, appointmentIndexInAppointmentsArray, deleteDayTimeClient, deleteDayTimeDentist, deleteDayTimeAssistant, dispatch) {
+    log('inside fn deleteAppointment: ')
+    console.log(appointmentId)
+  
+    let getAppointment = appointment => appointment.appointmentId === appointmentId
+    let appointmentThatIsAboutToBeDeleted = selectObjectsByArrayObjectKey(appointmentsfromReduxToolkit.appointments, getAppointment)
+    console.log('here:')
+    console.log(appointmentThatIsAboutToBeDeleted[0])
+  
+    let {clientId, day, time, dentistId, assistantId} = appointmentThatIsAboutToBeDeleted[0];
+    log(clientId, day, time, dentistId, assistantId)
+  
+    
+    let objToDispatch;
+    objToDispatch = createCombiOfPersonAndDayAndTime(clientId, day, time)
+     console.log(objToDispatch)
+    dispatch(deleteDayTimeClient(objToDispatch));
+    
+    objToDispatch = createCombiOfPersonAndDayAndTime(dentistId, day, time)
+    dispatch(deleteDayTimeDentist(objToDispatch));
+  
+  
+    if (assistantId !== null) {
+        objToDispatch = createCombiOfPersonAndDayAndTime(assistantId, day, time)
+        dispatch(deleteDayTimeAssistant(objToDispatch));
+    }
+  
+    dispatch(deleteAppointment(appointmentIndexInAppointmentsArray))
+    
+  }

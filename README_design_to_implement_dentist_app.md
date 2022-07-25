@@ -1102,7 +1102,7 @@
                     let deleteAppointment = appointment => appoinment.appointmentId !=== appointmentId
                     let state.appoinments = selectObjectsByArrayObjectKey(state.appointments, deleteAppointment)
             */
-
+        }
 
 
 

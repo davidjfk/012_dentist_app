@@ -22,15 +22,14 @@ import {addAppointsments} from "./redux/appointmentSlice";
 import {createAppointment, checkIfPersonWithDayAndTimeIsUnique, createCombiOfPersonAndDayAndTime, generateRandomAppointmentId, getRandomPersonId, getRandomPersonIdAsync, getRandomDay, getRandomName, getRandomPersons, getRandomTime, selectObjectsByArrayObjectKey } from './utils';
 
 
-import AddAppointment from "./AddAppointment";
+import AddAppointment from "./Appointment";
 
 
 import {Calendar} from "./Calendar";
 import {Day} from "./Day";
 import {generateRandomAppointmentsFromWinc} from "./utils";
 
-const CreateManualAppointmentAfterDentistAppHasStarted = () => {
-    console.log('hi')
+export const CreateManualAppointmentAfterDentistAppHasStarted = () => {
     let clientsFromReduxToolkit  = useSelector((state) => state.client);
     let dentistsFromReduxToolkit  = useSelector((state) => state.dentist);
     let assistantsFromReduxToolkit  = useSelector((state) => state.assistant);
@@ -43,7 +42,8 @@ const CreateManualAppointmentAfterDentistAppHasStarted = () => {
 
 
             useEffect(() => {
-               
+                // This is how to ADD dental appointments without using a form nor buttons:
+
                 /*
                     winc requirement:
                     - add an appointment without an assistant: newState = addAppointment(state, dayNumber, time, patientId, dentistId) 
@@ -86,6 +86,7 @@ const CreateManualAppointmentAfterDentistAppHasStarted = () => {
                 //createAppointment(clientId, day, time, dentistId, isAssistantNeededForAppointment, assistantId); 
                 // expected result: an alert with the message 'please check if client, dentist and/or assistant have an appointment on this day and time';
 
+
                 }, []
             );
          return null
@@ -93,4 +94,4 @@ const CreateManualAppointmentAfterDentistAppHasStarted = () => {
 } // end of component
 
 
-export default CreateManualAppointmentAfterDentistAppHasStarted
+// export default CreateManualAppointmentAfterDentistAppHasStarted

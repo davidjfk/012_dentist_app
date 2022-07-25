@@ -9,9 +9,13 @@ export const clientDayTimeSlice = createSlice({
     addDayTimeClient: (state, action) => {
       const stuffToSave = action.payload;
       state.clientDayTimes.push(stuffToSave);
-    }}
+    },
+    deleteDayTimeClient: (state, action) => {
+      // const stuffToSave = action.payload;
+      state.clientDayTimes.splice(action.payload, 1)
+    }},
 })
-export const { addDayTimeClient } = clientDayTimeSlice.actions;
+export const { addDayTimeClient, deleteDayTimeClient } = clientDayTimeSlice.actions;
 
 export default clientDayTimeSlice.reducer;    
 

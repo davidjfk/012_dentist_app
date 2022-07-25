@@ -49,12 +49,12 @@ let sortedStuff = (daysInMonthJSXsorted)
 
 
 
-   console.log(sortedStuff)
-   console.log(sortedStuff[1][1])
+  //  console.log(sortedStuff)
+  //  console.log(sortedStuff[1][1])
 
    let result = sortedStuff.map(element => element[1])
    
-   console.log(result)
+  //  console.log(result)
 
    /*
     structure of the data at this point:
