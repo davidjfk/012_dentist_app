@@ -13,7 +13,7 @@ export const appointmentSlice = createSlice({
     addAppointment: (state, action) => {
       const appointmentToSave = action.payload;
       state.appointments.push(appointmentToSave);
-
+//
     }}
 })
 export const { addAppointments, addAppointment } = appointmentSlice.actions;
