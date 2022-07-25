@@ -1025,13 +1025,18 @@
 
     use case: as a an assistant or dentist I delete a dental appointment for a patient in the dentist-app (e.g. the patient is ill, so cannot come).
         The basic idea of the next steps is that the deletion of an appointment will undo/reverse an added appointment in global state. Just like in the situation of adding an appointment, I must distinguish between appointments with and without an assistant. 
-    1. click delete-button: 
-        a) in the Calendar View or Day View click on the appointment. 
-    2.  via inverse data flow (via redux-toolkit) appointment is deleted from global state (next step below explains how). Automatic re-render will make then    
-        apppointment disappear from calender (month) view and day view, due to automatic re-render.
-    3.  the idea: deleteAppointment does the opposite with state as addAppointment (see use cases 1 and 2)
-    4.  fn deleteAppointment can first be called as a fn (see winc-requirment: - delete an appointment: newState = removeAppointment(state, appointmentId)  ).
-        In the bonus requirement this fn will be invoked from a button 'delete appointment' that will be added to each appointment in the Calendar View and the Day View. 
+
+
+    1.  fn deleteAppointment below will first be called as a fn (see winc-requirment: - delete an appointment: newState = 
+        removeAppointment(state, appointmentId)  ).
+        
+        In the bonus requirement: call this fn from a button 'delete appointment' that will be added to each appointment in the 
+
+
+    2.  result: appointment is deleted from global state.
+    3.  Automatic re-render will make the apppointment then disappear from calender (month) view and day view, due to automatic re-render.
+    4.  the idea: deleteAppointment does the opposite with state as addAppointment (see use cases 1 and 2)
+
         
 
         fn deleteAppointment(appointmentId){

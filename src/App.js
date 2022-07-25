@@ -248,7 +248,10 @@ const App = ()  => {
               <ul>
                 <li>
                   <Link to="/">Add appointment</Link>
-                </li>         
+                </li>   
+                <li>
+                  <Link to="/deleteAppointment">Delete appointment</Link>
+                </li>                        
                 <li>
                   <Link to="/calendar">Calendar view</Link>
                 </li>
@@ -266,6 +269,9 @@ const App = ()  => {
                 </Route>
                 <Route path="/day">
                   <Day appointments={appointmentsfromReduxToolkit.appointments.filter(app => app.day === "02")} />
+                </Route>
+                <Route path="/deleteAppointment">  
+                  <AddAppointment  />
                 </Route>
                 <Route path="/">
                   <AddAppointment  />
