@@ -23,6 +23,9 @@ export const Calendar = ( {appointments} ) => {
   // console.log(typeof(appointments[0].time))
   // console.log(appointments[0].time)
   const appointmentsByDay = divideByDay(appointments.appointments);
+
+
+  
   /* appointmentsByDay is an obj with each key signifiying a day 
     number and its corresponding value being an array with appointments on that day.
 {
@@ -34,9 +37,45 @@ export const Calendar = ( {appointments} ) => {
 
   */
 
-  const daysInMonthJSX = Object.values(
-    appointmentsByDay
-  ).map((appointmentsInDay, index) => (
+
+const daysInMonthJSXsorted = Object.entries(appointmentsByDay)
+  //  
+
+// console.log(daysInMonthJSXsorted[0][0])
+  // .sort((appointmentsByDay1, appointmentsByDay2) => Object.keys(appointmentsByDay2) -Object.keys(appointmentsByDay1)) //.reverse()
+
+let sortedStuff = (daysInMonthJSXsorted)
+   .sort((daysInMonthJSXsorted1, daysInMonthJSXsorted2) => daysInMonthJSXsorted2[0] - daysInMonthJSXsorted1[0]).reverse()
+
+
+
+   console.log(sortedStuff)
+   console.log(sortedStuff[1][1])
+
+   let result = sortedStuff.map(element => element[1])
+   
+   console.log(result)
+
+   /*
+    structure of the data at this point:
+    (20) [Array(9), Array(8), Array(10), Array(8), Array(7), 
+      Array(7), Array(10), Array(11), Array(8), Array(5), Array(10),
+      Array(8), Array(3), Array(8), Array(6), Array(5), Array(5), 
+      Array(8), Array(6), Array(8)]
+    0: (9) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}]
+    1: (8) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}]
+    (...)
+    19: (8) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}]
+   */
+
+  const daysInMonthJSX = Object.values(result)
+    // .sort((appointmentsByDay1, appointmentsByDay2) => appointmentsByDay2.day - appointmentsByDay1.day).reverse()
+    .map((appointmentsInDay, index) => (
+
+    /*
+      2do: result is already an array, so skip Object.values 
+      note-to-self: for each day in the month there is a separate array. Each appointment is an objecct inside a "day-array".
+    */
     /* 
       about: " .map((appointmentsInDay, day, index) => ( "
       in a vanilla-js map fn, index is the second argument. So I skip day={day}.

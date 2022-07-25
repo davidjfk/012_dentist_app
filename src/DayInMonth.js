@@ -4,7 +4,7 @@ import {AppointmentInMonthDay} from "./AppointmentInMonthDay";
 export const DayInMonth = ({ appointments }) => {
   
   const appointmentsJSX = appointments
-    .sort((appointment1, appointment2) => appointment2.time - appointment1.time).reverse()
+    .sort((appointment1, appointment2) => appointment2.time - appointment1.time).reverse()  // works
     .map(({ time, day, client, assistant }, index) => (
     <AppointmentInMonthDay  day={day} time={time}  client={client} assistant={assistant} key={index} />
   ));

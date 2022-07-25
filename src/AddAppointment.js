@@ -1,15 +1,21 @@
 import React from "react";
 import "./App.css";
-import CreateRandomAppointmentsWhenAppStarts from "./CreateRandomAppointmentsWhenAppStarts";
-import InitalSetupForMakingAppointments from "./InitialSetupForMakingAppointments";
 
-export default () =>  {
+
+
+import InitalSetupForMakingAppointments from "./InitialSetupForMakingAppointments";
+import CreateRandomAppointmentsWhenAppStarts from "./CreateRandomAppointmentsWhenAppStarts";
+import CreateManualAppointmentAfterDentistAppHasStarted from "./CreateManualAppointmentAfterDentistAppHasStarted";
+
+export default ({appointments}) =>  {
     // console.log('jojo')
     return(
         // <div>Home!</div>
         <>
-            {/* <InitalSetupForMakingAppointments/> */}
+            <div>bla</div>
+            {/* <CreateManualAppointmentAfterDentistAppHasStarted/> */}
             {/* <CreateRandomAppointmentsWhenAppStarts/>    */}
+            <CreateManualAppointmentAfterDentistAppHasStarted />
         </>
 
     )

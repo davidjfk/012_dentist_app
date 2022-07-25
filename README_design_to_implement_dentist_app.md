@@ -873,11 +873,12 @@
         
             a) create form to add an appointment. Do this inside component 'CreateManualAppointmentAfterDentistAppHasStarted.js'. This component is a child  of component AddAppointment.js 
             b) select / fill out data on the form (selectboxes and input fields).  
-            c) (2do if time left: perform the validations before the saving the form. The form controls (e.g. selectbox, input field) instantly update local state. So after each change you can validate if the  input is valid. But at this stage you do not want alerts to pop up, but just a warning message instead )
+            c) (2do if time left: add the validations before saving the controlled form, acting as a feedforward. So as soon as you select a client, day and time, the system  can already check if the client-day-time combi is vacant or not. This can already happen before having selected a dentist or assistant. The form controls (e.g. selectbox, input field) instantly update local state. So after each change you can validate if the  input is (still) valid. But at this stage you do not want alerts to pop up, but just a warning message instead, for better usability )
             c) click 'save appointment'.
             d) in the onsubmit fn, do a preventDefault.
             e) inside the onSubmit fn body, call  addAppointment (see step 5 below) 
-            f) to add another appointment by a dentist or assistant after the application has started, redo the steps b-e.
+            f) perform the validations. If the data does not pass the validations, then an alert is shown with the text ''please check if client, dentist and/or assistant have an appointment on this day and time'. If so, then look at the current calendar view to check who has a double appointment, adjust the data and click 'save appointment' again.
+            f) to add another appointment by a dentist or assistant after the application has started, redo the steps b-f.
 
 
         7. create fn addAppointment
