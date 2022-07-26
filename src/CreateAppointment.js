@@ -1,43 +1,22 @@
 import React from "react";
-import { useState } from "react";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import "./App.css";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
+import {createAppointment, getRandomPersonIdAsync, getRandomDay, getRandomTime } from './utils';
 
-import clientsDentistCompanyBVT from "./dataInDentistAppWhenDentistAppStarts/clients"
-import dentistsDentistCompanyBVT from "./dataInDentistAppWhenDentistAppStarts/dentists"
-import assistantsDentistCompanyBVT from "./dataInDentistAppWhenDentistAppStarts/assistants"
-
-import { addClient } from "./redux/clientSlice";
-import { addDentist } from "./redux/dentistSlice";
-import { addAssistant } from "./redux/assistantSlice";
-import { addAppointment } from "./redux/appointmentSlice";
-import {addDayTimeClient} from "./redux/clientDayTimeSlice";
-import {addDayTimeDentist} from "./redux/dentistDayTimeSlice";
-import {addDayTimeAssistant} from "./redux/assistantDayTimeSlice";
-import {addAppointsments} from "./redux/appointmentSlice";
-import {createAppointment, checkIfPersonWithDayAndTimeIsUnique, createCombiOfPersonAndDayAndTime, generateRandomAppointmentId, getRandomPersonId, getRandomPersonIdAsync, getRandomDay, getRandomName, getRandomPersons, getRandomTime, selectObjectsByArrayObjectKey } from './utils';
-
-
-import AddAppointment from "./Appointment";
-
-
-import {Calendar} from "./Calendar";
-import {Day} from "./Day";
-import {generateRandomAppointmentsFromWinc} from "./utils";
-
-export const CreateManualAppointmentAfterDentistAppHasStarted = () => {
+export const CreateAppointment = () => {
+    const log = console.log;
     let clientsFromReduxToolkit  = useSelector((state) => state.client);
     let dentistsFromReduxToolkit  = useSelector((state) => state.dentist);
     let assistantsFromReduxToolkit  = useSelector((state) => state.assistant);
-    // let appointmentsfromReduxToolkit = useSelector((state) => state.appointment)
 
-    let clientDayTimes = useRef([]);
-    let dentistDayTimes = useRef([]);
-    let assistantDayTimes = useRef([]);
+    let clientDayTimesFromReduxToolkit = useSelector((state) => state.clientDayTime);
+    let dentistDayTimesFromReduxToolkit = useSelector((state) => state.dentistDayTime);
+    let assistantDayTimesFromReduxToolkit = useSelector((state) => state.assistantDayTime);
+    log(`comp createManualAppointmentAfterDentistAppHasStarted: get data from redux toolkit: `)
+
     let dispatch = useDispatch();
 
 
@@ -48,6 +27,12 @@ export const CreateManualAppointmentAfterDentistAppHasStarted = () => {
                     winc requirement:
                     - add an appointment without an assistant: newState = addAppointment(state, dayNumber, time, patientId, dentistId) 
                     Note: an appointment on a day + time can only be added when the choosen dentist and/or assistant is available.
+
+                    This is how to ADD a dental appointment without using a form nor buttons:
+                    how to do it:
+                    step 1: switch off the other components inside component Appointments. Reason: they both access the same data in redux toolkit with a useEffect with [] as a dependency.
+                    step 2: activate this component. 
+
                 */
                 let day = getRandomDay()  
                 day="50"  
@@ -61,9 +46,29 @@ export const CreateManualAppointmentAfterDentistAppHasStarted = () => {
                 let clientId = getRandomPersonIdAsync(clientsFromReduxToolkit.clients, 'clientId')
                 let dentistId = getRandomPersonIdAsync(dentistsFromReduxToolkit.dentists, 'dentistId');  
                 let assistantId = getRandomPersonIdAsync(assistantsFromReduxToolkit.assistants, 'assistantId');
+                log(`comp createManualAppointmentAfterDentistAppHasStarted: get random ids: `)
+                // log(clientId)
+                // log(dentistId)
+                // log(assistantId)
                 // or fill out any Id you like as a clientId, dentistId or assistantId, e.g. assistantId = "barryToTheRescue-03404";
-                let isAssistantNeededForAppointment = false;
-                createAppointment(clientId, day, time, dentistId, isAssistantNeededForAppointment, assistantId, clientsFromReduxToolkit, dentistsFromReduxToolkit, assistantsFromReduxToolkit, clientDayTimes, dentistDayTimes, assistantDayTimes, dispatch); 
+                let isAssistantNeededForAppointment = true;
+                
+                createAppointment(
+                    clientId, 
+                    day, 
+                    time, 
+                    dentistId, 
+                    isAssistantNeededForAppointment, 
+                    assistantId, 
+                    clientsFromReduxToolkit, 
+                    dentistsFromReduxToolkit, 
+                    assistantsFromReduxToolkit, 
+                    clientDayTimesFromReduxToolkit, 
+                    dentistDayTimesFromReduxToolkit, 
+                    assistantDayTimesFromReduxToolkit, 
+                    dispatch
+                ); 
+                
                 /*
                     to prove that the validation works, try to add another appointment with the same clientId, dentistId 
                     and assistantId on day 50 at 09 o'clock. (so uncomment the following and 'npm start' again) 
@@ -78,7 +83,26 @@ export const CreateManualAppointmentAfterDentistAppHasStarted = () => {
                 */
                 isAssistantNeededForAppointment = true;
                 day="51" // same comment as  for day 50 above. 
-                createAppointment(clientId, day, time, dentistId, isAssistantNeededForAppointment, assistantId, clientsFromReduxToolkit, dentistsFromReduxToolkit, assistantsFromReduxToolkit, clientDayTimes, dentistDayTimes, assistantDayTimes, dispatch); 
+                
+                createAppointment(
+                    clientId, 
+                    day, 
+                    time, 
+                    dentistId, 
+                    isAssistantNeededForAppointment, 
+                    assistantId, 
+                    clientsFromReduxToolkit, 
+                    dentistsFromReduxToolkit, 
+                    assistantsFromReduxToolkit, 
+                    clientDayTimesFromReduxToolkit, 
+                    dentistDayTimesFromReduxToolkit, 
+                    assistantDayTimesFromReduxToolkit, 
+                    dispatch
+                ); 
+                
+                // createAppointment(
+                //     clientId, day, time, dentistId, isAssistantNeededForAppointment, assistantId, clientsFromReduxToolkit, dentistsFromReduxToolkit, assistantsFromReduxToolkit, clientDayTimes, dentistDayTimes, assistantDayTimes, dispatch); 
+               
                 /*
                     to prove that the validation works,  try to add another appointment with the same clientId, dentistId 
                     and assistantId on day 50 at 09 o'clock. (so uncomment the following and 'npm start' again)
@@ -90,8 +114,6 @@ export const CreateManualAppointmentAfterDentistAppHasStarted = () => {
                 }, []
             );
          return null
+} 
 
-} // end of component
 
-
-// export default CreateManualAppointmentAfterDentistAppHasStarted
