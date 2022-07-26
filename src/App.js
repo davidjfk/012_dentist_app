@@ -50,22 +50,22 @@ const App = ()  => {
       } , [] 
     );
     
-    let clientDayTimes = useRef([]);
-    let dentistDayTimes = useRef([]);
-    let assistantDayTimes = useRef([]);
+    let clientDayTimesRef = useRef([]);
+    let dentistDayTimesRef = useRef([]);
+    let assistantDayTimesRef = useRef([]);
     
     function checkIfPersonWithDayAndTimeIsUnique (personId, day, time, personType) {
         let arrayWithDayAndTimeCombinationsThatAreTaken = [];
         let uniqueValue = false;
         switch (personType) {
             case 'client':
-                arrayWithDayAndTimeCombinationsThatAreTaken = clientDayTimes.current; 
+                arrayWithDayAndTimeCombinationsThatAreTaken = clientDayTimesRef.current; 
                 break;
             case 'dentist':
-                arrayWithDayAndTimeCombinationsThatAreTaken = dentistDayTimes.current; 
+                arrayWithDayAndTimeCombinationsThatAreTaken = dentistDayTimesRef.current; 
                 break;
             case 'assistant':
-                arrayWithDayAndTimeCombinationsThatAreTaken = assistantDayTimes.current; 
+                arrayWithDayAndTimeCombinationsThatAreTaken = assistantDayTimesRef.current; 
                 break;
             default:
                 console.error(`this ${personType} does not exist`)
@@ -78,7 +78,7 @@ const App = ()  => {
         // console.log(uniqueValue)
         // console.log('fn checkIfPersonWithDayAndTimeIsUnique: return PersonIdAndDayAndTimeCombi:')
         // console.log(PersonIdAndDayAndTimeCombi)
-        // console.log('fn checkIfPersonWithDayAndTimeIsUnique: return clientDayTimes.current:')
+        // console.log('fn checkIfPersonWithDayAndTimeIsUnique: return clientDayTimesRef.current:')
         // console.log(assistantDayTimes.current)
         return uniqueValue
     }
@@ -111,43 +111,37 @@ const App = ()  => {
                   )
               {
     
-                  let objToDispatch;
-                  objToDispatch = createCombiOfPersonAndDayAndTime(clientId, day, time)
-                  // console.log(objToDispatch)
-                  dispatch(addDayTimeClient(objToDispatch));
-                  clientDayTimes.current.push(objToDispatch)
+                  
+                  let clientDayTimes = createCombiOfPersonAndDayAndTime(clientId, day, time)
+                  dispatch(addDayTimeClient(clientDayTimes));
+                  clientDayTimesRef.current.push(clientDayTimes)
     
-                  objToDispatch = createCombiOfPersonAndDayAndTime(dentistId, day, time)
-                  // console.log(objToDispatch)
-                  dispatch(addDayTimeDentist(objToDispatch));
-                  dentistDayTimes.current.push(objToDispatch)
+                  let dentistDayTimes = createCombiOfPersonAndDayAndTime(dentistId, day, time)
+                  dispatch(addDayTimeDentist(dentistDayTimes));
+                  dentistDayTimesRef.current.push(dentistDayTimes)
 
-                  objToDispatch = createCombiOfPersonAndDayAndTime(assistantId, day, time)
-                  // console.log(objToDispatch)
-                  dispatch(addDayTimeAssistant(objToDispatch));
-                  assistantDayTimes.current.push(objToDispatch)
+                  let assistantDayTimes = createCombiOfPersonAndDayAndTime(assistantId, day, time)
+                  dispatch(addDayTimeAssistant(assistantDayTimes));
+                  assistantDayTimesRef.current.push(assistantDayTimes)
 
                   let getClient = client => client.clientId === clientId
-                  // console.log(clientId)
                   let clientForWhomAnAppointmentIsBeingMade = selectObjectsByArrayObjectKey(randomClients, getClient)
+                  
                   // variable client inside obj appointment is derived data from  the object client.
                   let client = (`${(clientForWhomAnAppointmentIsBeingMade[0].firstName)} ${(clientForWhomAnAppointmentIsBeingMade[0].lastName)}`)
-                  // console.log(client)
-
 
                   let getDentist = dentist => dentist.dentistId === dentistId
-                  // console.log(dentistId)
                   let dentistForWhomAnAppointmentIsBeingMade = selectObjectsByArrayObjectKey(randomDentists, getDentist)
+                  
                   // variable dentist inside obj appointment is derived data from  the object dentist.
                   let dentist = (`${(dentistForWhomAnAppointmentIsBeingMade[0].firstName)} ${(dentistForWhomAnAppointmentIsBeingMade[0].lastName)}`)
-                  // console.log(dentist)
 
                   let getAssistant = assistant => assistant.assistantId === assistantId
-                  // console.log(assistantId)
                   let assistantForWhomAnAppointmentIsBeingMade = selectObjectsByArrayObjectKey(randomAssistants, getAssistant)
+                  
                   // variable assistant inside obj appointment is derived data from  the object assistant.
                   let assistant = (`${(assistantForWhomAnAppointmentIsBeingMade[0].firstName)} ${(assistantForWhomAnAppointmentIsBeingMade[0].lastName)}`)
-                  // console.log(assistant)
+      
 
                   let appointmentId = generateRandomAppointmentId();
                   let newAppointmentObject = {appointmentId, clientId, client, day, time, dentistId, dentist, assistantId, assistant, isSick:false, isNowUpdatingAppointment:false } // bonus: 1 treatmentType
@@ -163,39 +157,31 @@ const App = ()  => {
                   checkIfPersonWithDayAndTimeIsUnique(dentistId, day, time, personType = "dentist"))
               {
     
-                  let objToDispatch;
-                  objToDispatch = createCombiOfPersonAndDayAndTime(clientId, day, time)
-                  // console.log(objToDispatch)
-                  dispatch(addDayTimeClient(objToDispatch));
-                  clientDayTimes.current.push(objToDispatch)
-    
-                  objToDispatch = createCombiOfPersonAndDayAndTime(dentistId, day, time)
-                  // console.log(objToDispatch)
-                  dispatch(addDayTimeDentist(objToDispatch));
-                  dentistDayTimes.current.push(objToDispatch)
+                let clientDayTimes = createCombiOfPersonAndDayAndTime(clientId, day, time)
+                dispatch(addDayTimeClient(clientDayTimes));
+                clientDayTimesRef.current.push(clientDayTimes)
 
-                  let getClient = client => client.clientId === clientId
-                  // console.log(clientId)
-                  let clientForWhomAnAppointmentIsBeingMade = selectObjectsByArrayObjectKey(randomClients, getClient)
-                  // variable client inside obj appointment is derived data from  the object client.
-                  let client = (`${(clientForWhomAnAppointmentIsBeingMade[0].firstName)} ${(clientForWhomAnAppointmentIsBeingMade[0].lastName)}`)
-                  // console.log(client)
+                let dentistDayTimes = createCombiOfPersonAndDayAndTime(dentistId, day, time)
+                dispatch(addDayTimeDentist(dentistDayTimes));
+                dentistDayTimesRef.current.push(dentistDayTimes)
 
+                let getClient = client => client.clientId === clientId
+                let clientForWhomAnAppointmentIsBeingMade = selectObjectsByArrayObjectKey(randomClients, getClient)
+                
+                // variable client inside obj appointment is derived data from  the object client.
+                let client = (`${(clientForWhomAnAppointmentIsBeingMade[0].firstName)} ${(clientForWhomAnAppointmentIsBeingMade[0].lastName)}`)
 
-                  let getDentist = dentist => dentist.dentistId === dentistId
-                  // console.log(dentistId)
-                  let dentistForWhomAnAppointmentIsBeingMade = selectObjectsByArrayObjectKey(randomDentists, getDentist)
-                  // variable dentist inside obj appointment is derived data from  the object dentist.
-                  let dentist = (`${(dentistForWhomAnAppointmentIsBeingMade[0].firstName)} ${(dentistForWhomAnAppointmentIsBeingMade[0].lastName)}`)
-                  //console.log(dentist)
+                let getDentist = dentist => dentist.dentistId === dentistId
+                let dentistForWhomAnAppointmentIsBeingMade = selectObjectsByArrayObjectKey(randomDentists, getDentist)
+                
+                // variable dentist inside obj appointment is derived data from  the object dentist.
+                let dentist = (`${(dentistForWhomAnAppointmentIsBeingMade[0].firstName)} ${(dentistForWhomAnAppointmentIsBeingMade[0].lastName)}`)
 
-    
-                  let appointmentId = generateRandomAppointmentId();
-                  let newAppointmentObject = {appointmentId, clientId, client, day, time, dentistId, dentist, assistantId:null, assistant:null, isSick:false, isNowUpdatingAppointment:false } // bonus: 1 treatmentType
-                  dispatch(addAppointment(newAppointmentObject));
+                let appointmentId = generateRandomAppointmentId();
+                let newAppointmentObject = {appointmentId, clientId, client, day, time, dentistId, dentist, assistantId:null, assistant:null, isSick:false, isNowUpdatingAppointment:false } // bonus: 1 treatmentType
+                dispatch(addAppointment(newAppointmentObject));
                     
-              } else {   
-                  // console.log('the else way 2')         
+              } else {          
                   generateRandomAppointment();
               }
           } 
@@ -241,7 +227,11 @@ const App = ()  => {
 
       Status/ result: the fn createAppointment inside component CreateManualAppointmentAfterDentistAppHasStarted works. So 'USECASE 2: CREATE APPOINTMENT IN THE APPLICATION (AT FIRST WITH A FN CALL, LATER IN THE BONUS REQUIREMENT WITH A FORM)' is done. 
       
-      Later, as part of the bonus requirements, inside component CreateManualAppointmentAfterDentistAppHasStarted I create a FORM to call fn createAppointment instead. 
+      Later, as part of the bonus requirements:
+        inside component CreateManualAppointmentAfterDentistAppHasStarted I create a FORM to call fn createAppointment instead. 
+        Component CreateRandomAppointmentsWhenAppStarts will then be the first component inside component Appointments.js and will contain all the code of this component App.js before the return statement above.    
+      
+      
       */ ///
         
         <Router>

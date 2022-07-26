@@ -16,7 +16,7 @@ export const appointmentSlice = createSlice({
 
     },
     deleteAppointment: (state, action) => {
-      state.appointments.splice(action.payload, 10)
+      state.appointments.splice(action.payload, 1)
 
     }}
 })
