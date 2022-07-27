@@ -16,7 +16,11 @@ import {addDayTimeClient} from "./redux/clientDayTimeSlice";
 import {addDayTimeDentist} from "./redux/dentistDayTimeSlice";
 import {addDayTimeAssistant} from "./redux/assistantDayTimeSlice";
 import {addAppointsments} from "./redux/appointmentSlice";
-import { createCombiOfPersonAndDayAndTime, generateRandomAppointmentId, getRandomPersonId, getRandomPersonIdAsync, getRandomDay, getRandomName, getRandomPersons, getRandomTime, selectObjectsByArrayObjectKey } from './utils';
+import { 
+    createCombiOfPersonAndDayAndTime, 
+    generateRandomAppointmentId, 
+    getRandomPersonId, 
+    getRandomPersonIdAsync, getRandomDay, getRandomName, getRandomPersons, getRandomTime, selectObjectsByArrayObjectKey } from './utils';
 
 
 const CreateRandomAppointmentsWhenAppStarts = () => {

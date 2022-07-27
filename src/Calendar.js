@@ -1,6 +1,6 @@
 import React from "react";
-import "./Calendar.css";
 import {DayInMonth} from "./DayInMonth";
+import "./Calendar.css";
 
 const divideByDay = appointments => {
   // console.log('hier')
@@ -16,7 +16,7 @@ const divideByDay = appointments => {
   return appointmentsByDay;
 };
 
-export const Calendar = ( {appointments} ) => {
+export const Calendar = ( {appointments, dentists} ) => {
 
   // let {appointments} = foo;
   // console.log(appointments)
@@ -83,7 +83,7 @@ let sortedStuff = (daysInMonthJSXsorted)
 
     */ 
 
-    <DayInMonth appointments={appointmentsInDay} key={index} />
+    <DayInMonth appointments={appointmentsInDay}  key={index} />
   ));
   // you are mapping all days of the month.
   return (

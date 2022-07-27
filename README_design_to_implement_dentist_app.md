@@ -1291,11 +1291,21 @@
 
 
 # USE CASE 7: CANCEL APPOINTMENTS BECAUSE CLIENT IS ILL
-    - a client is sick, so delete his appointments: newState = makePatientSick(state, patientId)
-    --> later in the bonus requirements: replace this fn call (inside the business logic of component Appointments) by a button (or stateful checkbox) in the component Client.js . If you click this button (or check the checkbox), then all appointments (0, 1 or more) in the upcoming month will be deleted for this patient. 
-    If time left then implement use case: if the checkbox in component Client.js indicates that that a patient is ill (i.e. is switched on), any attempt to add a new appointment (in component AddAppointment ) will display the alert('Please check that client has cured and is fit enough for a new appointment. If so, please uncheck checkbox 'patient is ill' on webpage Client ). Client will get its own Route and Link in React Router. 
 
-    work flow:
+    - a client is sick, so delete his appointments: newState = makePatientSick(state, patientId)
+
+    UI: as a dentist or assistant on a client page, I select a clientId inside a selectbox. Then
+    I click a button 'cancel all appointments'. The event that is  triggered, contains a clientId.
+    The UI part will be implemented as part of the bonus requirement. Until then I use this useEffect hook to call the fn
+    that deletes all appointments of this clientId. 
+
+    Client page will get its own Route and Link in React Router. 
+
+       
+    
+    alternative UI: a button (or stateful checkbox) in the component Client.js . If you click this button (or check the checkbox), then all appointments (0, 1 or more) in the upcoming month will be deleted for this patient. 
+    
+    alternative work flow:
     1. Component Dlient.js has subcomponent ShowClients.js 
     2. ShowClient.js contains overview with all clients.
     3. On each client row you can select checkbox 'client is ill'
@@ -1307,6 +1317,7 @@
         long as on the Client page the checkbox indicates that the client is ill.
     
 
+
 # USE CASE 8: GIVE APPOINTMENTS OF SICK DENTIST A RED BACKGROUND COLOR
     winc-requirement: "a dentist becomes sick. Give each of his or her appointments a red background colour". --> do this in the Day View and in the Calendar (month) View: 
     newState = makeDentistSick(state, dentistId)" 
@@ -1316,7 +1327,7 @@
     --> where to implement: in component Dentist.js --> subcomponent DisplayDentist.js check checkbox 'dentist is ill'. As a result of this all of his appointments (0, 1 or more) will get a red background color. 
 
 
-    work flow:
+    UI work flow:
     1. Component Dentist.js has subcomponent ShowDentists.js 
     2. ShowDentist.js contains overview with all dentists.
     3. On each dentist row you can select checkbox 'dentist is ill'
@@ -1340,7 +1351,7 @@
         5. now conditionally render the array appointmentsWithSickAndHealthyDentists:  "if isSick, then show red background", else do nothing.  (use nullish coalescing operator.).
 
 
-    5. 'use case 2: (see chapter use case 2): validate that when you make appointment for sick dentist, then the appointment shows up on Calendar View and Day View, but with red background color. 
+    5. 'scenario: (see chapter use case 2): validate that when you make appointment for sick dentist, then the appointment shows up on Calendar View and Day View, but with red background color. 
 
 # USE CASE 9: GIVE APPOINTMENTS OF SICK ASSISTANT AN ORANGE BACKGROUND COLOR
     winc-requirement: "(dentists and) assistants can become sick. They won't be able to work that day."

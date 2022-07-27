@@ -19,11 +19,20 @@
   font-size: 1rem;
 }
 
-.calendarview .day {
+.calendarview  {
   margin-bottom: 0.5rem;
   border: 1px solid lightblue;
   padding: 0.5rem;
   background-color: lightyellow;
+  /* background-color: red; */
+}
+
+.day {
+  margin-bottom: 0.5rem;
+  border: 1px solid lightblue;
+  padding: 0.5rem;
+  /* background-color: lightyellow; */
+  /* background-color: red; */
 }
 
 .appointment {
@@ -47,4 +56,8 @@
 
 .assistant {
   margin-left: 20px;
+}
+
+.backgroundColor {
+  background-color: red;
 }
