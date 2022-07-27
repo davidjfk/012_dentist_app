@@ -12,7 +12,7 @@ import dentistsDentistCompanyBVT from "./dataInDentistAppWhenDentistAppStarts/de
 import assistantsDentistCompanyBVT from "./dataInDentistAppWhenDentistAppStarts/assistants"
 
 import { addClient } from "./redux/clientSlice";
-import { addDentist } from "./redux/dentistSlice";
+import { addDentists } from "./redux/dentistSlice";
 import { addAssistant } from "./redux/assistantSlice";
 import { addAppointment } from "./redux/appointmentSlice";
 import {addDayTimeClient} from "./redux/clientDayTimeSlice";
@@ -29,6 +29,7 @@ import {Calendar} from "./Calendar";
 import {Day} from "./Day";
 import {generateRandomAppointmentsFromWinc} from "./utils";
 
+const log = console.log;
 
 const App = ()  => {
   
@@ -43,7 +44,9 @@ const App = ()  => {
           dispatch(addClient(randomClients));
       
           randomDentists = getRandomPersons(dentistsDentistCompanyBVT, 4);
-          dispatch(addDentist(randomDentists));
+          log(`App.js inside start of useEffect:`)
+          log(randomDentists)
+          dispatch(addDentists(randomDentists));
       
           randomAssistants = getRandomPersons(assistantsDentistCompanyBVT, 3); 
           dispatch(addAssistant(randomAssistants));
@@ -262,7 +265,7 @@ const App = ()  => {
                   <Day appointments={appointmentsfromReduxToolkit.appointments.filter(app => app.day === "02")} />
                 </Route>
                 <Route path="/">
-                  <Appointment  />
+                  <Appointment />
                 </Route>
               </Switch>
             </main>
