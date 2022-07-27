@@ -7,11 +7,15 @@ export const dentistListSlice = createSlice({
   },
   reducers: {
     addDentist: (state, action) => {
-      const randomDentistsFromMockaroo = action.payload;
-      state.dentists.push(...randomDentistsFromMockaroo);
+      const dentistToSave = action.payload;
+      state.dentists.push(dentistToSave);
+    },
+    addDentists: (state, action) => {
+      const dentistsToSave = action.payload; 
+      state.dentists = dentistsToSave; // dentistsToSave is an array with dentist objects.
     }}
 })
-export const { addDentist } = dentistListSlice.actions;
+export const { addDentist, addDentists } = dentistListSlice.actions;
 
 export default dentistListSlice.reducer;    
 
