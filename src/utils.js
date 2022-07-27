@@ -77,6 +77,14 @@ export function getAppointmentId(appointmentsfromReduxToolkit, indexOfAppointmen
   return appointmentId
 }
 
+export function getClientId(clientsfromReduxToolkit, indexOfClient) {
+  const client = clientsfromReduxToolkit.clients[indexOfClient]
+  log('fn getClientId: start:')
+  console.log(client)
+  let clientId = client.clientId
+  log('fn getClientId: end.')
+  return clientId
+}
 
 export const getRandomDay = () => {
   /*

@@ -24,14 +24,16 @@ const AddClient = () => {
                     
                     This is how to ADD a dental appointment without using a form nor buttons:
                     how to do it:
-                    step 1: switch off the other components inside component Appointments. Reason: they both access the same data in redux toolkit with a useEffect with [] as a dependency.
+                    step 1: switch off the other components inside component Appointments. 
+                        Reason: they both access the same data in redux toolkit with a useEffect with [] as a dependency.
                     step 2: uncomment this component inside component Appointments. 
                     step 3: npm start
                     step 4: chrome dev tools Redux: the new client below has been added to the client array inside state.
 
                     status: works, done.
 
-                    In the bonus requirements I will use a form with a button to add a client, instead of using this useEffect hook
+                    In the bonus requirements I will use a form with a button to add a client, 
+                    instead of using this useEffect hook
 
             
                 */
