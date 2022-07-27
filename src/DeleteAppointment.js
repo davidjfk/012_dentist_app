@@ -27,7 +27,8 @@ const DeleteAppointment = () => {
                 
                     This is how to DELETE dental appointments without using a form nor buttons:
                     how to do it:
-                    step 1: switch off components CreateManualAppointmentAfterDentistAppHasStarted and UpdateAppointment. Reason: they both access the same data in redux toolkit with a useEffect with [] as a dependency.
+                    step 1: step 1: switch off all other components inside component Appointment. 
+                        Reason: they both access the same data in redux toolkit with a useEffect with [] as a dependency.
                     step 2: (if needed) uncomment the following 3 lines of code:
 
                 */
