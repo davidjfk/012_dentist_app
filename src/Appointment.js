@@ -1,14 +1,13 @@
 import React from "react";
 import "./App.css";
 
-
-
 // import InitalSetupForMakingAppointments from "./InitialSetupForMakingAppointments";
 import CreateRandomAppointmentsWhenAppStarts from "./CreateRandomAppointmentsWhenAppStarts";
 import {CreateAppointment} from "./CreateAppointment";
 import DeleteAppointment from "./DeleteAppointment";
 import UpdateAppointment from "./UpdateAppointment";
 import AddDentist from "./AddDentist";
+import AddClient from "./AddClient";
 
 export const Appointment = ({appointments}) =>  {
     return(
@@ -35,6 +34,7 @@ export const Appointment = ({appointments}) =>  {
             {/* <DeleteAppointment/> */}
             {/* <UpdateAppointment/> */}
             <AddDentist />
+            <AddClient />
             <div>the useEffect hook inside each of the components above explains how the functions inside these components can be invoked.</div>
             
         </>

@@ -7,11 +7,15 @@ export const clientListSlice = createSlice({
   },
   reducers: {
     addClient: (state, action) => {
-      const randomClientsFromMockaroo = action.payload;
-      state.clients.push(...randomClientsFromMockaroo);
+      const clientToSave = action.payload;
+      state.clients.push(clientToSave);
+    },
+    addClients: (state, action) => {
+      const clientsToSave = action.payload; 
+      state.clients = clientsToSave; // clientsToSave is an array with client objects.
     }}
 })
-export const { addClient } = clientListSlice.actions;
+export const { addClient, addClients } = clientListSlice.actions;
 
 export default clientListSlice.reducer;    
 
