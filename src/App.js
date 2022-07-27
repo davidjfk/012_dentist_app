@@ -11,7 +11,7 @@ import clientsDentistCompanyBVT from "./dataInDentistAppWhenDentistAppStarts/cli
 import dentistsDentistCompanyBVT from "./dataInDentistAppWhenDentistAppStarts/dentists"
 import assistantsDentistCompanyBVT from "./dataInDentistAppWhenDentistAppStarts/assistants"
 
-import { addClient } from "./redux/clientSlice";
+import { addClients } from "./redux/clientSlice";
 import { addDentists } from "./redux/dentistSlice";
 import { addAssistant } from "./redux/assistantSlice";
 import { addAppointment } from "./redux/appointmentSlice";
@@ -41,11 +41,11 @@ const App = ()  => {
   
       useEffect(() => {
           randomClients = getRandomPersons(clientsDentistCompanyBVT, 50);
-          dispatch(addClient(randomClients));
+          log(`App.js inside start of useEffect:`)
+          log(randomClients)
+          dispatch(addClients(randomClients));
       
           randomDentists = getRandomPersons(dentistsDentistCompanyBVT, 4);
-          log(`App.js inside start of useEffect:`)
-          log(randomDentists)
           dispatch(addDentists(randomDentists));
       
           randomAssistants = getRandomPersons(assistantsDentistCompanyBVT, 3); 
