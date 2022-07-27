@@ -208,6 +208,7 @@ const App = ()  => {
 
 
     let appointmentsfromReduxToolkit = useSelector((state) => state.appointment)
+    let dentistsFromReduxToolkit  = useSelector((state) => state.dentist);
 
   return(
     
@@ -256,7 +257,7 @@ const App = ()  => {
           
               <Switch>
                 <Route path="/calendar">
-                  <Calendar appointments={appointmentsfromReduxToolkit} />
+                  <Calendar appointments={appointmentsfromReduxToolkit}  />
                 </Route>
                 <Route path="/deleteAppointment">  
                 <DeleteAppointment  />

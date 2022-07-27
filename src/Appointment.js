@@ -9,6 +9,7 @@ import UpdateAppointment from "./UpdateAppointment";
 import AddDentist from "./AddDentist";
 import AddClient from "./AddClient";
 import DeleteAllAppointmentsOfClient from "./DeleteAllAppointmentsOfClient";
+import MakeRedBackgroundForAppointmentsOfSickDentist from "./MakeRedBackgroundForAppointmentsOfSickDentist";
 
 export const Appointment = ({appointments}) =>  {
     return(
@@ -36,7 +37,8 @@ export const Appointment = ({appointments}) =>  {
             {/* <UpdateAppointment/> */}
             {/* <AddDentist />
             <AddClient /> */}
-            <DeleteAllAppointmentsOfClient />
+            {/* <DeleteAllAppointmentsOfClient /> */}
+            <MakeRedBackgroundForAppointmentsOfSickDentist />
             <div>the useEffect hook inside each of the components above explains how the functions inside these components can be invoked.</div>
             
         </>

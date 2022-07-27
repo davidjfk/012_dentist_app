@@ -86,6 +86,15 @@ export function getClientId(clientsfromReduxToolkit, indexOfClient) {
   return clientId
 }
 
+export function getDentistId(dentistsfromReduxToolkit, indexOfDentist) {
+  const dentist = dentistsfromReduxToolkit.dentists[indexOfDentist]
+  log('fn getDentistId: start:')
+  console.log(dentist)
+  let dentistId = dentist.dentistId
+  log('fn getDentistId: end.')
+  return dentistId
+}
+
 export const getRandomDay = () => {
   /*
       winc-requirement: The practice is closed on the weekend.
