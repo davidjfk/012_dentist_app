@@ -1,6 +1,5 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { dentistListSlice } from "./redux/dentistSlice";
 import { selectObjectsByArrayObjectKey } from "./utils";
 
 const log = console.log;
@@ -10,9 +9,22 @@ const format_time = time => (time < 10 ? `${time}:00u` : `${time}:00u`);
 export const AppointmentInMonthDay = ({day, time, client, dentistId, assistantId }) => {
   
   let dentistsFromReduxToolkit  = useSelector((state) => state.dentist);
+  let assistantsFromReduxToolkit  = useSelector((state) => state.assistant);
   console.log(dentistId) 
+  console.log(assistantId) 
   let dentistIsSick;
+  let assistantIsSick;
+  let colorToIndicateSickness;
   
+  // check if assistant is  ill:
+  console.log(`assistants from redux toolkit:`)
+  log(dentistsFromReduxToolkit.dentists)
+  let getAssistant = assistant => assistant.assistantId === assistantId
+  let assistantFromreduxToolkit = selectObjectsByArrayObjectKey(assistantsFromReduxToolkit.assistants, getAssistant)
+  assistantIsSick = assistantFromreduxToolkit[0].isSick;
+  assistantIsSick = (assistantIsSick === "true" || assistantIsSick === true);
+
+
   // check if dentist is  ill:
   console.log(`dentists from redux toolkit:`)
   log(dentistsFromReduxToolkit.dentists)
@@ -22,8 +34,21 @@ export const AppointmentInMonthDay = ({day, time, client, dentistId, assistantId
   dentistIsSick = (dentistIsSick === "true" || dentistIsSick === true);
 
 
+  assistantIsSick && (colorToIndicateSickness = "linear-gradient(45deg, #ffa500 50%, #ffa500 50%, #ffa500 100%)");
+  dentistIsSick && (colorToIndicateSickness = "linear-gradient(45deg, #ff0000 50%, #ff0000 50%, #ff0000 100%)");
+  (assistantIsSick && dentistIsSick) && (colorToIndicateSickness = "linear-gradient(45deg, #ff0000 25%, #ffa500 25%, #ffa500 50%, #ff0000 50%, #ff0000 75%, #ffa500 75%, #ffa500 100%)");
+
+
+  // if (assistantIsSick && dentistIsSick) {
+  //   colorToIndicateSickness = "linear-gradient(45deg, #ff0000 25%, #ffa500 25%, #ffa500 50%, #ff0000 50%, #ff0000 75%, #ffa500 75%, #ffa500 100%)"
+  // } else if (dentistIsSick) {
+  //   colorToIndicateSickness = "linear-gradient(45deg, #ff0000 50%, #ff0000 50%, #ff0000 100%)";
+  // } else if (assistantIsSick) {
+  //   colorToIndicateSickness = "linear-gradient(45deg, #ffa500 50%, #ffa500 50%, #ffa500 100%)";
+  // }
+
   return(
-  <div className="appointment" style={{backgroundColor : dentistIsSick ? 'red' : 'lightyellow'}}  >
+  <div className="appointment" style={{backgroundImage : colorToIndicateSickness}}  >
     <span className="dayAsNumber">{day} </span>    
     <span className="time">{format_time(time)}</span>
     <span className="client">{client} </span>

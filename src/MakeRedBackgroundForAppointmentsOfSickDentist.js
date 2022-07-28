@@ -19,7 +19,8 @@ const MakeRedBackgroundForAppointmentsOfSickDentist = () => {
             useEffect(() => {
                 /*
                     winc requirement:
-                    - a client is sick, delete his appointments: newState = makePatientSick(state, patientId)
+                    - a dentist becomes sick. Give each of his or her appointments a red background
+                     colour in the views: newState = makeDentistSick(state, dentistId)
                 
                     This is how to give all appointments of a sick dentist in the calendar view and day view a red background color:
                     step 1: switch off the other components inside component Appointments. 

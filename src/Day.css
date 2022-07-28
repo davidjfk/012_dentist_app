@@ -18,16 +18,19 @@
 .dayview .time {
   float: right;
   background-color: aquamarine;
+  font-size: 1.1rem;
 }
 
 .dayview .dayAsNumber {
   float: right;
   background-color: yellow;
+  
 }
 
 .dayview .client {
   font-weight: bold;
   background-color: deepskyblue;
+  font-size: 1.1rem;
 }
 
 .dayview .dentist,
