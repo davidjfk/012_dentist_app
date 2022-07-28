@@ -16,7 +16,7 @@
 
 .calendarview {
   padding: 0.5rem;
-  font-size: 1rem;
+  font-size: 1.1rem;
 }
 
 .calendarview  {
@@ -51,7 +51,11 @@
 
 .calendarview .time {
   margin-left: 0.5rem;
-  color: yellowgreen;
+  color: black;  /* yellowgreen;*/
+}
+
+.time {
+  font-weight: bold;
 }
 
 .assistant {

@@ -77,6 +77,15 @@ export function getAppointmentId(appointmentsfromReduxToolkit, indexOfAppointmen
   return appointmentId
 }
 
+export function getAssistantId(assistantsfromReduxToolkit, indexOfAssistant) {
+  const assistant = assistantsfromReduxToolkit.assistants[indexOfAssistant]
+  log('fn getAssistantId: start:')
+  console.log(assistant)
+  let assistantId = assistant.assistantId
+  log('fn getAssistantId: end.')
+  return assistantId
+}
+
 export function getClientId(clientsfromReduxToolkit, indexOfClient) {
   const client = clientsfromReduxToolkit.clients[indexOfClient]
   log('fn getClientId: start:')

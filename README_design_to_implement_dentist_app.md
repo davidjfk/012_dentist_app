@@ -1514,7 +1514,7 @@
                 1. In component AddAppointment.js 
                 2. add a selectbox with all skills of all dentists.
                 3. select a dentist
-                4. select a number of skills (between 1 to all inclusive)
+                4. select one treatmentType (winc-requirement: 1 treatmentType per appointment).
                 5. add a validation to fn createAppointment to check if the selected dentist masters the required skill 
                     (skill = treatmentType) 
 
