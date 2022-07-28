@@ -13,7 +13,7 @@ import assistantsDentistCompanyBVT from "./dataInDentistAppWhenDentistAppStarts/
 
 import { addClients } from "./redux/clientSlice";
 import { addDentists } from "./redux/dentistSlice";
-import { addAssistant } from "./redux/assistantSlice";
+import { addAssistants } from "./redux/assistantSlice";
 import { addAppointment } from "./redux/appointmentSlice";
 import {addDayTimeClient} from "./redux/clientDayTimeSlice";
 import {addDayTimeDentist} from "./redux/dentistDayTimeSlice";
@@ -49,7 +49,7 @@ const App = ()  => {
           dispatch(addDentists(randomDentists));
       
           randomAssistants = getRandomPersons(assistantsDentistCompanyBVT, 3); 
-          dispatch(addAssistant(randomAssistants));
+          dispatch(addAssistants(randomAssistants));
       } , [] 
     );
     

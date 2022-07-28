@@ -42,7 +42,7 @@ const AddDentist = () => {
                     lastName,
                     dentistId:`${lastName}-${generateRandomPersonId()}`,
                     firstName,
-                    phone:"06-61175862",
+                    phone:`06${Math.floor(10000000 + Math.random() * 90000000)}`,
                     email: `${firstName}.${lastName}@dentistcompanybvt.com`,
                     treatmentTypes:[],
                     isSick:"false"

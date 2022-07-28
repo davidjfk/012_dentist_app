@@ -23,8 +23,14 @@
 
 .dayview .dayAsNumber {
   float: right;
-  background-color: yellow;
-  
+  /* background-color: yellow; */
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.dayAsNumber {
+  margin-top: 10px;
+  margin-right: 10px;
 }
 
 .dayview .client {

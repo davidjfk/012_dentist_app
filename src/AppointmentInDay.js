@@ -52,7 +52,7 @@ export const AppointmentInDay = ({ time, day, client, dentist, assistant, dentis
   return(
   <li className="appointment" style={{backgroundImage : colorToIndicateSickness}}>
     <div className="time">{format_time(time)}</div>
-    <div className="dayAsNumber">Day number: {day}</div>
+    <div className="dayAsNumber">Day: {day}</div>
     <div className="client">Client: {client}</div>
     <div className="dentist">Tandarts: {dentist}</div>
     <div className="assistant">Assistent: {assistant}</div>
