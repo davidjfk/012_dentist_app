@@ -41,9 +41,9 @@
   padding: 0.1rem;
 }
 
-/* .dayAsNumber {
-  margin-right: 0.5 rem;
-} */
+.dayAsNumber {
+  font-weight: 700;
+}
 
 .calendarview .client {
   margin-left: 0.5rem;

@@ -25,7 +25,9 @@ const MakeOrangeBackgroundForAppointmentsOfSickAssistant = () => {
                     This is how to give all appointments of a sick assistant in the calendar view and day view a red background color:
                     step 1: switch off the other components inside component Appointments. 
                         Reason: they all access (partly) the same data in redux toolkit with a useEffect with [] as a dependency.
-                    step 2: uncomment this component 'MakeRedBackgroundForAppointmentsOfSickAssistant' inside component Appointments. 
+                    step 2: uncomment inside component Appointments:
+                        a) this component 'MakeOrangeBackgroundForAppointmentsOfSickAssistant'. 
+                        b) component 'MakeRedBackgroundForAppointmentsOfSickDentist'
                     step 3: npm start
                     step 4: in calendar view and day view all appointments of the sick assistant have a red background color.
 
