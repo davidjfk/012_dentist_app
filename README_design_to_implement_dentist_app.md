@@ -263,6 +263,7 @@
                 treatmentType: ["parodontology", "fillings"], --> implement later as bonus assignment.
                 dentistId: Ayad_083596,
                 dentist: firstName lastName, --> derived data from object dentist. usage: display in day view.
+                treatmentType: "crown",
                 assistantId: Bakir_03949463,
                 assistant: firstName lastName, --> derived data from object assistant. usage: display in day view.
                 isNowUpdatingThisAppointment: false, --> while appointment is updated (see use case 'update an appointment' below), the boolean is set to true. 
@@ -1415,7 +1416,7 @@
         e) in the day view, you can see the treatment type.
 
 
-        Precondition before starting with TREATMENT TYPES: the following 4 usecases (see chapters with same names above) must be ready, before implementing treatment types. Reason:  TREATMENT TYPES will be implemented inside both use cases.
+        Precondition before starting with TREATMENT TYPES: the following 4 usecases (see chapters with same names above) must be ready, before implementing treatment types. Reason:  TREATMENT TYPES will be implemented inside all use cases.
             USE CASE 0: create component InitialSetupForMakingAppointments, using data from Mockaroo
             USE CASE 1: CREATE A RANDOM DENTIST APPOINTMENT, TO LOAD WHEN APPLICATION STARTS. (read this chapter for more
                 info about TREATMENT TYPE) arbitrary choice: I will give each of the 4 dentists (that must be in the system when the application starts) randomnly 50% of all skills.
@@ -1425,24 +1426,24 @@
             USE CASES 4: UPDATE APPOINTMENT 
         
             Generic step for all use cases below: create array with dental treatments:
-            1. create file treatments.js in directory 'dataInDentistAppWhenDentistAppStarts'.
+            1. create file dentalTreatments.js in directory 'dataInDentistAppWhenDentistAppStarts'.
             2. inside this file add array:
 
 
                 const dentalTreatments = [
                     "brace",
                     "bridge",
-                    "crown", 
-                    "dental_veneer",
-                    "denture_false_teeth",
-                    "scale_and_polish",
-                    "filling",
-                    "wisdom_tooth_removal",
-                    "dental_implant",
                     "broken_or_knocked_out_tooth",
+                    "crown", 
+                    "dental_implant",
+                    "dental_veneer",
+                    "dentures",
+                    "filling",
+                    "root_canal_treatment",
+                    "scale_and_polish",
                     "teeth_whitening",
-                    "root_canal_treatment"
-                ]
+                    "wisdom_tooth_removal",
+                ];
 
 
             USE CASE 0 with treatment types:
@@ -1556,7 +1557,7 @@
     
             Use case steps (of all for all of these 3 use cases) to add/update an appointment with 1 treatmentType with 1 dentist with a skill that matches exactly that treatmentType: 
 
-            The component addAppointment has the following fields (see June 27th):
+            The component addAppointment has the following fields:
 
                 appointmentObject = {
                     appointmentId: 056946,
@@ -1604,6 +1605,8 @@
 
 
 # USE CASE 12: AS A DENTIST OR ASSISTANT I CAN PERFORM OPERATIONS WITH FORMS AND BUTTONS
+
+
 
     add client (form)
     add dentist (form)

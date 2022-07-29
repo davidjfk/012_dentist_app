@@ -10,15 +10,15 @@ export const AppointmentInMonthDay = ({day, time, client, dentistId, assistantId
   
   let dentistsFromReduxToolkit  = useSelector((state) => state.dentist);
   let assistantsFromReduxToolkit  = useSelector((state) => state.assistant);
-  console.log(dentistId) 
-  console.log(assistantId) 
+  // console.log(dentistId) 
+  // console.log(assistantId) 
   let dentistIsSick;
   let assistantIsSick;
   let colorToIndicateSickness;
   
   // check if assistant is  ill:
-  console.log(`assistants from redux toolkit:`)
-  log(dentistsFromReduxToolkit.dentists)
+  // console.log(`assistants from redux toolkit:`)
+  // log(dentistsFromReduxToolkit.dentists)
   let getAssistant = assistant => assistant.assistantId === assistantId
   let assistantFromreduxToolkit = selectObjectsByArrayObjectKey(assistantsFromReduxToolkit.assistants, getAssistant)
   assistantIsSick = assistantFromreduxToolkit[0].isSick;
@@ -26,8 +26,8 @@ export const AppointmentInMonthDay = ({day, time, client, dentistId, assistantId
 
 
   // check if dentist is  ill:
-  console.log(`dentists from redux toolkit:`)
-  log(dentistsFromReduxToolkit.dentists)
+  // console.log(`dentists from redux toolkit:`)
+  // log(dentistsFromReduxToolkit.dentists)
   let getDentist = dentist => dentist.dentistId === dentistId
   let dentistFromreduxToolkit = selectObjectsByArrayObjectKey(dentistsFromReduxToolkit.dentists, getDentist)
   dentistIsSick = dentistFromreduxToolkit[0].isSick;
@@ -48,12 +48,14 @@ export const AppointmentInMonthDay = ({day, time, client, dentistId, assistantId
   // }
 
   return(
-  <div className="appointment" style={{backgroundImage : colorToIndicateSickness}}  >
-    <span className="dayAsNumber">{day} </span>    
-    <span className="time">{format_time(time)}</span>
-    <span className="client">{client} </span>
-    <span className="dentist">{dentistId}</span> 
-    <span className="assistant">{assistantId}</span> 
+  <div className="appointment appointmentInMonth" style={{backgroundImage : colorToIndicateSickness}}  >
+    <span>
+      <span className="dayAsNumber">day: {day} </span>    
+      <span className="time">{format_time(time)}</span>
+    </span>
+    <span className="client"> client: {client} </span>
+    <span className="dentist">dentist: {dentistId}</span> 
+    <span className="assistant">assistant: {assistantId}</span> 
   </div>
   );
 };

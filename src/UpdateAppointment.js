@@ -6,7 +6,7 @@ import "./App.css";
 import {deleteDayTimeClient} from "./redux/clientDayTimeSlice";
 import {deleteDayTimeDentist} from "./redux/dentistDayTimeSlice";
 import {deleteDayTimeAssistant} from "./redux/assistantDayTimeSlice";
-import { createAppointment, getAppointmentId, getAppointmentObject, deleteDentalAppointment} from './utils';
+import { createAppointment, getAppointmentId, getAppointmentObject, deleteDentalAppointment, getRandomTreatmentForRandomAppointment} from './utils';
 
 const log = console.log;
 
@@ -92,13 +92,14 @@ const UpdateAppointment = () => {
                         assistantId = null;
                     }
                     log(`assistantId: ${assistantId}`)
-
+                    let treatmentType = getRandomTreatmentForRandomAppointment(dentistId, dentistsFromReduxToolkit.dentists );
 
                     createAppointment(
                         clientId, 
                         day, 
                         time, 
                         dentistId, 
+                        treatmentType,
                         isAssistantNeededForAppointment, 
                         assistantId, 
                         clientsFromReduxToolkit, 

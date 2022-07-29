@@ -10,15 +10,20 @@ import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import clientsDentistCompanyBVT from "./dataInDentistAppWhenDentistAppStarts/clients"
 import dentistsDentistCompanyBVT from "./dataInDentistAppWhenDentistAppStarts/dentists"
 import assistantsDentistCompanyBVT from "./dataInDentistAppWhenDentistAppStarts/assistants"
+import dentalTreatmentsDentistCompanyBV from "./dataInDentistAppWhenDentistAppStarts/dentalTreatments";
 
 import { addClients } from "./redux/clientSlice";
 import { addDentists } from "./redux/dentistSlice";
 import { addAssistants } from "./redux/assistantSlice";
-import { addAppointment } from "./redux/appointmentSlice";
+
 import {addDayTimeClient} from "./redux/clientDayTimeSlice";
 import {addDayTimeDentist} from "./redux/dentistDayTimeSlice";
 import {addDayTimeAssistant} from "./redux/assistantDayTimeSlice";
+import {addAppointment } from "./redux/appointmentSlice";
 import {addAppointsments} from "./redux/appointmentSlice";
+import {addDentalTreatmentsArrayFromExternalSource} from "./redux/dentalTreatments";
+import {addDentalTreatmentsAsSkillSetToDentist} from  "./redux/dentistSlice"
+
 import {checkIfPersonWithDayAndTimeIsUnique, createCombiOfPersonAndDayAndTime, generateRandomAppointmentId, getRandomPersonId, getRandomPersonIdAsync, getRandomDay, getRandomName, getRandomPersons, getRandomTime, selectObjectsByArrayObjectKey } from './utils';
 
 
@@ -27,32 +32,115 @@ import DeleteAppointment from "./DeleteAppointment";
 
 import {Calendar} from "./Calendar";
 import {Day} from "./Day";
-import {generateRandomAppointmentsFromWinc} from "./utils";
+import {addTreatmentTypesToDentist, generateRandomAppointmentsFromWinc, getRandomTreatmentForRandomAppointment, getRandomTreatmentTypes} from "./utils";
 
 const log = console.log;
 
 const App = ()  => {
-  
+
     const dispatch = useDispatch();
     // helper variables 
     let randomClients;
     let randomDentists;
     let randomAssistants;
-  
+    // let dentistsFromReduxToolkit; // use dentistsWithTreatmentTypesRef instead, because of presumably latency.
+    let dentistsWithTreatmentTypesRef = useRef([]); // see comment below for explanation. 
+
+
+    // randomDentists = getRandomPersons(dentistsDentistCompanyBVT, 4);
+
+
       useEffect(() => {
           randomClients = getRandomPersons(clientsDentistCompanyBVT, 50);
-          log(`App.js inside start of useEffect:`)
-          log(randomClients)
+          // log(`App.js inside start of useEffect:`)
+          // log(randomClients)
           dispatch(addClients(randomClients));
       
+          /*
+
+          */
           randomDentists = getRandomPersons(dentistsDentistCompanyBVT, 4);
-          dispatch(addDentists(randomDentists));
+          // log(randomDentists)
+
+          dentistsWithTreatmentTypesRef.current.push(randomDentists);
+          // log(dentistsWithTreatmentTypesRef.current)
+          //2do: put next 3 lines of code in a fn.
+          for (let i = 0; i < 4; i++) {
+            let skillSetOfDentist = getRandomTreatmentTypes(dentalTreatmentsDentistCompanyBV);
+            dentistsWithTreatmentTypesRef.current[0][i].treatmentTypes = skillSetOfDentist;
+          }
+
+          // dispatch(addDentists(randomDentists));
+          /*
+            The array inside the ref 'dentistsWithTreatmentTypesRef' has been the single source of truth for the state
+             with regard to the dentists inside the dentist array. 
+             Now that each dentist has received (acquired :) ) a set of skills, this dentist array can be dispatched
+             into redux-toolkit.
+             After the following dispatch, redux toolkit will be the single source of truth for the dentist array:
+          */
+          dispatch(addDentists(dentistsWithTreatmentTypesRef.current[0]));
+          /*
+            To deal with / solve a latency issue, this ref 'dentistsWithTreatmentTypesRef' will be used inside
+            fn generateRandomAppointment() <in read-only mode > to create the 150 appointments. 
+
+          */
+
+          // let skillSetOfDentist = getRandomTreatmentTypes(dentalTreatmentsDentistCompanyBV);
+          // dentistsWithTreatmentTypesRef.current[0][0].treatmentTypes = skillSetOfDentist
+
+          // skillSetOfDentist = getRandomTreatmentTypes(dentalTreatmentsDentistCompanyBV);
+          // dentistsWithTreatmentTypesRef.current[0][1].treatmentTypes = skillSetOfDentist
+
+          // skillSetOfDentist = getRandomTreatmentTypes(dentalTreatmentsDentistCompanyBV);
+          // dentistsWithTreatmentTypesRef.current[0][2].treatmentTypes = skillSetOfDentist
+
+          // skillSetOfDentist = getRandomTreatmentTypes(dentalTreatmentsDentistCompanyBV);
+          // dentistsWithTreatmentTypesRef.current[0][3].treatmentTypes = skillSetOfDentist
+
+
+          /* 
+            following line will log array with 4 dentists. 
+            QED: variable is accessible inside this useEffect.
+            (compare with same log below  this useEffect)
+          */
+          // log(randomDentists)
       
-          randomAssistants = getRandomPersons(assistantsDentistCompanyBVT, 3); 
+          randomAssistants = getRandomPersons(assistantsDentistCompanyBVT, 2); 
           dispatch(addAssistants(randomAssistants));
+
+          dispatch(addDentalTreatmentsArrayFromExternalSource(dentalTreatmentsDentistCompanyBV));
+   
       } , [] 
     );
-    
+
+
+          // status: works (so now the treatment types inside each dentist object are accessible)
+          // log(dentistsWithTreatmentTypesRef.current)
+
+
+
+    /* goal: access the treatmentTypes inside the dentist objects, so I can add 1 random skill (=== treatmentType) to 
+        each of the 150 randomly generated appoinments. The treatmentTypes are added to each dentist inside the useEffect hook above. 
+
+        The code below does not (seem to) wait for code in useEffect hook to finish. 
+        That is why e.g. following line will log undefined:
+    */
+      // log(randomDentists) 
+    /*
+        There is latency before the dentists from redux toolkit are accessible. The 3rd or 4th render shows the data.
+    */
+      //  dentistsFromReduxToolkit = useSelector((state) => state.dentist) 
+      // log(dentistsFromReduxToolkit) 
+        
+    /*
+      problem: not permissible to wait for the 3rd render: treatmentTypes must be added to each randomly-created-appointment during the 1st render ( React is relentless :) ).
+      solution: I use a useRef instead, just like for e.g. clientDayTimesRef below. The needed variable dentistsWithTreatmentTypesRef must be declared before the useEffect hook  above, so it can be used inside the useEffect hook.  
+    */
+
+    // check if useRef from useEffect above works:  
+    // log(dentistsWithTreatmentTypesRef)
+
+
     let clientDayTimesRef = useRef([]);
     let dentistDayTimesRef = useRef([]);
     let assistantDayTimesRef = useRef([]);
@@ -75,14 +163,7 @@ const App = ()  => {
                 break;  
         }
         let PersonIdAndDayAndTimeCombi = personId +"_" + day + "_" + time;
-        // console.log(PersonIdAndDayAndTimeCombi)
         uniqueValue = !arrayWithDayAndTimeCombinationsThatAreTaken.includes(PersonIdAndDayAndTimeCombi) 
-        // console.log('fn checkIfPersonWithDayAndTimeIsUnique: return uniqueValue:')
-        // console.log(uniqueValue)
-        // console.log('fn checkIfPersonWithDayAndTimeIsUnique: return PersonIdAndDayAndTimeCombi:')
-        // console.log(PersonIdAndDayAndTimeCombi)
-        // console.log('fn checkIfPersonWithDayAndTimeIsUnique: return clientDayTimesRef.current:')
-        // console.log(assistantDayTimes.current)
         return uniqueValue
     }
 
@@ -97,7 +178,9 @@ const App = ()  => {
           let time = getRandomTime() 
           clientId = getRandomPersonIdAsync(randomClients, 'clientId')
           dentistId = getRandomPersonIdAsync(randomDentists, 'dentistId');
-    
+          let treatmentType = getRandomTreatmentForRandomAppointment(dentistId, dentistsWithTreatmentTypesRef.current[0] )
+          // log(treatmentType)
+
           let isAssistantNeededForAppointment = false;
           let randomNrThatDecidesIfAssistantMustBePresentAtAppointment = Math.random();
           if (randomNrThatDecidesIfAssistantMustBePresentAtAppointment < 0.99999){    // arbitrary default value: < 0.4 
@@ -146,8 +229,22 @@ const App = ()  => {
                   let assistant = (`${(assistantForWhomAnAppointmentIsBeingMade[0].firstName)} ${(assistantForWhomAnAppointmentIsBeingMade[0].lastName)}`)
       
 
+                  // log(dentistsWithTreatmentTypesRef.current[0])
+
                   let appointmentId = generateRandomAppointmentId();
-                  let newAppointmentObject = {appointmentId, clientId, client, day, time, dentistId, dentist, assistantId, assistant, isSick:false, isNowUpdatingAppointment:false } // bonus: 1 treatmentType
+                  let newAppointmentObject = {
+                    appointmentId, 
+                    clientId, 
+                    client, 
+                    day, 
+                    time, 
+                    dentistId, 
+                    dentist, 
+                    treatmentType, 
+                    assistantId, 
+                    assistant, 
+                    isSick:false, 
+                    isNowUpdatingAppointment:false } 
                   dispatch(addAppointment(newAppointmentObject));
                   
               } else {
@@ -181,7 +278,7 @@ const App = ()  => {
                 let dentist = (`${(dentistForWhomAnAppointmentIsBeingMade[0].firstName)} ${(dentistForWhomAnAppointmentIsBeingMade[0].lastName)}`)
 
                 let appointmentId = generateRandomAppointmentId();
-                let newAppointmentObject = {appointmentId, clientId, client, day, time, dentistId, dentist, assistantId:null, assistant:null, isSick:false, isNowUpdatingAppointment:false } // bonus: 1 treatmentType
+                let newAppointmentObject = {appointmentId, clientId, client, day, time, dentistId, dentist, treatmentType, assistantId:null, assistant:null, isSick:false, isNowUpdatingAppointment:false } // bonus: 1 treatmentType
                 dispatch(addAppointment(newAppointmentObject));
                     
               } else {          
@@ -203,13 +300,8 @@ const App = ()  => {
               } , [] 
           );
   
-
-
-
-
     let appointmentsfromReduxToolkit = useSelector((state) => state.appointment)
-    let dentistsFromReduxToolkit  = useSelector((state) => state.dentist);
-
+   
   return(
     
     
@@ -234,9 +326,7 @@ const App = ()  => {
       Later, as part of the bonus requirements:
         inside component CreateManualAppointmentAfterDentistAppHasStarted I create a FORM to call fn createAppointment instead. 
         Component CreateRandomAppointmentsWhenAppStarts will then be the first component inside component Appointments.js and will contain all the code of this component App.js before the return statement above.    
-      
-      
-      */ ///
+      */ 
         
         <Router>
           <div>

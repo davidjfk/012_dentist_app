@@ -35,19 +35,22 @@
   /* background-color: red; */
 }
 
-.appointment {
-  /* display: flex;
-  flex-direction: row; */
-  padding: 0.1rem;
+.appointmentInMonth {
+  display: flex;
+  flex-direction: column;
+  /* padding: 0.1rem; */
+  
 }
 
 .dayAsNumber {
   font-weight: 700;
 }
 
-.calendarview .client {
+.calendarview  {
   margin-left: 0.5rem;
 }
+
+
 
 .calendarview .time {
   margin-left: 0.5rem;
@@ -58,9 +61,7 @@
   font-weight: bold;
 }
 
-.assistant {
-  margin-left: 20px;
-}
+
 
 .backgroundColor {
   background-color: red;

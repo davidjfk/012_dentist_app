@@ -74,13 +74,12 @@ let sortedStuff = (daysInMonthJSXsorted)
 
     /*
       2do: result is already an array, so skip Object.values 
-      note-to-self: for each day in the month there is a separate array. Each appointment is an objecct inside a "day-array".
+      note-to-self: for each day in the month there is a separate array. Each appointment is an object inside a "day-array".
     */
     /* 
       about: " .map((appointmentsInDay, day, index) => ( "
       in a vanilla-js map fn, index is the second argument. So I skip day={day}.
       Furthermore, 'day' does not have access to the  scope of  divideByDay above. So I skip day={day} 
-
     */ 
 
     <DayInMonth appointments={appointmentsInDay}  key={index} />
@@ -89,11 +88,11 @@ let sortedStuff = (daysInMonthJSXsorted)
   return (
     <div className="calendarview">
       <div className="header">
-        <div>Maandag</div>
-        <div>Dinsdag</div>
-        <div>Woensdag</div>
-        <div>Donderdag</div>
-        <div>Vrijdag</div>
+        <div>Monday</div>
+        <div>Tuesday</div>
+        <div>Wednesday</div>
+        <div>Thursday</div>
+        <div>Friday</div>
       </div>
       <div className="table">{daysInMonthJSX}</div>
     </div>

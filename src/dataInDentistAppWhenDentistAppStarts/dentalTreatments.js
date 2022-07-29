@@ -1,0 +1,16 @@
+const dentalTreatmentsDentistCompanyBV = [
+    "brace",
+    "bridge",
+    "broken_or_knocked_out_tooth",
+    "crown", 
+    "dental_implant",
+    "dental_veneer",
+    "dentures",
+    "filling",
+    "root_canal_treatment",
+    "scale_and_polish",
+    "teeth_whitening",
+    "wisdom_tooth_removal",
+];
+
+export default dentalTreatmentsDentistCompanyBV;

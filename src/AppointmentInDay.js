@@ -3,9 +3,9 @@ import { useSelector } from "react-redux";
 import { selectObjectsByArrayObjectKey } from "./utils";
 const log = console.log;
 
-const format_time = time => (time < 10 ? `0${time}:00u` : `${time}:00u`);
+const format_time = time => (time < 10 ? `${time}:00u` : `${time}:00u`);
 
-export const AppointmentInDay = ({ time, day, client, dentist, assistant, dentistId, assistantId }) => {
+export const AppointmentInDay = ({ time, day, client, dentist, assistant, dentistId, assistantId, treatmentType }) => {
   
   // let dentistsFromReduxToolkit  = useSelector((state) => state.dentist);
   // console.log(dentistId) 
@@ -54,8 +54,11 @@ export const AppointmentInDay = ({ time, day, client, dentist, assistant, dentis
     <div className="time">{format_time(time)}</div>
     <div className="dayAsNumber">Day: {day}</div>
     <div className="client">Client: {client}</div>
-    <div className="dentist">Tandarts: {dentist}</div>
-    <div className="assistant">Assistent: {assistant}</div>
+    <div className="treatmentType">{treatmentType}</div>
+    <div className="dentist">Dentist: {dentist}</div>
+  
+    <div className="assistant">Assistant: {assistant}</div>
+
   </li>
   )
 };

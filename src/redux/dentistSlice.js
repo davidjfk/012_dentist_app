@@ -8,6 +8,13 @@ export const dentistListSlice = createSlice({
     dentists: []
   },
   reducers: {
+    addDentalTreatmentsAsSkillSetToDentist: (state, action) => {
+      // const {skillsetOfDentist, indexOfDentistInArray} = action.payload;
+      let skillSetOfDentist = action.payload.skillSetOfDentist;
+      let indexOfDentistInArray = action.payload.indexOfDentistInArray;
+      // log(skillsetOfDentist)
+      state.dentists[indexOfDentistInArray].treatmentTypes = skillSetOfDentist;
+    },
     addDentist: (state, action) => {
       const dentistToSave = action.payload;
       state.dentists.push(dentistToSave);
@@ -17,22 +24,12 @@ export const dentistListSlice = createSlice({
       state.dentists = dentistsToSave; // dentistsToSave is an array with dentist objects.
     },
     setDentistToSick: (state, action) => {
-      console.log('inside dentistList Slice:')
+      // console.log('inside dentistList Slice:')
       let indexOfDentistInDentistArrayInReduxToolkit = action.payload; 
       state.dentists[indexOfDentistInDentistArrayInReduxToolkit].isSick = true; 
-
-      console.log(typeof(indexOfDentistInDentistArrayInReduxToolkit) )
-
-
-
-      // log( state.dentists)
-      // log( state.dentists[indexOfDentistInDentistArrayInReduxToolkit])
-      // state.dentists[indexOfDentistInDentistArrayInReduxToolkit].isSick = true;
-
-      // console.log(dentistObjectOfWhichTheKeySickMustBeSetToTrue, indexOfDentistInDentistArrayInReduxToolkit )
     }}
 })
-export const { addDentist, addDentists, setDentistToSick } = dentistListSlice.actions;
+export const {addDentalTreatmentsAsSkillSetToDentist, addDentist, addDentists, setDentistToSick } = dentistListSlice.actions;
 
 export default dentistListSlice.reducer;    
 
