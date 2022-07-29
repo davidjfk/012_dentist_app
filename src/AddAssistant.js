@@ -8,7 +8,7 @@ import {generateRandomPersonId} from './utils';
 const AddAssistant = () => {
     const log = console.log;
 
-    log(`comp AddAssistant: start: `)
+    // log(`comp AddAssistant: start: `)
 
     let dispatch = useDispatch();
             const addAssistantToReduxToolkit = (newAssistant) => {
@@ -21,10 +21,7 @@ const AddAssistant = () => {
                 /*
                     winc requirement: none. 
                     I quickly reuse code (for adding a assistant) to be able to add assistants as well.
-                    
-                    
-                    This is how to ADD a dental appointment without using a form nor buttons:
-                    how to do it:
+
                     step 1: switch off the other components inside component Appointments. 
                     Reason: they both access the same data in redux toolkit with a useEffect with [] as a dependency.
                     step 2: uncomment this component inside component Appointments. 

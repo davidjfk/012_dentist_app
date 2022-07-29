@@ -7,6 +7,7 @@ import { addAppointment, deleteAppointment } from "./redux/appointmentSlice";
 import {addDayTimeClient} from "./redux/clientDayTimeSlice";
 import {addDayTimeDentist} from "./redux/dentistDayTimeSlice";
 import {addDayTimeAssistant} from "./redux/assistantDayTimeSlice";
+import {addDentalTreatmentsAsSkillSetToDentist} from  "./redux/dentistSlice"
 
 const log = console.log;
 
@@ -48,6 +49,13 @@ export function checkIfPersonWithDayAndTimeIsUnique (
   }
   
   return uniqueValue
+}
+
+
+export const addTreatmentTypesToDentist = (arrayWithDentistObjects, arrayWithDentalTreatments, dispatch) => {
+  for (let i = 0; i < arrayWithDentistObjects.length; i++) {
+    dispatch(addDentalTreatmentsAsSkillSetToDentist({"skillSetOfDentist": getRandomTreatmentTypes(arrayWithDentalTreatments), "indexOfDentistInArray": i}))
+  }
 }
 
 
@@ -122,11 +130,19 @@ export const getRandomDay = () => {
   return randomDay
 }
  
+
+
+
+
+
+
+
   
 export const getRandomName = (personCategoryInCompanyBVT) => {
   const person = personCategoryInCompanyBVT[Math.floor(Math.random() * personCategoryInCompanyBVT.length)];
   return `${person["firstName"]} ${person["lastName"]}`;
 };
+
 
 
 export const getRandomPersonId = (personCategoryInCompanyBVT) => {
@@ -229,6 +245,47 @@ export const getRandomDay2 = () => {
 }
 
 
+
+
+
+
+
+export const getRandomTreatmentForRandomAppointment = (dentistId, dentistArray) => {
+  
+  // log(dentistId)
+  let getDentistObject = dentist => dentist.dentistId === dentistId
+  let dentistObject = selectObjectsByArrayObjectKey(dentistArray, getDentistObject)
+  
+  const randomCurrentSkillOfDentist = dentistObject[0].treatmentTypes[Math.floor(Math.random() * dentistObject[0].treatmentTypes.length)];
+  // log(randomCurrentSkillOfDentist)
+
+  let currentSkillSetOfDentist = dentistObject;
+  // log(dentistObject)
+  return randomCurrentSkillOfDentist;
+};
+
+
+
+
+
+
+
+
+export const getRandomTreatmentTypes = (completeArrayWithDentalTreatments, nrOfDifferentTreatmentsAsTheSkillsOfADentist = 8) => {
+  let selectionOfDentalTreatments = [];
+  
+  while (selectionOfDentalTreatments.length < nrOfDifferentTreatmentsAsTheSkillsOfADentist){
+    let dentalTreatment = completeArrayWithDentalTreatments[Math.floor(Math.random() * completeArrayWithDentalTreatments.length)];
+   
+   
+      if (!selectionOfDentalTreatments.includes(dentalTreatment)){
+        selectionOfDentalTreatments.push(dentalTreatment)
+      }
+  }
+  return selectionOfDentalTreatments.sort();
+};
+
+
 export const isValidWorkingDay = (dayNumber) => (![6, 7, 13, 14, 20, 21, 27, 28].includes(dayNumber) ? true : false)
 
 
@@ -270,6 +327,7 @@ export const generateRandomAppointmentsFromWinc = num =>
     day, 
     time, 
     dentistId, 
+    treatmentType,
     isAssistantNeededForAppointment, 
     assistantId, 
     clientsFromReduxToolkit, 
@@ -283,9 +341,25 @@ export const generateRandomAppointmentsFromWinc = num =>
       log(`fn createAppointment: start: `)
     let personType;
     
+    
+    log(`dentist stuffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff`)  
+    let getDentist = dentist => dentist.dentistId === dentistId
+    let dentistForWhomAnAppointmentIsBeingMade = selectObjectsByArrayObjectKey(dentistsFromReduxToolkit.dentists, getDentist)  
+    let skillsOfDentistForWhomAnAppointmentIsBeingMade = (dentistForWhomAnAppointmentIsBeingMade[0].treatmentTypes)
+    log(skillsOfDentistForWhomAnAppointmentIsBeingMade)
+    if(skillsOfDentistForWhomAnAppointmentIsBeingMade.includes(treatmentType)) {
+      log(`Dentist ${dentistId} has the required skill to treat client ${clientId} `) // 
+    } else {
+      log(`Dentist ${dentistId} does not have the required skill to treat client ${clientId} `)
+      alert(`Dentist ${dentistId} does not have the required skill to treat client ${clientId} `);
+      return; // abort creating appointment. 
+    } 
+
     log(`isAssistantNeededForAppointment: ${isAssistantNeededForAppointment}`)
     if (isAssistantNeededForAppointment) {
-        log(clientId, dentistId, assistantId, day, time, clientDayTimesFromReduxToolkit, dentistDayTimesFromReduxToolkit, assistantDayTimesFromReduxToolkit )
+        log(clientId, dentistId, treatmentType, assistantId, day, time, clientDayTimesFromReduxToolkit, dentistDayTimesFromReduxToolkit, assistantDayTimesFromReduxToolkit )
+        
+
         if (
             checkIfPersonWithDayAndTimeIsUnique(
               clientId, 
@@ -343,7 +417,7 @@ export const generateRandomAppointmentsFromWinc = num =>
             let assistant = (`${(assistantForWhomAnAppointmentIsBeingMade[0].firstName)} ${(assistantForWhomAnAppointmentIsBeingMade[0].lastName)}`)
   
             let appointmentId = generateRandomAppointmentId();
-            let newAppointmentObject = {appointmentId, clientId, client, day, time, dentistId, dentist, assistantId, assistant, isSick:false, isNowUpdatingAppointment:false } // bonus: 1 treatmentType
+            let newAppointmentObject = {appointmentId, clientId, client, day, time, dentistId, treatmentType, dentist, assistantId, assistant, isSick:false, isNowUpdatingAppointment:false } // bonus: 1 treatmentType
             dispatch(addAppointment(newAppointmentObject));
         } 
         else {            

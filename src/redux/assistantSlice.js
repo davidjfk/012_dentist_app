@@ -15,11 +15,11 @@ export const assistantListSlice = createSlice({
       state.assistants = assistantsToSave; // dentistsToSave is an array with dentist objects.
     },
     setAssistantToSick: (state, action) => {
-      console.log('inside assistantList Slice:')
+      // console.log('inside assistantList Slice:')
       let index = action.payload; 
       state.assistants[index].isSick = true; 
 
-      console.log(typeof(index) )
+      // console.log(typeof(index) )
     }}
 })
 export const { addAssistant, addAssistants, setAssistantToSick } = assistantListSlice.actions;

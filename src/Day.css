@@ -3,11 +3,7 @@
   background-color: lightyellow;
 }
 
-.dayview .appointment {
-  border: 2px solid grey;
-  width: 60%;
-  margin-bottom: 20px;
-}
+
 
 .dayview .time,
 .dayview .client {
@@ -23,7 +19,6 @@
 
 .dayview .dayAsNumber {
   float: right;
-  /* background-color: yellow; */
   font-weight: bold;
   font-size: 1.1rem;
 }
@@ -42,4 +37,29 @@
 .dayview .dentist,
 .dayview .assistant {
   padding: 10px;
+}
+
+.treatmentType {
+  float: right;
+  background-color: aquamarine;
+  font-size: 1.1rem;
+  padding: 6px;
+  margin-right: 20px;
+  margin-top: 20px;
+}
+
+.assistant,
+.dentist {
+  font-size: 1.1rem;
+}
+
+.dayview .appointment {
+  border: 2px solid grey;
+  width: 60%;
+  margin-bottom: 20px;
+}
+
+.appointment {
+  padding: 0.1rem;
+  
 }

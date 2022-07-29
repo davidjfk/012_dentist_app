@@ -1,13 +1,16 @@
 import { useEffect } from "react";
+import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { addDentist } from "./redux/dentistSlice";
 import "./App.css";
 
-import {generateRandomPersonId} from './utils';
+import {generateRandomPersonId, getRandomTreatmentTypes} from './utils';
+import dentalTreatmentsDentistCompanyBV from "./dataInDentistAppWhenDentistAppStarts/dentalTreatments";
 
 const AddDentist = () => {
     const log = console.log;
-
+    // let dentistsFromReduxToolkit  = useSelector((state) => state.dentist);
+    // log(dentistsFromReduxToolkit)
     log(`comp AddDentist: start: `)
 
     let dispatch = useDispatch();
@@ -37,14 +40,16 @@ const AddDentist = () => {
                 */
                 let lastName = "More";
                 let firstName = "Less";
-
-               let newDentist = {
+                let skillSetOfDentist = getRandomTreatmentTypes(dentalTreatmentsDentistCompanyBV);
+                log(`inside comp AddDentist:`)
+                log(skillSetOfDentist)
+                let newDentist = {
                     lastName,
                     dentistId:`${lastName}-${generateRandomPersonId()}`,
                     firstName,
                     phone:`06${Math.floor(10000000 + Math.random() * 90000000)}`,
                     email: `${firstName}.${lastName}@dentistcompanybvt.com`,
-                    treatmentTypes:[],
+                    treatmentTypes:skillSetOfDentist,
                     isSick:"false"
                 }
 
