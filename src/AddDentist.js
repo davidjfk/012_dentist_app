@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useSelector } from "react-redux";
+// import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { addDentist } from "./redux/dentistSlice";
 import "./App.css";
@@ -50,7 +50,8 @@ const AddDentist = () => {
                     phone:`06${Math.floor(10000000 + Math.random() * 90000000)}`,
                     email: `${firstName}.${lastName}@dentistcompanybvt.com`,
                     treatmentTypes:skillSetOfDentist,
-                    isSick:"false"
+                    isSick:"false",
+                    skillLevel: (Math.floor(Math.random() * (7 - 1)) + 1).toString()
                 }
 
                 addDentistToReduxToolkit(newDentist);

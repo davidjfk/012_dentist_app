@@ -46,7 +46,7 @@ const MakeRedBackgroundForAppointmentsOfSickDentist = () => {
                 */ 
 
                 // step: filter a dentistId inside the (randomly created dentists inside the) dentist array (skip this step when implementing the bonus UI)
-                let dentistIndexInDentistsArray = 0 // select the  first dentist from the 4 randomly generated dentists.
+                let dentistIndexInDentistsArray = 0 // select (ad lib) the  first dentist from the 4 randomly generated dentists.
                 let dentistId = getDentistId(dentistsfromReduxToolkit, dentistIndexInDentistsArray) 
 
                 // step: get indexOfDentistInDentistArrayInReduxToolkit

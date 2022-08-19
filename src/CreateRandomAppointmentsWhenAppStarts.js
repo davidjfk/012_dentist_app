@@ -1,13 +1,12 @@
 
 import React from 'react'
-import { useState } from "react";
+// import { useState } from "react";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import clientsDentistCompanyBVT from "./dataInDentistAppWhenDentistAppStarts/clients"
 import dentistsDentistCompanyBVT from "./dataInDentistAppWhenDentistAppStarts/dentists"
 import assistantsDentistCompanyBVT from "./dataInDentistAppWhenDentistAppStarts/assistants"
-
 import { addClient } from "./redux/clientSlice";
 import { addDentist } from "./redux/dentistSlice";
 import { addAssistant } from "./redux/assistantSlice";
@@ -15,12 +14,11 @@ import { addAppointment } from "./redux/appointmentSlice";
 import {addDayTimeClient} from "./redux/clientDayTimeSlice";
 import {addDayTimeDentist} from "./redux/dentistDayTimeSlice";
 import {addDayTimeAssistant} from "./redux/assistantDayTimeSlice";
-import {addAppointsments} from "./redux/appointmentSlice";
+// import {addAppointsments} from "./redux/appointmentSlice";
 import { 
     createCombiOfPersonAndDayAndTime, 
     generateRandomAppointmentId, 
-    getRandomPersonId, 
-    getRandomPersonIdAsync, getRandomDay, getRandomName, getRandomPersons, getRandomTime, selectObjectsByArrayObjectKey } from './utils';
+    getRandomPersonIdAsync, getRandomDay, getRandomPersons, getRandomTime, selectObjectsByArrayObjectKey } from './utils';
 
 
 const CreateRandomAppointmentsWhenAppStarts = () => {

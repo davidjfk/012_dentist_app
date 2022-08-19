@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import {getDentistId, deleteDentalAppointment, selectObjectsByArrayObjectKey} from '../utils';
+// import {getDentistId, deleteDentalAppointment, selectObjectsByArrayObjectKey} from '../utils';
 
 const log = console.log;
 export const dentistListSlice = createSlice({

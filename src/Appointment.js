@@ -11,7 +11,7 @@ import AddClient from "./AddClient";
 import DeleteAllAppointmentsOfClient from "./DeleteAllAppointmentsOfClient";
 import MakeRedBackgroundForAppointmentsOfSickDentist from "./MakeRedBackgroundForAppointmentsOfSickDentist";
 import MakeOrangeBackgroundForAppointmentsOfSickAssistant from "./MakeOrangeBackgroundForAppointmentsOfSickAssistant";
-import AddAssistant from "./AddAssistant";
+import AddAssistant from "./components/assistant/AddAssistant";
 
 export const Appointment = ({appointments}) =>  {
     return(
@@ -19,7 +19,7 @@ export const Appointment = ({appointments}) =>  {
             <div>How to call the functions from the winc assignment dentist without forms nor buttons: </div>
             <br/>
             
-            <div>step 1: inside component App.js uncomment one component at a time. </div>
+            <div>step 1: inside this component Appointment.js below, uncomment one component at a time. </div>
             <div>Each component contains a fn that must be implemented as part of the winc requirements.</div>    
             <div>Initially I call each fn without form nor buttons inside a useEffect hook with "[]" as a dependency. That is why only one component can be 
             active at a time.</div>
@@ -43,7 +43,7 @@ export const Appointment = ({appointments}) =>  {
 
             {/* <MakeRedBackgroundForAppointmentsOfSickDentist /> */}
             {/* <MakeOrangeBackgroundForAppointmentsOfSickAssistant/> */}
-            {/* <AddAssistant/> */}
+            <AddAssistant/>
 
             <div>the useEffect hook inside each of the components above explains how the functions inside these components can be invoked.</div> 
         </>

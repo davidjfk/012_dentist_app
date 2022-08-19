@@ -40,7 +40,7 @@ export function checkIfPersonWithDayAndTimeIsUnique (
           uniqueValue = !dentistDayTimesFromReduxToolkit.dentistDayTimes.includes(PersonIdAndDayAndTimeCombi) 
           break;
       case 'assistant':
-          log(assistantDayTimesFromReduxToolkit.assistantDayTimes)
+          // log(assistantDayTimesFromReduxToolkit.assistantDayTimes)
           uniqueValue = !assistantDayTimesFromReduxToolkit.assistantDayTimes.includes(PersonIdAndDayAndTimeCombi) 
           break;
       default:
@@ -259,7 +259,7 @@ export const getRandomTreatmentForRandomAppointment = (dentistId, dentistArray) 
   const randomCurrentSkillOfDentist = dentistObject[0].treatmentTypes[Math.floor(Math.random() * dentistObject[0].treatmentTypes.length)];
   // log(randomCurrentSkillOfDentist)
 
-  let currentSkillSetOfDentist = dentistObject;
+  // let currentSkillSetOfDentist = dentistObject;
   // log(dentistObject)
   return randomCurrentSkillOfDentist;
 };
@@ -338,14 +338,15 @@ export const generateRandomAppointmentsFromWinc = num =>
     assistantDayTimesFromReduxToolkit, 
     dispatch
     ) {
-      log(`fn createAppointment: start: `)
+    log(`fn createAppointment: start: `)
     let personType;
     
     
-    log(`dentist stuffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff`)  
+    
     let getDentist = dentist => dentist.dentistId === dentistId
     let dentistForWhomAnAppointmentIsBeingMade = selectObjectsByArrayObjectKey(dentistsFromReduxToolkit.dentists, getDentist)  
     let skillsOfDentistForWhomAnAppointmentIsBeingMade = (dentistForWhomAnAppointmentIsBeingMade[0].treatmentTypes)
+    log(`skillsOfDentistForWhomAnAppointmentIsBeingMade: `)
     log(skillsOfDentistForWhomAnAppointmentIsBeingMade)
     if(skillsOfDentistForWhomAnAppointmentIsBeingMade.includes(treatmentType)) {
       log(`Dentist ${dentistId} has the required skill to treat client ${clientId} `) // 
@@ -357,8 +358,8 @@ export const generateRandomAppointmentsFromWinc = num =>
 
     log(`isAssistantNeededForAppointment: ${isAssistantNeededForAppointment}`)
     if (isAssistantNeededForAppointment) {
-        log(clientId, dentistId, treatmentType, assistantId, day, time, clientDayTimesFromReduxToolkit, dentistDayTimesFromReduxToolkit, assistantDayTimesFromReduxToolkit )
-        
+        log(`data to create updated appointment:`)
+        log(clientId, dentistId, treatmentType, assistantId, day, time, clientDayTimesFromReduxToolkit, dentistDayTimesFromReduxToolkit, assistantDayTimesFromReduxToolkit )     
 
         if (
             checkIfPersonWithDayAndTimeIsUnique(
@@ -478,7 +479,7 @@ export const generateRandomAppointmentsFromWinc = num =>
 
   export function deleteDentalAppointment (appointmentsfromReduxToolkit, appointmentId, appointmentIndexInAppointmentsArray, deleteDayTimeClient, deleteDayTimeDentist, deleteDayTimeAssistant, dispatch) {
     log('fn deleteAppointment start: ')
-    console.log(appointmentId)
+    console.log(`appointmentId: ${appointmentId}`)
   
     let getAppointment = appointment => appointment.appointmentId === appointmentId
     let appointmentThatIsAboutToBeDeleted = selectObjectsByArrayObjectKey(appointmentsfromReduxToolkit.appointments, getAppointment)

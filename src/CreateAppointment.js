@@ -1,4 +1,3 @@
-import React from "react";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
@@ -45,11 +44,12 @@ export const CreateAppointment = () => {
                 */
                 let time = getRandomTime() 
                 time="09"
+                log(`comp createManualAppointmentAfterDentistAppHasStarted: get random ids: `)
                 let clientId = getRandomPersonIdAsync(clientsFromReduxToolkit.clients, 'clientId')
                 let dentistId = getRandomPersonIdAsync(dentistsFromReduxToolkit.dentists, 'dentistId');  
                 let assistantId = getRandomPersonIdAsync(assistantsFromReduxToolkit.assistants, 'assistantId');
                 let treatmentType = getRandomTreatmentForRandomAppointment(dentistId, dentistsFromReduxToolkit.dentists );
-                log(`comp createManualAppointmentAfterDentistAppHasStarted: get random ids: `)
+                
                 // or fill out any Id you like as a clientId, dentistId or assistantId, e.g. assistantId = "barryToTheRescue-03404";
                 let isAssistantNeededForAppointment = false;
                 
@@ -101,7 +101,7 @@ export const CreateAppointment = () => {
                     A dentist or assistant cannot have two appointments at the same time.
                 /* 
                     How to test:
-                    step 1: copy-paste the relevant createAppointment above into the testcase below.
+                    step 1: copy-paste the first or second createAppointment above into the testcase below.
                     step 2: make modifications (see testcase 1 below)
                     step 3: save
                     status: this file now contains 2 appointments with the same << "person"Id >> (can be dentistId, assistantId or clientId) and day and time. 

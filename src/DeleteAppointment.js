@@ -15,7 +15,7 @@ const log = console.log;
 
 
 const DeleteAppointment = () => {
-
+    log(`comp DeleteAppointment: start: `)
     let appointmentsfromReduxToolkit = useSelector((state) => state.appointment)
 
     let dispatch = useDispatch();
@@ -65,6 +65,7 @@ const DeleteAppointment = () => {
                 
                 },[]
             );
+            log(`comp DeleteAppointment: end: `)
             return(
                 <div>Delete appointment</div>
             )

@@ -5,8 +5,15 @@ const log = console.log;
 
 const format_time = time => (time < 10 ? `${time}:00u` : `${time}:00u`);
 
+
+
+
+
 export const AppointmentInDay = ({ time, day, client, dentist, assistant, dentistId, assistantId, treatmentType }) => {
   
+
+ 
+
   // let dentistsFromReduxToolkit  = useSelector((state) => state.dentist);
   // console.log(dentistId) 
   // let dentistIsSick;
@@ -19,17 +26,20 @@ export const AppointmentInDay = ({ time, day, client, dentist, assistant, dentis
   // dentistIsSick = dentistFromreduxToolkit[0].isSick;
   // dentistIsSick = (dentistIsSick === "true" || dentistIsSick === true);
 
+
+
+  
   let dentistsFromReduxToolkit  = useSelector((state) => state.dentist);
   let assistantsFromReduxToolkit  = useSelector((state) => state.assistant);
-  console.log(dentistId) 
-  console.log(assistantId) 
+  // console.log(dentistId) 
+  // console.log(assistantId) 
   let dentistIsSick;
   let assistantIsSick;
   let colorToIndicateSickness;
   
   // check if assistant is  ill:
-  console.log(`assistants from redux toolkit:`)
-  log(dentistsFromReduxToolkit.dentists)
+  // console.log(`assistants from redux toolkit:`)
+  // log(dentistsFromReduxToolkit.dentists)
   let getAssistant = assistant => assistant.assistantId === assistantId
   let assistantFromreduxToolkit = selectObjectsByArrayObjectKey(assistantsFromReduxToolkit.assistants, getAssistant)
   assistantIsSick = assistantFromreduxToolkit[0].isSick;
@@ -37,8 +47,8 @@ export const AppointmentInDay = ({ time, day, client, dentist, assistant, dentis
 
 
   // check if dentist is  ill:
-  console.log(`dentists from redux toolkit:`)
-  log(dentistsFromReduxToolkit.dentists)
+  // console.log(`dentists from redux toolkit:`)
+  // log(dentistsFromReduxToolkit.dentists)
   let getDentist = dentist => dentist.dentistId === dentistId
   let dentistFromreduxToolkit = selectObjectsByArrayObjectKey(dentistsFromReduxToolkit.dentists, getDentist)
   dentistIsSick = dentistFromreduxToolkit[0].isSick;
