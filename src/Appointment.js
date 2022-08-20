@@ -43,7 +43,7 @@ export const Appointment = ({appointments}) =>  {
 
             {/* <MakeRedBackgroundForAppointmentsOfSickDentist /> */}
             {/* <MakeOrangeBackgroundForAppointmentsOfSickAssistant/> */}
-            <AddAssistant/>
+            {/* <AddAssistant/> */}
 
             <div>the useEffect hook inside each of the components above explains how the functions inside these components can be invoked.</div> 
         </>

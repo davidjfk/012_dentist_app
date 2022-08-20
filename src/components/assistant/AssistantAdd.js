@@ -1,0 +1,142 @@
+import React from 'react';
+import {useState } from 'react';
+import {useDispatch } from "react-redux";
+import {addAssistant } from "../../redux/assistantSlice";
+import skillLevelOptions from '../../dataInDentistAppWhenDentistAppStarts/skillLevelOptions';
+import healthStatusOptions from '../../dataInDentistAppWhenDentistAppStarts/healthStatusOptions';
+import {Container} from '../styles/Container.styled';
+import {AssistantAddStyled, Column, Form, Intro} from './AssistantAdd.styled';
+import {StyledButton} from '../styles/Button.styled';
+import {StyledInputfield} from '../styles/Inputfield.styled';
+import {StyledSelectbox} from '../styles/Selectbox.styled';
+
+import {generateRandomPersonId} from '../../utils';
+
+const log = console.log;
+
+const AddAssistant = () => {
+    let [lastName, setLastName] = useState('')
+    let [firstName, setFirstName] = useState('')
+    let [phone, setPhone] = useState('')
+    let [email, setEmail] = useState('')
+    let [isSick, setIsSick] = useState('default')
+    let [skillLevel, setSkillLevel] = useState("default")
+
+    const dispatch = useDispatch();
+
+    const onSubmit = (e) => {
+        e.preventDefault()
+    
+        if (!lastName || !firstName) {
+          alert('Please add a song lastName and firstName')
+          return
+        }   
+
+        if (phone === 'default') {
+            setPhone(phone = 'unknown') 
+        } 
+
+        if (email === 'default') {
+            setEmail(email = 'unknown') 
+        } 
+
+        if (isSick === 'default') {
+            setIsSick(isSick = 'unknown') 
+        } 
+
+        if (skillLevel === 'default') {
+            setSkillLevel(skillLevel = 'unknown') 
+        } 
+
+        // replace with code from winc-react-assistant: 
+        const assistantId = `${lastName}-${generateRandomPersonId()}`;
+
+        dispatch(addAssistant({assistantId, lastName, firstName, phone, email, isSick, skillLevel }));   
+        
+        // now reset the form for the next use:
+        // setLastName('')
+        // setFirstName('')
+        // setPhone('')
+        // setEmail('')
+        // setIsSick('')
+        // setRating('')
+    }
+
+  return (
+    <Container> 
+        <AssistantAddStyled>
+            <Intro>Add Assistant</Intro>
+            <Form>
+                <Column>
+                    <StyledInputfield
+                            type='text'
+                            placeholder='Add surname'
+                            value={lastName}
+                            onChange={(e) => setLastName(e.target.value)}                              
+                    />
+                </Column>
+                <Column>
+                    <StyledInputfield
+                            type='text'
+                            placeholder='Add first name'
+                            value={firstName}
+                            onChange={(e) => setFirstName(e.target.value)} 
+                        />
+                </Column>
+                <Column>
+                    <StyledInputfield
+                            type='text'
+                            placeholder='Add phone nr'
+                            value={phone}
+                            onChange={(e) => setPhone(e.target.value)}                              
+                    />
+                </Column>
+                <Column>
+                    <StyledInputfield
+                            type='text'
+                            placeholder='Add email'
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)} 
+                        />
+                </Column>
+                <Column>
+                    <StyledSelectbox 
+                        value={isSick}
+                        onChange={(e) => setIsSick(e.target.value)}
+                        name="isSick"
+                    > 
+                        <option value="default" disabled hidden>
+                            Add health status
+                        </option>
+                       {healthStatusOptions.map(item => {
+                            return (<option key={item.value} value={item.value}>{item.text}</option>);
+                        })}                   
+                    </StyledSelectbox>
+
+                </Column>
+                <Column>
+                    <StyledSelectbox 
+                        value={skillLevel}
+                        onChange={(e) => setSkillLevel(e.target.value)}
+                        name="skillLevel"
+                    > 
+                        <option value="default" disabled hidden>
+                            Add skill level
+                        </option>
+                        {skillLevelOptions.map(item => {
+                            return (<option key={item.value} value={item.value}>{item.text}</option>);
+                        })}
+                    </StyledSelectbox>
+                </Column>
+                <Column>
+                    <StyledButton onClick={onSubmit}>
+                        Add assistant 
+                    </StyledButton>                  
+                </Column>
+            </Form>
+        </AssistantAddStyled>  
+    </Container>
+  )
+}
+
+export default AddAssistant 

@@ -28,6 +28,7 @@ import {createCombiOfPersonAndDayAndTime, generateRandomAppointmentId, getRandom
 
 
 import {Appointment} from "./Appointment";
+import Assistant from "./components/assistant/Assistant";
 import DeleteAppointment from "./DeleteAppointment";
 
 import {Calendar} from "./Calendar";
@@ -341,6 +342,9 @@ const App = ()  => {
                 <li>
                   <Link to="/day">Day view</Link>
                 </li>
+                <li>
+                  <Link to="/assistant">Assistant</Link>
+                </li>
               </ul>
             </nav>
             <main>
@@ -351,6 +355,9 @@ const App = ()  => {
                 </Route>
                 <Route path="/deleteAppointment">  
                 <DeleteAppointment  />
+                </Route>
+                <Route path="/assistant">  
+                <Assistant  />
                 </Route>
                 <Route path="/day">
                   {/* <Day appointments={appointmentsfromReduxToolkit.appointments.filter(app => app.day === "03")} /> */}

@@ -7,7 +7,7 @@ import "../Day.css";
 
 import {Day} from "../Day";
 import {Container} from './styles/Container.styled';
-import {AssistantListStyled, FormControlArea, Intro, Section2} from './styles/AssistantList.styled';
+import {AssistantListStyled, FormControlArea, Intro, Section2} from './assistant/AssistantList.styled';
 import {StyledSelectbox} from './styles/Selectbox.styled';
 import listOfValidWorkingDayNumbersInNextMonth from '../dataInDentistAppWhenDentistAppStarts/listOfValidWorkingDayNumbersInNextMonth';
 

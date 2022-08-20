@@ -143,6 +143,10 @@ export const getRandomName = (personCategoryInCompanyBVT) => {
   return `${person["firstName"]} ${person["lastName"]}`;
 };
 
+export const getRandomPaymentMethod = (paymentMethodOptions) => {
+  let person = paymentMethodOptions[Math.floor(Math.random() * paymentMethodOptions.length)];
+  return person.personId;
+};
 
 
 export const getRandomPersonId = (personCategoryInCompanyBVT) => {
