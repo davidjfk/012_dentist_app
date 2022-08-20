@@ -26,26 +26,23 @@ export const assistantListSlice = createSlice({
       });
       state.assistants.splice(indexOfSongToDelete, 1)
     },
-    // use_case_09_give_appointments_of_sick_assistant_an_orange_background_color: (as direct fn call without UI)
+    // use_case_09_give_appointments_of_sick_assistant_an_orange_background_color: as direct fn call without UI
     setAssistantToSick: (state, action) => {
       // console.log('inside assistantList Slice:')
       let index = action.payload; 
       state.assistants[index].isSick = true; 
       // console.log(typeof(index) )
     },
+    // use_case_09_give_appointments_of_sick_assistant_an_orange_background_color: via UI
     toggleHealthStatusOfAssistant: (state, action) => {
       console.log('in the redux-toolkit:')
       console.log(action.payload)
-     
-      // state.assistants.assistants[0].isSick = "jee";
       const indexOfAssistant = state.assistants.findIndex(assistantToToggleHealth => {
         return assistantToToggleHealth.assistantId === action.payload.assistantId;
       });
       log(`indexOfAssistant: ${indexOfAssistant}`)
       log(state.assistants[indexOfAssistant].isSick = (action.payload.isSick))
-
       // log(state.assistants[indexOfAssistant].isSick = (!state.assistants[indexOfAssistant].isSick))
-
     }}
 
 })

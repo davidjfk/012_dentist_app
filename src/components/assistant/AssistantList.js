@@ -143,7 +143,7 @@ const AssistantList = () => {
     <>
     <Container> 
         <AssistantListStyled>
-            <Intro>List of assistants in Dentist company B.V.T. </Intro>
+            <Intro>Assistants in Dentist company B.V.T. </Intro>
             <FormControlArea>
                 <Section1>
                     <StyledSelectbox                  
@@ -203,13 +203,13 @@ const AssistantList = () => {
                     <span>First name</span>
                 </Column>
                 <Column>
-                    <span>Health status</span>
-                </Column>
-                <Column>
                     <span>Skill level</span>
                 </Column>
                 <Column>
-                    <span>Show as sick in calendar (orange background) </span>
+                    <span>Health status</span>
+                </Column>
+                <Column>
+                    <span>Show as sick in views (orange background) </span>
                 </Column>
             </Headers>
             <AssistantListAreaStyled>

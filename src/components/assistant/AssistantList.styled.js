@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 
 export const AssistantListAreaStyled = styled.div`
-  grid-area: songInPlaylist;  
+  grid-area: assistantList;  
   background: yellow;
   color: black;
   padding: 0.25rem;
@@ -16,7 +16,7 @@ export const AssistantListStyled = styled.div`
       "intro intro intro intro"
       "formcontrol formcontrol formcontrol formcontrol"
       "header header header header"
-      "songInPlaylist songInPlaylist songInPlaylist songInPlaylist"
+      "assistantList assistantList assistantList assistantList"
       ;
   text-align: center;
   grid-gap: 0.25rem;

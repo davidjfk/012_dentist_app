@@ -272,9 +272,6 @@ export const getRandomTreatmentForRandomAppointment = (dentistId, dentistArray) 
 
 
 
-
-
-
 export const getRandomTreatmentTypes = (completeArrayWithDentalTreatments, nrOfDifferentTreatmentsAsTheSkillsOfADentist = 8) => {
   let selectionOfDentalTreatments = [];
   

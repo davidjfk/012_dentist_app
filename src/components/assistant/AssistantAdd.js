@@ -48,7 +48,6 @@ const AddAssistant = () => {
             setSkillLevel(skillLevel = 'unknown') 
         } 
 
-        // replace with code from winc-react-assistant: 
         const assistantId = `${lastName}-${generateRandomPersonId()}`;
 
         dispatch(addAssistant({assistantId, lastName, firstName, phone, email, isSick, skillLevel }));   
@@ -120,9 +119,10 @@ const AddAssistant = () => {
                         onChange={(e) => setSkillLevel(e.target.value)}
                         name="skillLevel"
                     > 
-                        <option value="default" disabled hidden>
+                        <option value="" >skill level:</option>
+                        {/* <option value="default" disabled hidden>
                             Add skill level
-                        </option>
+                        </option> */}
                         {skillLevelOptions.map(item => {
                             return (<option key={item.value} value={item.value}>{item.text}</option>);
                         })}

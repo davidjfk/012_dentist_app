@@ -31,16 +31,16 @@ const AssistantInAssistantList = ({item}) => {
         </Column>
         <Column>
           <AssistantInAssistantListStyled>
-            {healthStatus}
-          </AssistantInAssistantListStyled>
-        </Column>
-        <Column>
-          <AssistantInAssistantListStyled>
             {item.skillLevel}
             {/* <StyledFaTimes>
               <FaTimes onClick={() => dispatch(deleteAssistant(item.assistantId))} />
             </StyledFaTimes> */}
             </AssistantInAssistantListStyled>
+        </Column>
+        <Column>
+          <AssistantInAssistantListStyled>
+            {healthStatus}
+          </AssistantInAssistantListStyled>
         </Column>
         <Column>
           <AssistantInAssistantListStyled>
