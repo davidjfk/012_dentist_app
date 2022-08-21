@@ -1,11 +1,11 @@
 import { useEffect } from "react";
-import { useSelector } from "react-redux";
+// import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
-import { addDentist } from "./redux/dentistSlice";
-import "./App.css";
+import { addDentist } from "../../redux/dentistSlice";
+import "../../App.css";
 
-import {generateRandomPersonId, getRandomTreatmentTypes} from './utils';
-import dentalTreatmentsDentistCompanyBV from "./dataInDentistAppWhenDentistAppStarts/dentalTreatments";
+import {generateRandomPersonId, getRandomTreatmentTypes} from '../../utils';
+import dentalTreatmentsDentistCompanyBV from "../../dataInDentistAppWhenDentistAppStarts/dentalTreatments";
 
 const AddDentist = () => {
     const log = console.log;
@@ -49,8 +49,9 @@ const AddDentist = () => {
                     firstName,
                     phone:`06${Math.floor(10000000 + Math.random() * 90000000)}`,
                     email: `${firstName}.${lastName}@dentistcompanybvt.com`,
-                    treatmentTypes:skillSetOfDentist,
-                    isSick:"false"
+                    treatmentTypes: skillSetOfDentist,
+                    isSick:"false",
+                    skillLevel: (Math.floor(Math.random() * (7 - 1)) + 1).toString()
                 }
 
                 addDentistToReduxToolkit(newDentist);
@@ -60,5 +61,5 @@ const AddDentist = () => {
          return null
 } 
 
-
+// 
 export default AddDentist;

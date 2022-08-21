@@ -50,7 +50,7 @@ export const AppointmentInMonthDay = ({day, time, client, dentistId, assistantId
   return(
   <div className="appointment appointmentInMonth" style={{backgroundImage : colorToIndicateSickness}}  >
     <span>
-      <span className="dayAsNumber">day: {day} </span>    
+      {/* <span className="dayAsNumber">day: {day} </span>     */}
       <span className="time">{format_time(time)}</span>
     </span>
     <span className="client"> client: {client} </span>

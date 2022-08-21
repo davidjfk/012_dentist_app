@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+// import { useState } from "react";
 import { useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
@@ -20,19 +20,23 @@ import {addDayTimeClient} from "./redux/clientDayTimeSlice";
 import {addDayTimeDentist} from "./redux/dentistDayTimeSlice";
 import {addDayTimeAssistant} from "./redux/assistantDayTimeSlice";
 import {addAppointment } from "./redux/appointmentSlice";
-import {addAppointsments} from "./redux/appointmentSlice";
+// import {addAppointsments} from "./redux/appointmentSlice";
 import {addDentalTreatmentsArrayFromExternalSource} from "./redux/dentalTreatments";
-import {addDentalTreatmentsAsSkillSetToDentist} from  "./redux/dentistSlice"
+// import {addDentalTreatmentsAsSkillSetToDentist} from  "./redux/dentistSlice"
 
-import {checkIfPersonWithDayAndTimeIsUnique, createCombiOfPersonAndDayAndTime, generateRandomAppointmentId, getRandomPersonId, getRandomPersonIdAsync, getRandomDay, getRandomName, getRandomPersons, getRandomTime, selectObjectsByArrayObjectKey } from './utils';
+import {createCombiOfPersonAndDayAndTime, generateRandomAppointmentId, getRandomPersonIdAsync, getRandomDay, getRandomPersons, getRandomTime, selectObjectsByArrayObjectKey } from './utils';
 
 
 import {Appointment} from "./Appointment";
+import Assistant from "./components/assistant/Assistant";
+
+import Dentist from "./components/dentist/Dentist";
 import DeleteAppointment from "./DeleteAppointment";
 
 import {Calendar} from "./Calendar";
-import {Day} from "./Day";
-import {addTreatmentTypesToDentist, generateRandomAppointmentsFromWinc, getRandomTreatmentForRandomAppointment, getRandomTreatmentTypes} from "./utils";
+import {SelectDayNrToDisplay} from "./components/SelectDayNrToDisplay";
+// import {Day} from "./Day";
+import {getRandomTreatmentForRandomAppointment, getRandomTreatmentTypes} from "./utils";
 
 const log = console.log;
 
@@ -145,7 +149,7 @@ const App = ()  => {
     let dentistDayTimesRef = useRef([]);
     let assistantDayTimesRef = useRef([]);
     
-    function checkIfPersonWithDayAndTimeIsUnique (personId, day, time, personType) {
+    function checkIfPersonWithDayAndTimeIsUniqueWithUseRef (personId, day, time, personType) {
         let arrayWithDayAndTimeCombinationsThatAreTaken = [];
         let uniqueValue = false;
         switch (personType) {
@@ -191,9 +195,9 @@ const App = ()  => {
           
           if (isAssistantNeededForAppointment) {
               if (
-                  checkIfPersonWithDayAndTimeIsUnique(clientId, day, time, personType="client") &&
-                  checkIfPersonWithDayAndTimeIsUnique(dentistId, day, time, personType = "dentist") &&
-                  checkIfPersonWithDayAndTimeIsUnique(assistantId, day, time, personType = "assistant")
+                  checkIfPersonWithDayAndTimeIsUniqueWithUseRef(clientId, day, time, personType="client") &&
+                  checkIfPersonWithDayAndTimeIsUniqueWithUseRef(dentistId, day, time, personType = "dentist") &&
+                  checkIfPersonWithDayAndTimeIsUniqueWithUseRef(assistantId, day, time, personType = "assistant")
                   )
               {
     
@@ -253,8 +257,8 @@ const App = ()  => {
                    
               } 
           } else {
-              if (checkIfPersonWithDayAndTimeIsUnique(clientId, day, time, personType = "client") &&
-                  checkIfPersonWithDayAndTimeIsUnique(dentistId, day, time, personType = "dentist"))
+              if (checkIfPersonWithDayAndTimeIsUniqueWithUseRef(clientId, day, time, personType = "client") &&
+                  checkIfPersonWithDayAndTimeIsUniqueWithUseRef(dentistId, day, time, personType = "dentist"))
               {
     
                 let clientDayTimes = createCombiOfPersonAndDayAndTime(clientId, day, time)
@@ -290,10 +294,9 @@ const App = ()  => {
           useEffect(() => {
                 
                   const generateRandomAppointments = num => {
-               
-                  Array(num)
-                      .fill(0) 
-                      .map(_ => generateRandomAppointment());
+                    Array(num)
+                        .fill(0) 
+                        .map(_ => generateRandomAppointment());
                   }
                   generateRandomAppointments(150)
     
@@ -341,19 +344,33 @@ const App = ()  => {
                 <li>
                   <Link to="/day">Day view</Link>
                 </li>
+                <li>
+                  <Link to="/assistant">Assistant</Link>
+                </li>
+                <li>
+                  <Link to="/dentist">Dentist</Link>
+                </li>
               </ul>
             </nav>
             <main>
           
               <Switch>
                 <Route path="/calendar">
-                  <Calendar appointments={appointmentsfromReduxToolkit}  />
+                  <Calendar appointments={appointmentsfromReduxToolkit.appointments}  />
                 </Route>
                 <Route path="/deleteAppointment">  
-                <DeleteAppointment  />
+                  <DeleteAppointment  />
+                </Route>
+                <Route path="/assistant">  
+                  <Assistant  />
+                </Route>
+                <Route path="/dentist">  
+                  <Dentist  />
                 </Route>
                 <Route path="/day">
-                  <Day appointments={appointmentsfromReduxToolkit.appointments.filter(app => app.day === "02")} />
+                  {/* <Day appointments={appointmentsfromReduxToolkit.appointments.filter(app => app.day === "03")} /> */}
+                  {/* <Day appointments={appointmentsfromReduxToolkit.appointments} /> */}
+                  <SelectDayNrToDisplay appointments={appointmentsfromReduxToolkit.appointments} />
                 </Route>
                 <Route path="/">
                   <Appointment />

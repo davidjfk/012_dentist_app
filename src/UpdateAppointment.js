@@ -34,14 +34,13 @@ const UpdateAppointment = () => {
                     This is how to UPDATE a dental appointment without using a form nor buttons:
                     how to do it:
                     step 1: switch off the other components inside component Appointments. Reason: they both access the same data in redux toolkit with a useEffect with [] as a dependency.
-                    step 2: (if needed) uncomment the following 3 lines of code:
+                    step 2: delete an appointment (of which the data will  be used to create an updated version  of  this appointment). If needed, uncomment the following 3 lines of code:
 
-                    // delete the first appointment, i.e. with index 0:
                 */
-                    let appointmentIndexInAppointmentsArray = 1; // update the second appointment.
+                    let appointmentIndexInAppointmentsArray = 1; // update the second appointment (is a random choice).
                     let appointmentId = getAppointmentId(appointmentsfromReduxToolkit, appointmentIndexInAppointmentsArray) 
                     let appointmentObject = getAppointmentObject(appointmentsfromReduxToolkit, appointmentIndexInAppointmentsArray) 
-                    log(`comp UpdateAppointment: appointmentObject: `)
+                    log(`comp UpdateAppointment: object that is about to be updated: `)
                     // log(appointmentObject)
                     tempPlaceToSaveAppointmentThatIsAboutToBeDeleted.current = appointmentObject
                     // appointment is saved in useRef, so it can safely be deleted from global state.

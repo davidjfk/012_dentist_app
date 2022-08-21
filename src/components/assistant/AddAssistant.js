@@ -1,9 +1,9 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { addAssistant } from "./redux/assistantSlice";
-import "./App.css";
+import { addAssistant } from "../../redux/assistantSlice";
+import "../../App.css";
 
-import {generateRandomPersonId} from './utils';
+import {generateRandomPersonId} from '../../utils';
 
 const AddAssistant = () => {
     const log = console.log;
@@ -37,13 +37,15 @@ const AddAssistant = () => {
                 let lastName = "Helfer";
                 let firstName = "Ayudante";
 
+
                let newAssistant = {
                     lastName,
                     assistantId:`${lastName}-${generateRandomPersonId()}`,
                     firstName,
                     phone:`06${Math.floor(10000000 + Math.random() * 90000000)}`,
                     email: `${firstName}.${lastName}@dentistcompanybvt.com`,
-                    isSick:"false"
+                    isSick:"false",
+                    skillLevel: (Math.floor(Math.random() * (7 - 1)) + 1).toString()
                 }
 
                 addAssistantToReduxToolkit(newAssistant);
