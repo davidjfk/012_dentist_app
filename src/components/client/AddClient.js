@@ -1,9 +1,11 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { addClient } from "./redux/clientSlice";
-import "./App.css";
+import { addClient } from "../../redux/clientSlice";
+import "../../App.css";
+// import paymentMethodsToAddToNewClientCreatedViaUI from '../../dataInDentistAppWhenDentistAppStarts/paymentMethodsToAddToNewClientCreatedViaUI';
+import paymentMethodsToAddToAutomaticallyCreatedClients from '../../dataInDentistAppWhenDentistAppStarts/paymentMethodsToAddToAutomaticallyCreatedClients';
 
-import {generateRandomPersonId} from './utils';
+import {generateRandomPersonId, getNrOfRandomElementsFromArray} from '../../utils';
 
 const AddClient = () => {
     const log = console.log;
@@ -46,15 +48,16 @@ const AddClient = () => {
                     firstName,
                     phone:"06-61175862",
                     email: `${firstName}.${lastName}@dentistcompanybvt.com`,
-                    birthYear: 2001,
-                    isSick:"false"
+                    birthYear: "2001",
+                    isSick:"false",
+                    paymentMethod: (getNrOfRandomElementsFromArray(paymentMethodsToAddToAutomaticallyCreatedClients, 1)).toString()
                 }
 
                 addClientToReduxToolkit(newClient);
 
                 }, []
             );
-         return null
+    return null
 } 
 
 

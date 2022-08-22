@@ -251,7 +251,17 @@ export const getRandomDay2 = () => {
 
 
 
+export const getNrOfRandomElementsFromArray = (array, nrOfArrayElements = 8) => {
+  let arrayWithSelectedElements = [];
 
+  for (let i = 0; i < nrOfArrayElements ; i++) {
+    let dentalTreatment = array[Math.floor(Math.random() * array.length)]; 
+    if (!arrayWithSelectedElements.includes(dentalTreatment)){
+      arrayWithSelectedElements.push(dentalTreatment)
+    }
+  }
+  return arrayWithSelectedElements.sort();
+};
 
 
 export const getRandomTreatmentForRandomAppointment = (dentistId, dentistArray) => {
@@ -267,6 +277,8 @@ export const getRandomTreatmentForRandomAppointment = (dentistId, dentistArray) 
   // log(dentistObject)
   return randomCurrentSkillOfDentist;
 };
+
+
 
 
 

@@ -1,5 +1,5 @@
 
-    const dentalSkills = [
+    const dentalSkillsToAddToNewDentistCreatedViaUI = [
         {value: 'brace', text: 'brace'},
         {value: 'bridge', text: 'bridge'},
         {value: 'broken_or_knocked_out_tooth', text: 'broken_or_knocked_out_tooth'},
@@ -14,4 +14,4 @@
         {value: 'wisdom_tooth_removal', text: 'wisdom_tooth_removal'}
     ];
 
-    export default dentalSkills;
+    export default dentalSkillsToAddToNewDentistCreatedViaUI;

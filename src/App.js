@@ -10,7 +10,7 @@ import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import clientsDentistCompanyBVT from "./dataInDentistAppWhenDentistAppStarts/clients"
 import dentistsDentistCompanyBVT from "./dataInDentistAppWhenDentistAppStarts/dentists"
 import assistantsDentistCompanyBVT from "./dataInDentistAppWhenDentistAppStarts/assistants"
-import dentalTreatmentsDentistCompanyBV from "./dataInDentistAppWhenDentistAppStarts/dentalTreatments";
+import dentalSkillsToAddToNewDentistToAutomaticallyCreateDentists from "./dataInDentistAppWhenDentistAppStarts/dentalSkillsToAddToNewDentistToAutomaticallyCreateDentists";
 
 import { addClients } from "./redux/clientSlice";
 import { addDentists } from "./redux/dentistSlice";
@@ -28,13 +28,15 @@ import {createCombiOfPersonAndDayAndTime, generateRandomAppointmentId, getRandom
 
 
 import {Appointment} from "./Appointment";
+
 import Assistant from "./components/assistant/Assistant";
+import Client from "./components/client/Client";
 
 import Dentist from "./components/dentist/Dentist";
 import DeleteAppointment from "./DeleteAppointment";
 
-import {Calendar} from "./Calendar";
-import {SelectDayNrToDisplay} from "./components/SelectDayNrToDisplay";
+import {Calendar} from "./components/monthView/Calendar";
+import {SelectDayNrToDisplay} from "./components/dayView/SelectDayNrToDisplay";
 // import {Day} from "./Day";
 import {getRandomTreatmentForRandomAppointment, getRandomTreatmentTypes} from "./utils";
 
@@ -70,7 +72,7 @@ const App = ()  => {
           // log(dentistsWithTreatmentTypesRef.current)
           //2do: put next 3 lines of code in a fn.
           for (let i = 0; i < 4; i++) {
-            let skillSetOfDentist = getRandomTreatmentTypes(dentalTreatmentsDentistCompanyBV);
+            let skillSetOfDentist = getRandomTreatmentTypes(dentalSkillsToAddToNewDentistToAutomaticallyCreateDentists);
             dentistsWithTreatmentTypesRef.current[0][i].treatmentTypes = skillSetOfDentist;
           }
 
@@ -89,16 +91,16 @@ const App = ()  => {
 
           */
 
-          // let skillSetOfDentist = getRandomTreatmentTypes(dentalTreatmentsDentistCompanyBV);
+          // let skillSetOfDentist = getRandomTreatmentTypes(dentalSkillsToAddToNewDentistToAutomaticallyCreateDentists);
           // dentistsWithTreatmentTypesRef.current[0][0].treatmentTypes = skillSetOfDentist
 
-          // skillSetOfDentist = getRandomTreatmentTypes(dentalTreatmentsDentistCompanyBV);
+          // skillSetOfDentist = getRandomTreatmentTypes(dentalSkillsToAddToNewDentistToAutomaticallyCreateDentists);
           // dentistsWithTreatmentTypesRef.current[0][1].treatmentTypes = skillSetOfDentist
 
-          // skillSetOfDentist = getRandomTreatmentTypes(dentalTreatmentsDentistCompanyBV);
+          // skillSetOfDentist = getRandomTreatmentTypes(dentalSkillsToAddToNewDentistToAutomaticallyCreateDentists);
           // dentistsWithTreatmentTypesRef.current[0][2].treatmentTypes = skillSetOfDentist
 
-          // skillSetOfDentist = getRandomTreatmentTypes(dentalTreatmentsDentistCompanyBV);
+          // skillSetOfDentist = getRandomTreatmentTypes(dentalSkillsToAddToNewDentistToAutomaticallyCreateDentists);
           // dentistsWithTreatmentTypesRef.current[0][3].treatmentTypes = skillSetOfDentist
 
 
@@ -112,7 +114,7 @@ const App = ()  => {
           randomAssistants = getRandomPersons(assistantsDentistCompanyBVT, 2); 
           dispatch(addAssistants(randomAssistants));
 
-          dispatch(addDentalTreatmentsArrayFromExternalSource(dentalTreatmentsDentistCompanyBV));
+          dispatch(addDentalTreatmentsArrayFromExternalSource(dentalSkillsToAddToNewDentistToAutomaticallyCreateDentists));
    
       } , [] 
     );
@@ -345,6 +347,9 @@ const App = ()  => {
                   <Link to="/day">Day view</Link>
                 </li>
                 <li>
+                  <Link to="/client">Client</Link>
+                </li>
+                <li>
                   <Link to="/assistant">Assistant</Link>
                 </li>
                 <li>
@@ -360,6 +365,9 @@ const App = ()  => {
                 </Route>
                 <Route path="/deleteAppointment">  
                   <DeleteAppointment  />
+                </Route>
+                <Route path="/client">  
+                  <Client  />
                 </Route>
                 <Route path="/assistant">  
                   <Assistant  />
