@@ -1,4 +1,5 @@
-const dentalTreatmentsDentistCompanyBV = [
+// use case: create 150 random dental appointments. 
+const dentalSkillsToAddToNewDentistToAutomaticallyCreateDentists = [
     "brace",
     "bridge",
     "broken_or_knocked_out_tooth",
@@ -13,4 +14,4 @@ const dentalTreatmentsDentistCompanyBV = [
     "wisdom_tooth_removal",
 ];
 
-export default dentalTreatmentsDentistCompanyBV;
+export default dentalSkillsToAddToNewDentistToAutomaticallyCreateDentists;

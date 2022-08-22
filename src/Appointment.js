@@ -7,7 +7,7 @@ import {CreateAppointment} from "./CreateAppointment";
 import DeleteAppointment from "./DeleteAppointment";
 import UpdateAppointment from "./UpdateAppointment";
 import AddDentist from "./components/dentist/AddDentist";
-import AddClient from "./AddClient";
+import AddClient from "./components/client/AddClient";
 import DeleteAllAppointmentsOfClient from "./DeleteAllAppointmentsOfClient";
 import MakeRedBackgroundForAppointmentsOfSickDentist from "./MakeRedBackgroundForAppointmentsOfSickDentist";
 import MakeOrangeBackgroundForAppointmentsOfSickAssistant from "./MakeOrangeBackgroundForAppointmentsOfSickAssistant";

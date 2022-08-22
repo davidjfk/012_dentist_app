@@ -130,17 +130,24 @@ let daysInMonthJSXSortedWithoutDayNr = daysInMonthJSXSorted.map(element => eleme
 
   // you are mapping all days of the month.
   return (
-    <div className="calendarview">
-      <div className="header">
-        <div>Monday</div>
-        <div>Tuesday</div>
-        <div>Wednesday</div>
-        <div>Thursday</div>
-        <div>Friday</div>
+    <>
+      <ul className="calendarview colorLegenda">
+        <li class="orange">orange = assistant is ill</li>  
+        <li class="purple">purple = client is ill</li>  
+        <li class="red">red = dentist is ill</li>  
+      </ul>
+      <div className="calendarview">
+        <div className="header">
+          <div>Monday</div>
+          <div>Tuesday</div>
+          <div>Wednesday</div>
+          <div>Thursday</div>
+          <div>Friday</div>
+        </div>
+        <div className="table">{daysInMonthJSX}</div>
+        {/* <div>{appointmentsInDay[0]}</div> */}
       </div>
-      <div className="table">{daysInMonthJSX}</div>
-      {/* <div>{appointmentsInDay[0]}</div> */}
-    </div>
+    </>
   );
 
 

@@ -1,15 +1,15 @@
 import React from "react";
 // import { useSelector } from "react-redux";
 import { useState, useEffect } from 'react';
-import "../Day.css";
+import "./Day.css";
 // import {AppointmentInDay} from "../AppointmentInDay";
 // import { useSelector } from "react-redux"; 
 
-import {Day} from "../Day";
-import {Container} from './styles/Container.styled';
-import {AssistantListStyled, FormControlArea, Intro, Section2} from './assistant/AssistantList.styled';
-import {StyledSelectbox} from './styles/Selectbox.styled';
-import listOfValidWorkingDayNumbersInNextMonth from '../dataInDentistAppWhenDentistAppStarts/listOfValidWorkingDayNumbersInNextMonth';
+import {Day} from "./Day";
+import {Container} from '../styles/Container.styled';
+import {AssistantListStyled, FormControlArea, Intro, Section2} from '../assistant/AssistantList.styled';
+import {StyledSelectbox} from '../styles/Selectbox.styled';
+import listOfValidWorkingDayNumbersInNextMonth from '../../dataInDentistAppWhenDentistAppStarts/listOfValidWorkingDayNumbersInNextMonth';
 
 
 // const log = console.log;
@@ -78,14 +78,18 @@ export const SelectDayNrToDisplay = ({appointments}) => {
                             {listOfValidWorkingDayNumbersInNextMonth.map(item => {
                                 return (<option key={item.value} value={item.value}>{item.text}</option>);
                             })}   
-                            </StyledSelectbox>
+                        </StyledSelectbox>
                         </div>
                     </Section2>
-
+            <ul className=" colorLegenda">
+                <li class="orange">orange: assistant is ill</li>  
+                <li class="purple">purple: client is ill</li>  
+                <li class="red">red: dentist is ill</li>  
+            </ul>  
                 </FormControlArea>
             </AssistantListStyled>  
         </Container>
-                         
+
        <Day  appointments = {dataToRenderFromUseEffectPipeline}    />               
     </>
   )

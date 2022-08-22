@@ -5,7 +5,7 @@ import { addDentist } from "../../redux/dentistSlice";
 import "../../App.css";
 
 import {generateRandomPersonId, getRandomTreatmentTypes} from '../../utils';
-import dentalTreatmentsDentistCompanyBV from "../../dataInDentistAppWhenDentistAppStarts/dentalTreatments";
+import dentalSkillsToAddToNewDentistToAutomaticallyCreateDentists from "../../dataInDentistAppWhenDentistAppStarts/dentalSkillsToAddToNewDentistToAutomaticallyCreateDentists";
 
 const AddDentist = () => {
     const log = console.log;
@@ -40,7 +40,7 @@ const AddDentist = () => {
                 */
                 let lastName = "More";
                 let firstName = "Less";
-                let skillSetOfDentist = getRandomTreatmentTypes(dentalTreatmentsDentistCompanyBV);
+                let skillSetOfDentist = getRandomTreatmentTypes(dentalSkillsToAddToNewDentistToAutomaticallyCreateDentists);
                 log(`inside comp AddDentist:`)
                 log(skillSetOfDentist)
                 let newDentist = {

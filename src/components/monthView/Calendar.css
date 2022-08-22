@@ -62,7 +62,30 @@
 }
 
 
-
 .backgroundColor {
   background-color: red;
+}
+
+.colorLegenda {
+  list-style: none;
+  padding-left: 1rem;
+  font-size: 1.4rem;
+  width: 15rem;
+  font-weight: 500;
+  
+}
+
+.orange{
+  background-color: orange;
+  padding: 0.2rem;
+}
+
+.purple{
+  background-color: purple;
+  padding: 0.2rem;
+}
+
+.red{
+  background-color: red;
+  padding: 0.2rem;
 }

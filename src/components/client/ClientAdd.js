@@ -1,12 +1,12 @@
 import React from 'react';
 import {useState } from 'react';
 import {useDispatch } from "react-redux";
-import {addDentist } from "../../redux/dentistSlice";
+import {addClient } from "../../redux/clientSlice";
 import skillLevelOptions from '../../dataInDentistAppWhenDentistAppStarts/skillLevelOptions';
-import dentalSkillsToAddToNewDentistCreatedViaUI from '../../dataInDentistAppWhenDentistAppStarts/dentalSkillsToAddToNewDentistCreatedViaUI';
+import paymentMethodsToAddToNewClientCreatedViaUI from '../../dataInDentistAppWhenDentistAppStarts/paymentMethodsToAddToNewClientCreatedViaUI';
 import healthStatusOptions from '../../dataInDentistAppWhenDentistAppStarts/healthStatusOptions';
 import {Container} from '../styles/Container.styled';
-import {DentistAddStyled, Column, Form, Intro} from './DentistAdd.styled';
+import {ClientAddStyled, Column, Form, Intro} from './ClientAdd.styled';
 import {StyledButton} from '../styles/Button.styled';
 import {StyledInputfield} from '../styles/Inputfield.styled';
 import {StyledSelectbox} from '../styles/Selectbox.styled';
@@ -15,14 +15,15 @@ import {generateRandomPersonId} from '../../utils';
 
 const log = console.log;
 
-const AddDentist = () => {
+const AddClient = () => {
     let [lastName, setLastName] = useState('')
     let [firstName, setFirstName] = useState('')
     let [phone, setPhone] = useState('')
     let [email, setEmail] = useState('')
     let [isSick, setIsSick] = useState('default')
-    let [skillLevel, setSkillLevel] = useState("default")
-    let [skillsOfDentist, setSkillsOfDentist] = useState([]);
+    // let [skillLevel, setSkillLevel] = useState("default")
+    let [paymentMethod, setPaymentMethod] = useState("default")
+    let [birthYear, setBirthYear] = useState('');
 
     const dispatch = useDispatch();
 
@@ -33,12 +34,6 @@ const AddDentist = () => {
           alert('Please add a song lastName and firstName')
           return
         }   
-
-        if (skillsOfDentist.length === 0) {
-            alert('Please add a skill')
-            return
-        }   
-
 
         if (phone === 'default') {
             setPhone(phone = 'unknown') 
@@ -52,15 +47,17 @@ const AddDentist = () => {
             setIsSick(isSick = 'unknown') 
         } 
 
-        if (skillLevel === 'default') {
-            setSkillLevel(skillLevel = 'unknown') 
+        if (paymentMethod === 'default') {
+            setPaymentMethod(paymentMethod = 'unknown') 
         } 
 
-        // replace with code from winc-react-assistant: 
-        const dentistId = `${lastName}-${generateRandomPersonId()}`;
+        if (birthYear === '') {
+            setBirthYear(birthYear = 'unknown') 
+        } 
 
-        let treatmentTypes = skillsOfDentist;
-        dispatch(addDentist({dentistId, lastName, firstName, phone, email, isSick, skillLevel, treatmentTypes }));   
+        const clientId = `${lastName}-${generateRandomPersonId()}`;
+
+        dispatch(addClient({clientId, lastName, firstName, phone, email, isSick, paymentMethod, birthYear }));   
         
         // now reset the form for the next use:
         // setLastName('')
@@ -69,33 +66,12 @@ const AddDentist = () => {
         // setEmail('')
         // setIsSick('')
         // setRating('')
-        // setSkillLevel('');
-        setSkillsOfDentist("");
-
-
     }
-
-    const handleAddSkillsToDentist = (event) => {
-        let value = Array.from(
-            event.target.selectedOptions, (option) => option.value
-        )   
-        setSkillsOfDentist(value);
-    };
-
-    const [isHovering, setIsHovering] = useState(false);
-
-    const handleMouseOver = () => {
-      setIsHovering(true);
-    };
-  
-    const handleMouseOut = () => {
-      setIsHovering(false);
-    };
 
   return (
     <Container> 
-        <DentistAddStyled>
-            <Intro>Add Dentist</Intro>
+        <ClientAddStyled>
+            <Intro>Add Client</Intro>
             <Form>
                 <Column>
                     <StyledInputfield
@@ -146,48 +122,36 @@ const AddDentist = () => {
                 </Column>
                 <Column>
                     <StyledSelectbox 
-                        value={skillLevel}
-                        onChange={(e) => setSkillLevel(e.target.value)}
-                        name="skillLevel"
+                        value={paymentMethod}
+                        onChange={(e) => setPaymentMethod(e.target.value)}
+                        name="paymentMethod"
                     > 
-                        <option value="">skill level:</option>
+                        <option value="" >payment method:</option>
                         {/* <option value="default" disabled hidden>
                             Add skill level
                         </option> */}
-                        {skillLevelOptions.map(item => {
+                        {paymentMethodsToAddToNewClientCreatedViaUI.map(item => {
                             return (<option key={item.value} value={item.value}>{item.text}</option>);
                         })}
                     </StyledSelectbox>
                 </Column>
-
-                <Column>        
-                    <div>
-                    <StyledSelectbox 
-                        multiple={true}
-                        value={skillsOfDentist}
-                        onChange={(e) => handleAddSkillsToDentist(e)  }     
-                        onMouseOver={handleMouseOver} 
-                        onMouseOut={handleMouseOut}                 
-                    >    
-                        <option value="" >skills:</option>
-                        {/* <option value="" >do not filter</option>   */}
-                        {dentalSkillsToAddToNewDentistCreatedViaUI.map(item => {
-                            return (<option key={item.value} value={item.value}>{item.text}</option>);
-                        })}
-                    </StyledSelectbox>
-                    {isHovering && <h5>Press Ctrl to select multiple skills</h5>}
-                    </div>
+                <Column>
+                    <StyledInputfield
+                            type='text'
+                            placeholder='Add birthYear (e.g. 2001)'
+                            value={birthYear}
+                            onChange={(e) => setBirthYear(e.target.value)}                              
+                    />
                 </Column>
-
                 <Column>
                     <StyledButton onClick={onSubmit}>
-                        Add dentist 
+                        Add client 
                     </StyledButton>                  
                 </Column>
             </Form>
-        </DentistAddStyled>  
+        </ClientAddStyled>  
     </Container>
   )
 }
 
-export default AddDentist 
+export default AddClient 

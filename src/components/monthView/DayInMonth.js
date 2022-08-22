@@ -11,7 +11,7 @@ export const DayInMonth = ({ appointments , dayNrInMonth}) => {
 
   let appointmentsJSX = appointments
   .sort((appointment1, appointment2) => appointment2.time - appointment1.time).reverse()  // works
-  .map(({ time, day, client, dentistId, assistantId,  }, index) => (
+  .map(({ time, day, client, clientId, dentistId, assistantId,  }, index) => (
     // React throws error, because each child in a list should have a unique "key" prop. 2do: analyse this.
   
   
@@ -19,6 +19,7 @@ export const DayInMonth = ({ appointments , dayNrInMonth}) => {
     day={day} 
     time={time}  
     client={client} 
+    clientId={clientId}
     dentistId={dentistId} 
     assistantId={assistantId}   
     key={index} />
