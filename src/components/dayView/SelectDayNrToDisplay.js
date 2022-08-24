@@ -82,15 +82,17 @@ export const SelectDayNrToDisplay = ({appointments}) => {
                         </div>
                     </Section2>
             <ul className=" colorLegenda">
-                <li class="orange">orange: assistant is ill</li>  
-                <li class="purple">purple: client is ill</li>  
-                <li class="red">red: dentist is ill</li>  
+                <li className="orange">orange: assistant is ill</li>  
+                <li className="purple">purple: client is ill</li>  
+                <li className="red">red: dentist is ill</li>  
             </ul>  
                 </FormControlArea>
             </AssistantListStyled>  
         </Container>
 
-       <Day  appointments = {dataToRenderFromUseEffectPipeline}    />               
+        { dataToRenderFromUseEffectPipeline.length !== 0 ? <Day  appointments = {dataToRenderFromUseEffectPipeline} /> : <Container>No appointments today.</Container>}
+
+       {/* <Day  appointments = {dataToRenderFromUseEffectPipeline}    />                */}
     </>
   )
 }

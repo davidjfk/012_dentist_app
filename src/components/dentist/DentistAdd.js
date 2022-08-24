@@ -7,7 +7,7 @@ import dentalSkillsToAddToNewDentistCreatedViaUI from '../../dataInDentistAppWhe
 import healthStatusOptions from '../../dataInDentistAppWhenDentistAppStarts/healthStatusOptions';
 import {Container} from '../styles/Container.styled';
 import {DentistAddStyled, Column, Form, Intro} from './DentistAdd.styled';
-import {StyledButton} from '../styles/Button.styled';
+import {StyledButtonAroundText} from '../styles/ButtonAroundText.styled';
 import {StyledInputfield} from '../styles/Inputfield.styled';
 import {StyledSelectbox} from '../styles/Selectbox.styled';
 
@@ -180,9 +180,9 @@ const AddDentist = () => {
                 </Column>
 
                 <Column>
-                    <StyledButton onClick={onSubmit}>
+                    <StyledButtonAroundText onClick={onSubmit}>
                         Add dentist 
-                    </StyledButton>                  
+                    </StyledButtonAroundText>                  
                 </Column>
             </Form>
         </DentistAddStyled>  

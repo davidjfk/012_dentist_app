@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-export const StyledButton = styled.button`
+export const StyledButtonAroundText = styled.button`
   background-color: white;  
   border-radius: 50px;
   border: none;

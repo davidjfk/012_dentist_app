@@ -211,13 +211,16 @@ const AssistantList = () => {
                     <span>Health status</span>
                 </Column>
                 <Column>
-                    <span>Show as sick in views (purple background) </span>
+                    <span>Show as sick in views (purple background)</span>
                 </Column>
                 <Column>
-                    <span>Delete all appointments (2do on separate branch) </span>
+                    <span>Appointments last deleted on</span>
                 </Column>
                 <Column>
-                    <span>Delete client with all appointments (2do on separate branch) </span>
+                    <span>Delete all appointments</span>
+                </Column>
+                <Column>
+                    <span>Delete client with all appointments</span>
                 </Column>
             </Headers>
             <ClientListAreaStyled>

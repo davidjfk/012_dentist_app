@@ -34,17 +34,17 @@ export const AppointmentInDay = ({ time, day, client, clientId, dentist, dentist
   
   let getClient = client => client.clientId === clientId
   let clientFromreduxToolkit = selectObjectsByArrayObjectKey(clientsFromReduxToolkit.clients, getClient)
-  clientIsSick = clientFromreduxToolkit[0].isSick;
+  clientIsSick = clientFromreduxToolkit[0]?.isSick;
   clientIsSick = (clientIsSick === "true" || clientIsSick === true);
 
   let getAssistant = assistant => assistant.assistantId === assistantId
   let assistantFromreduxToolkit = selectObjectsByArrayObjectKey(assistantsFromReduxToolkit.assistants, getAssistant)
-  assistantIsSick = assistantFromreduxToolkit[0].isSick;
+  assistantIsSick = assistantFromreduxToolkit[0]?.isSick;
   assistantIsSick = (assistantIsSick === "true" || assistantIsSick === true);
 
   let getDentist = dentist => dentist.dentistId === dentistId
   let dentistFromreduxToolkit = selectObjectsByArrayObjectKey(dentistsFromReduxToolkit.dentists, getDentist)
-  dentistIsSick = dentistFromreduxToolkit[0].isSick;
+  dentistIsSick = dentistFromreduxToolkit[0]?.isSick;
   dentistIsSick = (dentistIsSick === "true" || dentistIsSick === true);
 
   clientIsSick && (colorToIndicateSickness = "linear-gradient(45deg, #c632d1 50%, #c632d1 50%, #c632d1 100%)");

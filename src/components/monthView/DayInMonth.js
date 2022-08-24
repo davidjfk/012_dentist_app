@@ -38,7 +38,7 @@ export const DayInMonth = ({ appointments , dayNrInMonth}) => {
     // <div className="day" style={{backgroundColor : dentistIsSick ? 'red' : 'lightyellow'}}  >{appointmentsJSX}</div>
     // <div className="day" style={{backgroundColor : 'red' }}  >{appointmentsJSX}</div> // works
     <>
-    
+     
     <div className="day" >{appointmentsJSX} </div>
     </>
   );
