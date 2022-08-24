@@ -6,7 +6,7 @@ import skillLevelOptions from '../../dataInDentistAppWhenDentistAppStarts/skillL
 import healthStatusOptions from '../../dataInDentistAppWhenDentistAppStarts/healthStatusOptions';
 import {Container} from '../styles/Container.styled';
 import {AssistantAddStyled, Column, Form, Intro} from './AssistantAdd.styled';
-import {StyledButton} from '../styles/Button.styled';
+import {StyledButtonAroundText} from '../styles/ButtonAroundText.styled';
 import {StyledInputfield} from '../styles/Inputfield.styled';
 import {StyledSelectbox} from '../styles/Selectbox.styled';
 
@@ -129,9 +129,9 @@ const AddAssistant = () => {
                     </StyledSelectbox>
                 </Column>
                 <Column>
-                    <StyledButton onClick={onSubmit}>
+                    <StyledButtonAroundText onClick={onSubmit}>
                         Add assistant 
-                    </StyledButton>                  
+                    </StyledButtonAroundText>                  
                 </Column>
             </Form>
         </AssistantAddStyled>  

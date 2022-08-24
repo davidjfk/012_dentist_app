@@ -7,7 +7,7 @@ import paymentMethodsToAddToNewClientCreatedViaUI from '../../dataInDentistAppWh
 import healthStatusOptions from '../../dataInDentistAppWhenDentistAppStarts/healthStatusOptions';
 import {Container} from '../styles/Container.styled';
 import {ClientAddStyled, Column, Form, Intro} from './ClientAdd.styled';
-import {StyledButton} from '../styles/Button.styled';
+import {StyledButtonAroundText} from '../styles/ButtonAroundText.styled';
 import {StyledInputfield} from '../styles/Inputfield.styled';
 import {StyledSelectbox} from '../styles/Selectbox.styled';
 
@@ -56,8 +56,9 @@ const AddClient = () => {
         } 
 
         const clientId = `${lastName}-${generateRandomPersonId()}`;
+        const appointmentsLastDeletedOnDateTime = "null";
 
-        dispatch(addClient({clientId, lastName, firstName, phone, email, isSick, paymentMethod, birthYear }));   
+        dispatch(addClient({clientId, lastName, firstName, phone, email, isSick, paymentMethod, birthYear, appointmentsLastDeletedOnDateTime }));   
         
         // now reset the form for the next use:
         // setLastName('')
@@ -144,9 +145,9 @@ const AddClient = () => {
                     />
                 </Column>
                 <Column>
-                    <StyledButton onClick={onSubmit}>
+                    <StyledButtonAroundText onClick={onSubmit}>
                         Add client 
-                    </StyledButton>                  
+                    </StyledButtonAroundText>                  
                 </Column>
             </Form>
         </ClientAddStyled>  

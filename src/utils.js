@@ -3,13 +3,55 @@ import clientsDentistCompanyBVT from "./dataInDentistAppWhenDentistAppStarts/cli
 import dentistsDentistCompanyBVT from "./dataInDentistAppWhenDentistAppStarts/dentists"
 import assistantsDentistCompanyBVT from "./dataInDentistAppWhenDentistAppStarts/assistants"
 
-import { addAppointment, deleteAppointment } from "./redux/appointmentSlice";
+import { addAppointment, deleteAppointmentInReduxToolkit} from "./redux/appointmentSlice";
 import {addDayTimeClient} from "./redux/clientDayTimeSlice";
 import {addDayTimeDentist} from "./redux/dentistDayTimeSlice";
 import {addDayTimeAssistant} from "./redux/assistantDayTimeSlice";
 import {addDentalTreatmentsAsSkillSetToDentist} from  "./redux/dentistSlice"
 
 const log = console.log;
+
+/*
+
+checkIfPersonWithDayAndTimeIsUnique
+addTreatmentTypesToDentist
+createCombiOfPersonAndDayAndTime
+generateRandomPersonId
+generateRandomAppointmentId
+generateRandomAppointmentFromWinc
+generateRandomAppointmentsFromWinc
+getAppointmentObject
+getAppointmentId
+getAssistantId
+getClientId
+getDentistId
+getRandomDay
+getRandomName
+getRandomPaymentMethod
+getRandomPersonId
+getRandomPersonIdOld
+getRandomPersonIdAsync
+getRandomPersons
+getRandomTime
+getRandomDay2
+getNrOfRandomElementsFromArray
+getRandomTreatmentForRandomAppointment
+getRandomTreatmentTypes
+isValidWorkingDay
+isValidWorkingTime
+getSystemDatePlusTime
+selectObjectsByArrayObjectKey
+createAppointment  ------------------------------------------------
+deleteDentalAppointment_not_in_use
+deleteAllAppointmentsOfClient_not_in_use
+deleteDentalAppointment
+
+*/
+
+
+
+
+
 
 export function checkIfPersonWithDayAndTimeIsUnique (
   personId, 
@@ -62,8 +104,30 @@ export const addTreatmentTypesToDentist = (arrayWithDentistObjects, arrayWithDen
 
 export const createCombiOfPersonAndDayAndTime = (personId, day, time) => personId + "_" + day + "_" + time;
 
+export const generateRandomAppointmentId = () => Math.floor(10000000 + Math.random() *  9000000); // 7 digits
 
 export const generateRandomPersonId = () => Math.floor(1000000 + Math.random() * 900000); // 6 digits
+
+const generateRandomAppointmentFromWinc = () => ({
+  appointmentId: generateRandomAppointmentId(), // appointmentId not part of the kick-start code. 
+  day: getRandomDay(),
+  time: getRandomTime(),
+  client: getRandomName(clientsDentistCompanyBVT),
+  dentist: getRandomName(dentistsDentistCompanyBVT),
+  assistant: getRandomName(assistantsDentistCompanyBVT),
+});
+
+export const generateRandomAppointmentsFromWinc = num =>
+  Array(num)
+    .fill(0) // why fill with 0 before mapping? The undefineds are replaced by zeros, but why?
+    /* see MDN ( https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Array ): A JavaScript array is 
+      initialized with the given elements, except in the case where a single argument is passed to the Array constructor and that 
+      argument is a number (see the arrayLength parameter below). 
+      imho: skip fill(0)
+    */
+    .map(_ => generateRandomAppointmentFromWinc());
+
+
 
 
 export function getAppointmentObject(appointmentsfromReduxToolkit, indexOfAppointment) {
@@ -102,6 +166,8 @@ export function getClientId(clientsfromReduxToolkit, indexOfClient) {
   log('fn getClientId: end.')
   return clientId
 }
+
+
 
 export function getDentistId(dentistsfromReduxToolkit, indexOfDentist) {
   const dentist = dentistsfromReduxToolkit.dentists[indexOfDentist]
@@ -284,6 +350,9 @@ export const getRandomTreatmentForRandomAppointment = (dentistId, dentistArray) 
 
 
 
+
+
+
 export const getRandomTreatmentTypes = (completeArrayWithDentalTreatments, nrOfDifferentTreatmentsAsTheSkillsOfADentist = 8) => {
   let selectionOfDentalTreatments = [];
   
@@ -307,26 +376,15 @@ export const isValidWorkingTime = (hourNumber) => (hourNumber > 7 && hourNumber 
 
 
 
-export const generateRandomAppointmentId = () => Math.floor(10000000 + Math.random() * 9000000); // 7 digits
 
-const generateRandomAppointmentFromWinc = () => ({
-  appointmentId: generateRandomAppointmentId(), // appointmentId not part of the kick-start code. 
-  day: getRandomDay(),
-  time: getRandomTime(),
-  client: getRandomName(clientsDentistCompanyBVT),
-  dentist: getRandomName(dentistsDentistCompanyBVT),
-  assistant: getRandomName(assistantsDentistCompanyBVT),
-});
 
-export const generateRandomAppointmentsFromWinc = num =>
-  Array(num)
-    .fill(0) // why fill with 0 before mapping? The undefineds are replaced by zeros, but why?
-    /* see MDN ( https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Array ): A JavaScript array is 
-      initialized with the given elements, except in the case where a single argument is passed to the Array constructor and that 
-      argument is a number (see the arrayLength parameter below). 
-      imho: skip fill(0)
-    */
-    .map(_ => generateRandomAppointmentFromWinc());
+  export const getSystemDatePlusTime = () => {
+    const today = new Date();
+    const date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+    const time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+    const dateTime = date+' '+time;
+    return dateTime;
+  }
 
 
   export const selectObjectsByArrayObjectKey  = (array, filterFunction) => {
@@ -490,14 +548,24 @@ export const generateRandomAppointmentsFromWinc = num =>
   } 
 
 
-  export function deleteDentalAppointment (appointmentsfromReduxToolkit, appointmentId, appointmentIndexInAppointmentsArray, deleteDayTimeClient, deleteDayTimeDentist, deleteDayTimeAssistant, dispatch) {
+  export function deleteDentalAppointment_not_in_use (appointmentsfromReduxToolkit, appointmentId, appointmentIndexInAppointmentsArray, deleteAppointment, deleteDayTimeClient, deleteDayTimeDentist, deleteDayTimeAssistant, dispatch) {
     log('fn deleteAppointment start: ')
-    console.log(`appointmentId: ${appointmentId}`)
-  
+    // log(`appointmentsfromReduxToolkit: ${appointmentsfromReduxToolkit}`)
+    // log(`appointmentId: ${appointmentId}`)
+    // log(`appointmentIndexInAppointmentsArray: ${appointmentIndexInAppointmentsArray}`)
+    // log(`deleteDayTimeClient${deleteDayTimeClient}`)
+    // log(deleteDayTimeClient)
+    // log(`deleteDayTimeDentistClient${deleteDayTimeDentist}`)
+    // log(`deleteDayTimeAssistant${deleteDayTimeAssistant}`)
+    // log(`dispatch${deleteDayTimeClient}`)
+    // log(`appointmentIndexInAppointmentsArray (of appointment that will be deleted: )`)
+    // log(appointmentIndexInAppointmentsArray)
+    // log(typeof((appointmentIndexInAppointmentsArray)))
+
     let getAppointment = appointment => appointment.appointmentId === appointmentId
     let appointmentThatIsAboutToBeDeleted = selectObjectsByArrayObjectKey(appointmentsfromReduxToolkit.appointments, getAppointment)
     
-    console.log('appointmentThatWillBeDeleted:')
+    console.log('---appointmentThatWillBeDeleted:')
     console.log(appointmentThatIsAboutToBeDeleted[0])
   
     let {clientId, day, time, dentistId, assistantId} = appointmentThatIsAboutToBeDeleted[0];
@@ -514,6 +582,82 @@ export const generateRandomAppointmentsFromWinc = num =>
         dispatch(deleteDayTimeAssistant(assistantDayTimes));
     }
   
-    dispatch(deleteAppointment(appointmentIndexInAppointmentsArray))
+
+    dispatch(deleteAppointmentInReduxToolkit(appointmentIndexInAppointmentsArray))
     log('fn deleteAppointment end: ')
   }
+
+
+
+  export const deleteAllAppointmentsOfClient_not_in_use = (clientId, appointmentsfromReduxToolkit, dispatch, deleteAppointmentVersionTwo, deleteDayTimeClient, deleteDayTimeDentist, deleteDayTimeAssistant ) => {
+    // this fn uses the index to  delete an item in redux-toolkit.
+    
+    log(`clientId: ${clientId}`)
+    let getAppointment = appointment => appointment.clientId === clientId
+    let appointmentsToDelete = selectObjectsByArrayObjectKey(appointmentsfromReduxToolkit.appointments, getAppointment)
+  
+    log(`appointmentsToDelete: ${appointmentsToDelete}`)
+    log(appointmentsToDelete)
+  
+  let appointmentsToDeleteCopy = [...appointmentsToDelete];
+  
+  appointmentsToDelete.forEach(appointmentToDelete => {
+        // console.log(appointmentToDelete);
+        let appointmentIndexInAppointmentsArray = appointmentsfromReduxToolkit.appointments.indexOf(appointmentToDelete) 
+        // log(appointmentIndexInAppointmentsArray)
+        let appointmentId = appointmentToDelete.appointmentId;
+        if (appointmentsToDelete.length !== 0){
+            deleteDentalAppointment(
+                appointmentsfromReduxToolkit, 
+                appointmentId,
+                appointmentIndexInAppointmentsArray, 
+                deleteAppointmentVersionTwo,
+                deleteDayTimeClient, 
+                deleteDayTimeDentist, 
+                deleteDayTimeAssistant, 
+                dispatch)  
+        }
+    })            
+  } 
+
+
+  export function deleteDentalAppointment (appointmentsfromReduxToolkit, appointmentId, deleteAppointmentInReduxToolkit, deleteDayTimeClient, deleteDayTimeDentist, deleteDayTimeAssistant, dispatch) {
+    log('fn deleteAppointmentVersionTwo start: ')
+    // log(`appointmentsfromReduxToolkit: ${appointmentsfromReduxToolkit}`)
+    // log(`appointmentId: ${appointmentId}`)
+    // log(`appointmentIndexInAppointmentsArray: ${appointmentIndexInAppointmentsArray}`)
+    // log(`deleteDayTimeClient${deleteDayTimeClient}`)
+    // log(deleteDayTimeClient)
+    // log(`deleteDayTimeDentistClient${deleteDayTimeDentist}`)
+    // log(`deleteDayTimeAssistant${deleteDayTimeAssistant}`)
+    // log(`dispatch${deleteDayTimeClient}`)
+    // log(`appointmentIndexInAppointmentsArray (of appointment that will be deleted: )`)
+    // log(appointmentIndexInAppointmentsArray)
+    // log(typeof((appointmentIndexInAppointmentsArray)))
+
+    let getAppointment = appointment => appointment.appointmentId === appointmentId
+    let appointmentThatIsAboutToBeDeleted = selectObjectsByArrayObjectKey(appointmentsfromReduxToolkit.appointments, getAppointment)
+    
+    console.log('---appointmentThatWillBeDeleted:')
+    console.log(appointmentThatIsAboutToBeDeleted[0])
+  
+    let {clientId, day, time, dentistId, assistantId} = appointmentThatIsAboutToBeDeleted[0];
+  
+    let clientDayTimes  = createCombiOfPersonAndDayAndTime(clientId, day, time)
+    dispatch(deleteDayTimeClient(clientDayTimes));
+    
+    let dentistDayTimes = createCombiOfPersonAndDayAndTime(dentistId, day, time)
+    dispatch(deleteDayTimeDentist(dentistDayTimes));
+  
+
+    if (assistantId !== null) {
+        let assistantDayTimes = createCombiOfPersonAndDayAndTime(assistantId, day, time)
+        dispatch(deleteDayTimeAssistant(assistantDayTimes));
+    }
+  
+    
+    dispatch(deleteAppointmentInReduxToolkit(appointmentId))
+    log('fn deleteAppointmentVersionTwo end: ')
+  }
+
+

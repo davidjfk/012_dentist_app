@@ -65,7 +65,7 @@ const DeleteAllAppointmentsOfClient = () => {
                 let appointmentIndexInAppointmentsArray = appointmentsfromReduxToolkit.appointments.indexOf(appointmentToDelete)
                 log(appointmentIndexInAppointmentsArray)
 
-                if (appointmentsToDelete.lenth !== 0){
+                if (appointmentsToDelete.length !== 0){
                     deleteDentalAppointment(
                         appointmentsfromReduxToolkit, 
                         appointmentToDelete.appointmentId, 
@@ -75,7 +75,8 @@ const DeleteAllAppointmentsOfClient = () => {
                         deleteDayTimeAssistant, 
                         dispatch)  
                 }
-            })     
+            })  
+
         },[]
     );
             return(

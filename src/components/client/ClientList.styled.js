@@ -60,7 +60,7 @@ export const Intro = styled.div`
 
 export const Row = styled.div`
   display: flex;
-  
+  margin-bottom: 0.3rem;
 `
 
 export const Section1 = styled.section`

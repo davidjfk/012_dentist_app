@@ -52,12 +52,11 @@ const App = ()  => {
     // let dentistsFromReduxToolkit; // use dentistsWithTreatmentTypesRef instead, because of presumably latency.
     let dentistsWithTreatmentTypesRef = useRef([]); // see comment below for explanation. 
 
-
     // randomDentists = getRandomPersons(dentistsDentistCompanyBVT, 4);
 
 
       useEffect(() => {
-          randomClients = getRandomPersons(clientsDentistCompanyBVT, 50);
+          randomClients = getRandomPersons(clientsDentistCompanyBVT, 4);
           // log(`App.js inside start of useEffect:`)
           // log(randomClients)
           dispatch(addClients(randomClients));
@@ -300,7 +299,7 @@ const App = ()  => {
                         .fill(0) 
                         .map(_ => generateRandomAppointment());
                   }
-                  generateRandomAppointments(150)
+                  generateRandomAppointments(10)
     
               } , [] 
           );
@@ -311,7 +310,7 @@ const App = ()  => {
     
     
     <div>
-     {(appointmentsfromReduxToolkit.appointments.length > 149 ) &&   
+     {(appointmentsfromReduxToolkit.appointments.length >= 0 ) &&   
      /*
         When I switch from a useEffect hook to call the functions (e.g. to add or delete an appointment), to the bonus assignment to use instead  a form that calls the same function via an event,  then this line of code above must/can be deleted.
       /*
@@ -363,9 +362,9 @@ const App = ()  => {
                 <Route path="/calendar">
                   <Calendar appointments={appointmentsfromReduxToolkit.appointments}  />
                 </Route>
-                <Route path="/deleteAppointment">  
+                {/* <Route path="/deleteAppointment">  
                   <DeleteAppointment  />
-                </Route>
+                </Route> */}
                 <Route path="/client">  
                   <Client  />
                 </Route>
