@@ -47,7 +47,7 @@ const App = ()  => {
     let randomAssistants;
     let dentistsWithTreatmentTypesRef = useRef([]); // see comment below for explanation. 
 
-    let chanceThatAppointmentNeedsAsssistant = 0.5;  
+    let chanceThatAppointmentNeedsAsssistant = 0.001;  
     /*  value between 0 (included) and 1 (included). 
         The bigger the nr, the bigger the chance that the automatically generated appointment requires the precence of an assistant.
     */

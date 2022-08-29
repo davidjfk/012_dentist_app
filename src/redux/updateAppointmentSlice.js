@@ -6,9 +6,18 @@ export const updateAppointmentSlice = createSlice({
   name: "updateAppointment",
   initialState: {
     stateOfComponentUpdateAppointment: {
-      isNowUpdatingAppointment: false,
-      appointmentSavedInReduxToolkit: {}
-    }
+      // isNowUpdatingAppointment: false,
+      // appointmentSavedInReduxToolkit: {   
+      //   clientId:"", 
+      //   treatmentType: "",
+      //   appointmentPriority: 1,
+      //   day: 1, 
+      //   time: "08", 
+      //   dentistId: "", 
+      //   assistantId: "",    
+      //   appointmentLastUpdatedOnDateTime: "",
+      //   isNowUpdatingAppointment: false
+      }
   },
   reducers: {
     // use_case_12_bonus_working_form_and_buttons_for_all_operations

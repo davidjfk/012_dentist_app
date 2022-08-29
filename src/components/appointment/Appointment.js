@@ -8,21 +8,26 @@ const log = console.log;
 
 function Appointment() {
   // log(`comp Appointment: start`)
-  const { appointmentSavedInReduxToolkit, isNowUpdatingAppointment } = useSelector((state) => state.updateAppointment);
+  const { isNowUpdatingAppointment } = useSelector((state) => state.updateAppointment);
   // log(isNowUpdatingAppointment);
   return (
     <>
     
       {/* <AppointmentAdd /> */}
       {isNowUpdatingAppointment ? 
-        <>
-          <div>visible: {appointmentSavedInReduxToolkit.appointmentId}</div>
-          <AppointmentUpdate />
-        </>  
+          <>
+            {/* <AppointmentAdd />  */}
+            <AppointmentUpdate/>
+            <AppointmentList/> 
+        </>
         :
-        <AppointmentAdd /> 
+        <>
+          <AppointmentAdd /> 
+          {/* <AppointmentUpdate/> */}
+          <AppointmentList/> 
+        </>
       } 
-      <AppointmentList/> 
+      
     </>
   );
 }

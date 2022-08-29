@@ -14,9 +14,19 @@ import {Container} from '../styles/Container.styled';
 import {ClientAddStyled, Column, Form, Intro} from './ClientAdd.styled';
 import {StyledButtonAroundText} from '../styles/ButtonAroundText.styled';
 import {StyledSelectbox} from '../styles/Selectbox.styled';
-import {createAppointment, generateAppointmentId, getSystemDatePlusTime, loadSelectboxWithListOf, selectObjectsByArrayObjectKey, sortArrayWithObjects} from '../../utils';
+import {createAppointment, generateAppointmentId, getSystemDatePlusTime, loadSelectboxWithListOf, selectObjectsByArrayObjectKey, sortArrayWithObjects, updateAppointmentRecursivelyUntilUpdateSucceeds} from '../../utils';
 
 const log = console.log;
+
+/*
+    Compontent AppointmentUpdate has 3 differences compared to component AppointmentAdd:
+    1. data in the form is loaded from  redux toolkit slice.
+    2. 'systemDateTime' is added to the appointment, to show when the appointment was last updated.
+    3. Naming stuff: e.g. button 'update appointment' instead of 'add appointment'.
+
+    I do not merge the 2 components, because they each have a different responsibility.
+*/
+
 
 const UpdateAppointment = () => {
     log(`comp AppointmentUpdate: start: `)
@@ -54,13 +64,6 @@ const UpdateAppointment = () => {
     let [assistantId, setAssistantId] = useState(appointmentSavedInReduxToolkit.assistantId);
     const dispatch = useDispatch();
 
-
-    const makeComponentUpdateAppointmentInvisible = () => {
-        // log("inside fn toggleVisibilityOfComponentUpdateAppointment: ");
-        // log(`isShowingComponentUpdateAppointment: ${isShowingComponentUpdateAppointment} `)
-        dispatch(toggleVisibilityOfComponentUpdateAppointment(false))
-    }
-
     const onSubmit = (e) => {
         e.preventDefault()
     
@@ -97,23 +100,23 @@ const UpdateAppointment = () => {
         }
 
         // skip this part until (...)
-        let getClient = client => client.clientId === clientId
-        let clientForWhomAnAppointmentIsBeingMade = selectObjectsByArrayObjectKey(clients, getClient)
-        // variable client inside obj appointment is derived data from  the object client.
-        let client = (`${(clientForWhomAnAppointmentIsBeingMade[0].firstName)} ${(clientForWhomAnAppointmentIsBeingMade[0].lastName)}`)
+        // let getClient = client => client.clientId === clientId
+        // let clientForWhomAnAppointmentIsBeingMade = selectObjectsByArrayObjectKey(clients, getClient)
+        // // variable client inside obj appointment is derived data from  the object client.
+        // let client = (`${(clientForWhomAnAppointmentIsBeingMade[0].firstName)} ${(clientForWhomAnAppointmentIsBeingMade[0].lastName)}`)
 
-        let getDentist = dentist => dentist.dentistId === dentistId
-        let dentistForWhomAnAppointmentIsBeingMade = selectObjectsByArrayObjectKey(dentists, getDentist)
-        // variable dentist inside obj appointment is derived data from  the object dentist.
-        let dentist = (`${(dentistForWhomAnAppointmentIsBeingMade[0].firstName)} ${(dentistForWhomAnAppointmentIsBeingMade[0].lastName)}`)
+        // let getDentist = dentist => dentist.dentistId === dentistId
+        // let dentistForWhomAnAppointmentIsBeingMade = selectObjectsByArrayObjectKey(dentists, getDentist)
+        // // variable dentist inside obj appointment is derived data from  the object dentist.
+        // let dentist = (`${(dentistForWhomAnAppointmentIsBeingMade[0].firstName)} ${(dentistForWhomAnAppointmentIsBeingMade[0].lastName)}`)
 
         
-        if (assistantId !== "") {
-        let getAssistant = assistant => assistant.assistantId === assistantId
-        let assistantForWhomAnAppointmentIsBeingMade = selectObjectsByArrayObjectKey(assistants, getAssistant)
-        // variable assistant inside obj appointment is derived data from  the object assistant.
-        let assistant = (`${(assistantForWhomAnAppointmentIsBeingMade[0].firstName)} ${(assistantForWhomAnAppointmentIsBeingMade[0].lastName)}`)
-        }
+        // if (assistantId !== "") {
+        // let getAssistant = assistant => assistant.assistantId === assistantId
+        // let assistantForWhomAnAppointmentIsBeingMade = selectObjectsByArrayObjectKey(assistants, getAssistant)
+        // // variable assistant inside obj appointment is derived data from  the object assistant.
+        // let assistant = (`${(assistantForWhomAnAppointmentIsBeingMade[0].firstName)} ${(assistantForWhomAnAppointmentIsBeingMade[0].lastName)}`)
+        // }
 
 
         // dispatch(addAppointment({
@@ -139,12 +142,13 @@ const UpdateAppointment = () => {
         */
         
         // q: delete this key from obj appointment?    
-        let isNowUpdatingAppointment = false;
+        let isNowUpdatingAppointment = true;
 
         let systemDateTime = getSystemDatePlusTime();
         let appointmentLastUpdatedOnDateTime = systemDateTime;
 
-        createAppointment (
+        
+        updateAppointmentRecursivelyUntilUpdateSucceeds (
             clientId, 
             treatmentType,
             appointmentPriority,
@@ -160,18 +164,20 @@ const UpdateAppointment = () => {
             clientDayTimesFromReduxToolkit, 
             dentistDayTimesFromReduxToolkit, 
             assistantDayTimesFromReduxToolkit, 
+            toggleVisibilityOfComponentUpdateAppointment,
             dispatch
         )
 
-        // now reset the form for the next use:
+           
+
+        // Do not reset the form! So do not:  
         // setClientId('');
         // setTreatmentType('');
         // setAppointmentPriority('');
         // setDay('');
         // setTime('');
         // setDentistId('');
-        setAssistantId('');
-        makeComponentUpdateAppointmentInvisible();
+        // setAssistantId('');
     }
 
   return (
