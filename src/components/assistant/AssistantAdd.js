@@ -50,7 +50,7 @@ const AddAssistant = () => {
 
         const assistantId = `${lastName}-${generateRandomPersonId()}`;
 
-        dispatch(addAssistant({assistantId, lastName, firstName, phone, email, isSick, skillLevel }));   
+        dispatch(addAssistant({assistantId, email, firstName, isSick, lastName, phone, skillLevel }));   
         
         // now reset the form for the next use:
         // setLastName('')

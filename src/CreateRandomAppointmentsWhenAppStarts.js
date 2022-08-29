@@ -17,8 +17,8 @@ import {addDayTimeAssistant} from "./redux/assistantDayTimeSlice";
 // import {addAppointsments} from "./redux/appointmentSlice";
 import { 
     createCombiOfPersonAndDayAndTime, 
-    generateRandomAppointmentId, 
-    getRandomPersonIdAsync, getRandomDay, getRandomPersons, getRandomTime, selectObjectsByArrayObjectKey } from './utils';
+    generateAppointmentId, 
+    getRandomPersonId, getRandomDay, getRandomPersons, getRandomTime, selectObjectsByArrayObjectKey } from './utils';
 
 
 const CreateRandomAppointmentsWhenAppStarts = () => {
@@ -82,8 +82,8 @@ const CreateRandomAppointmentsWhenAppStarts = () => {
         let personType;
         let day = getRandomDay()  
         let time = getRandomTime() 
-        clientId = getRandomPersonIdAsync(randomClients, 'clientId')
-        dentistId = getRandomPersonIdAsync(randomDentists, 'dentistId');
+        clientId = getRandomPersonId(randomClients, 'clientId')
+        dentistId = getRandomPersonId(randomDentists, 'dentistId');
         /*
         40% chance that appointment requires the presence of an assistant:
         */
@@ -93,7 +93,7 @@ const CreateRandomAppointmentsWhenAppStarts = () => {
         let randomNrThatDecidesIfAssistantMustBePresentAtAppointment = Math.random();
         if (randomNrThatDecidesIfAssistantMustBePresentAtAppointment < 0.999){    // reset to < 0.4 later. 
             isAssistantNeededForAppointment = true;
-            assistantId = getRandomPersonIdAsync(randomAssistants, 'assistantId');
+            assistantId = getRandomPersonId(randomAssistants, 'assistantId');
             // console.log(assistantId);
         } 
         // console.log(`isAssistantNeededForAppointment: ${isAssistantNeededForAppointment}`)
@@ -135,7 +135,7 @@ const CreateRandomAppointmentsWhenAppStarts = () => {
 
                 // add client, dentist and assistant to the appointment object.
 
-                let appointmentId = generateRandomAppointmentId();
+                let appointmentId = generateAppointmentId(clientId, day, time);
                 let newAppointmentObject = {appointmentId, clientId, day, time, dentistId, assistantId, isSick:false, isNowUpdatingAppointment:false } // bonus: 1 treatmentType
                 dispatch(addAppointment(newAppointmentObject));
                 
@@ -164,7 +164,8 @@ const CreateRandomAppointmentsWhenAppStarts = () => {
 
                 // add client, dentist and assistant to the appointment object.
 
-                let appointmentId = generateRandomAppointmentId();
+                // let appointmentId = generateRandomAppointmentId();
+                let appointmentId = generateAppointmentId(clientId, day, time);
                 let newAppointmentObject = {appointmentId, clientId, day, time, dentistId, assistantId:null, isSick:false, isNowUpdatingAppointment:false } // bonus: 1 treatmentType
                 dispatch(addAppointment(newAppointmentObject));
                   

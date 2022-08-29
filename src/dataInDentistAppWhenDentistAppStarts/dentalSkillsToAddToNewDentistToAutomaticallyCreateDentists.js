@@ -2,7 +2,7 @@
 const dentalSkillsToAddToNewDentistToAutomaticallyCreateDentists = [
     "brace",
     "bridge",
-    "broken_or_knocked_out_tooth",
+    "broken_tooth",
     "crown", 
     "dental_implant",
     "dental_veneer",

@@ -3,7 +3,7 @@ import "./App.css";
 
 // import InitalSetupForMakingAppointments from "./InitialSetupForMakingAppointments";
 import CreateRandomAppointmentsWhenAppStarts from "./CreateRandomAppointmentsWhenAppStarts";
-import {CreateAppointment} from "./CreateAppointment";
+import {CreateAppointment} from "./components/appointment/CreateAppointment";
 import DeleteAppointment from "./DeleteAppointment";
 import UpdateAppointment from "./UpdateAppointment";
 import AddDentist from "./components/dentist/AddDentist";
@@ -13,7 +13,7 @@ import MakeRedBackgroundForAppointmentsOfSickDentist from "./MakeRedBackgroundFo
 import MakeOrangeBackgroundForAppointmentsOfSickAssistant from "./MakeOrangeBackgroundForAppointmentsOfSickAssistant";
 import AddAssistant from "./components/assistant/AddAssistant";
 
-export const Appointment = ({appointments}) =>  {
+export const UseEffectHookCalls = ({appointments}) =>  {
     return(
         <>
             <div>How to call the functions from the winc assignment dentist without forms nor buttons: </div>

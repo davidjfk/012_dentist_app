@@ -18,19 +18,31 @@ export const appointmentSlice = createSlice({
 
     },
     deleteAppointmentInReduxToolkit: (state, action) => {
-      log(`appointmentSlice: action deleteAppointmentVersionTwo:`)
-      const indexOfAppointmentToDelete = state.appointments.findIndex(appointmentToDelete => {
+      // log(`appointmentSlice: action deleteAppointmentInReduxToolkit:`)
+      const indexOfAppointmentToUpdate = state.appointments.findIndex(appointmentToDelete => {
         return appointmentToDelete.appointmentId === action.payload;
       });
-      log(`index of the appointment (inside array) to delete:`)
-      log(indexOfAppointmentToDelete)
-      state.appointments.splice(indexOfAppointmentToDelete, 1)
+      // log(`appointmentIndex:`)
+      // log(indexOfAppointmentToUpdate)
+      state.appointments.splice(indexOfAppointmentToUpdate, 1)
     },
-    deleteAppointment_not_in_use: (state, action) => {
-      state.appointments.splice(action.payload, 1)
+    // not a winc requirement
+    setDateAndTimeOfUpdateOfAppointmentInReduxToolkit: (state, action) => {
+      // log('in the redux-toolkit: action setDateAndTimeOfUpdateOfAppointmentInReduxToolkit: ')
+      // log(`systemDateTime:`)
+      // log(action.payload.systemDateTime)
+      // log(`appointmentId:`)
+      // log(action.payload.appointmentId)
+      const indexOfAppointmentToUpdate = state.appointments.findIndex(appointmentForWhichToSetDateAndTime => {
+        return appointmentForWhichToSetDateAndTime.appointmentId === action.payload.appointmentId;
+      });
+      // log(`indexOfAppointmentToUpdate: `)
+      // log(indexOfAppointmentToUpdate)
+      // log(typeof(indexOfAppointmentToUpdate))
+      state.appointments[indexOfAppointmentToUpdate].appointmentLastUpdatedOnDateTime = action.payload.systemDateTime;
     }}
 })
-export const { addAppointments, addAppointment, deleteAppointmentInReduxToolkit } = appointmentSlice.actions;
+export const { addAppointment, deleteAppointmentInReduxToolkit, setDateAndTimeOfUpdateOfAppointmentInReduxToolkit} = appointmentSlice.actions;
 
 export default appointmentSlice.reducer;    
 

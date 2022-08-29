@@ -3,6 +3,7 @@ import { useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import "./App.css";
+import {deleteAppointmentInReduxToolkit} from "./redux/appointmentSlice";
 import {deleteDayTimeClient} from "./redux/clientDayTimeSlice";
 import {deleteDayTimeDentist} from "./redux/dentistDayTimeSlice";
 import {deleteDayTimeAssistant} from "./redux/assistantDayTimeSlice";
@@ -42,6 +43,9 @@ const UpdateAppointment = () => {
                     let appointmentObject = getAppointmentObject(appointmentsfromReduxToolkit, appointmentIndexInAppointmentsArray) 
                     log(`comp UpdateAppointment: object that is about to be updated: `)
                     // log(appointmentObject)
+
+
+
                     tempPlaceToSaveAppointmentThatIsAboutToBeDeleted.current = appointmentObject
                     // appointment is saved in useRef, so it can safely be deleted from global state.
                     log(tempPlaceToSaveAppointmentThatIsAboutToBeDeleted.current)
@@ -49,12 +53,14 @@ const UpdateAppointment = () => {
                     // remark: in the bonus requirement I will get the appointmentId from the event object.
 
                     // put the info from the useRef into the fn call createAppointment below (in the bonus requirement this info will then be shown to the user in a form)
+                    // in bonus requirement: instead of useRef, put the appointmentThatIsAboutToBeUpdated in redux-toolkit slice. From there load the data into the component UpdateAppointment. Comp UpdateAppointment is conditionally rendered with  a boolean. 
+
                     
                     // delete the appointment-to-update from global state, so any adjustment can be made (e.g. reschedule to other dentist, move to other day and/or time, etc.)
                     deleteDentalAppointment(
                         appointmentsfromReduxToolkit, 
                         appointmentId, 
-                        appointmentIndexInAppointmentsArray, 
+                        deleteAppointmentInReduxToolkit, 
                         deleteDayTimeClient, 
                         deleteDayTimeDentist, 
                         deleteDayTimeAssistant, 
@@ -71,6 +77,10 @@ const UpdateAppointment = () => {
                     
                     let clientId = tempPlaceToSaveAppointmentThatIsAboutToBeDeleted.current.clientId;
                     log(`clientId: ${clientId}`)
+
+
+                    let appointmentPriority = 'high';
+
                     let day = tempPlaceToSaveAppointmentThatIsAboutToBeDeleted.current.day;
                     day = 70;
                     log(`day: ${day}`)
@@ -93,14 +103,20 @@ const UpdateAppointment = () => {
                     log(`assistantId: ${assistantId}`)
                     let treatmentType = getRandomTreatmentForRandomAppointment(dentistId, dentistsFromReduxToolkit.dentists );
 
+                    let isNowUpdatingAppointment = false;
+                    let appointmentLastUpdatedOnDateTime = null;
+
                     createAppointment(
                         clientId, 
+                        treatmentType,
+                        appointmentPriority,
                         day, 
                         time, 
                         dentistId, 
-                        treatmentType,
-                        isAssistantNeededForAppointment, 
                         assistantId, 
+                        isAssistantNeededForAppointment, 
+                        appointmentLastUpdatedOnDateTime,
+                        isNowUpdatingAppointment,  
                         clientsFromReduxToolkit, 
                         dentistsFromReduxToolkit, 
                         assistantsFromReduxToolkit, 
