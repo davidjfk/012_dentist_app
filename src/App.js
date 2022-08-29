@@ -54,7 +54,7 @@ const App = ()  => {
     let nrOfAssistants = 4; 
     let nrOfRandomGeneratedAppointments = 3;
     let nrOfClients = 5;
-    let nrOfDentists = 6; 
+    let nrOfDentists = 4; 
     let nrOfDifferentTreatmentsAsTheSkillsOfADentist = 12;
 
     useEffect(() => {

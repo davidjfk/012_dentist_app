@@ -12,9 +12,13 @@ function Appointment() {
   // log(isNowUpdatingAppointment);
   return (
     <>
+    
       {/* <AppointmentAdd /> */}
       {isNowUpdatingAppointment ? 
-        <div>visible: {appointmentSavedInReduxToolkit.appointmentId}</div>
+        <>
+          <div>visible: {appointmentSavedInReduxToolkit.appointmentId}</div>
+          <AppointmentUpdate />
+        </>  
         :
         <AppointmentAdd /> 
       } 

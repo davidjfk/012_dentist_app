@@ -150,7 +150,8 @@ const AppointmentInAppointmentList = ({appointments, item}) => {
                       //2do: create fn updateAppointment.
                       saveDataFromAppointmentToReduxToolkitBeforeAppointmentIsDeleted(item);
 
-                      // delete current appointment
+                      // delete current appointment: 2do: uncomment fn call: 
+                      
                       deleteDentalAppointment(
                         appointmentsfromReduxToolkit, 
                         item.appointmentId, 
@@ -160,17 +161,15 @@ const AppointmentInAppointmentList = ({appointments, item}) => {
                         deleteDayTimeAssistant, 
                         dispatch
                     )
+                    
 
                       // create new appointment with data from the current appointment
                       // working here.
 
                       toggleTheVisibilityOfComponentUpdateAppointment();
 
-                      //2do: add systemDateTime in comp UpdateAppointment.
-                      let systemDateTime = getSystemDatePlusTime();
-                      
-                      // 2do: access appointmentId from redux-toolkit, because item.appointmentId (and the whole item object) 
-                      //       has just been deleted. 
+                      //2do: systemDateTime is added in comp UpdateAppointment. Check  if setDateAndTimeOfUpdateOfAppointmentInReduxToolkit can be removed from  redux-toolkitt.
+                      // let systemDateTime = getSystemDatePlusTime();
                       // let appointmentId = item.appointmentId;
                       // dispatch(setDateAndTimeOfUpdateOfAppointmentInReduxToolkit({appointmentId, systemDateTime}));
                     }} 

@@ -2,6 +2,9 @@ import React from 'react';
 import {useState } from 'react';
 import {useDispatch, useSelector } from "react-redux";
 import {addAppointment } from "../../redux/appointmentSlice";
+
+import {toggleVisibilityOfComponentUpdateAppointment } from '../../redux/updateAppointmentSlice';
+
 import dentalSkillsToAddToNewDentistCreatedViaUI from '../../dataInDentistAppWhenDentistAppStarts/dentalSkillsToAddToNewDentistCreatedViaUI';
 import appointmentPriorityLevelsInSelectbox from '../../dataInDentistAppWhenDentistAppStarts/appointmentPriorityLevelsInSelectbox';
 import listOfValidWorkingDayNumbersInNextMonth from '../../dataInDentistAppWhenDentistAppStarts/listOfValidWorkingDayNumbersInNextMonth';
@@ -15,7 +18,8 @@ import {createAppointment, generateAppointmentId, getSystemDatePlusTime, loadSel
 
 const log = console.log;
 
-const AddAppointment = () => {
+const UpdateAppointment = () => {
+    log(`comp AppointmentUpdate: start: `)
     let clientsFromReduxToolkit  = useSelector((state) => state.client);
     let dentistsFromReduxToolkit  = useSelector((state) => state.dentist);
     let assistantsFromReduxToolkit  = useSelector((state) => state.assistant);
@@ -37,15 +41,25 @@ const AddAppointment = () => {
     let selectboxWithListOfAssistantsSorted = sortArrayWithObjects("text", selectboxWithListOfAssistantIds);
 
 
+    let {appointmentSavedInReduxToolkit}  = useSelector((state) => state.updateAppointment);
+    log(appointmentSavedInReduxToolkit);
+
     //2do: load initial data from redux-toolkit updateAppointmentSlice.
-    let [clientId, setClientId] = useState("");
-    let [treatmentType, setTreatmentType] = useState("");
-    let [appointmentPriority, setAppointmentPriority] = useState("");
-    let [day, setDay] = useState("");
-    let [time, setTime] = useState("");
-    let [dentistId, setDentistId] = useState("");
-    let [assistantId, setAssistantId] = useState("");
+    let [clientId, setClientId] = useState(appointmentSavedInReduxToolkit.clientId);
+    let [treatmentType, setTreatmentType] = useState(appointmentSavedInReduxToolkit.treatmentType);
+    let [appointmentPriority, setAppointmentPriority] = useState(appointmentSavedInReduxToolkit.appointmentPriority);
+    let [day, setDay] = useState(appointmentSavedInReduxToolkit.day);
+    let [time, setTime] = useState(appointmentSavedInReduxToolkit.time);
+    let [dentistId, setDentistId] = useState(appointmentSavedInReduxToolkit.dentistId);
+    let [assistantId, setAssistantId] = useState(appointmentSavedInReduxToolkit.assistantId);
     const dispatch = useDispatch();
+
+
+    const makeComponentUpdateAppointmentInvisible = () => {
+        // log("inside fn toggleVisibilityOfComponentUpdateAppointment: ");
+        // log(`isShowingComponentUpdateAppointment: ${isShowingComponentUpdateAppointment} `)
+        dispatch(toggleVisibilityOfComponentUpdateAppointment(false))
+    }
 
     const onSubmit = (e) => {
         e.preventDefault()
@@ -74,13 +88,13 @@ const AddAppointment = () => {
             alert('Please select a dentistId')
             return
         } 
-
-
-        //2do: load appointmentId from redux-toolkit updateAppointmentSlice.
-        let UIMade="UIMade_temp_remove_this_after_the_test";
+        
+        // alternative with same result: load appointmentId from redux-toolkit updateAppointmentSlice.
         const appointmentId = generateAppointmentId(clientId, day, time);
-
-
+        let appointmentIdFromReduxToolkitSlice = appointmentSavedInReduxToolkit.appointmentId;
+        if (appointmentId !== appointmentIdFromReduxToolkitSlice){
+            console.error(`There is a problem with the appointmentId that is used to update an appointment. Please investigate.`)
+        }
 
         // skip this part until (...)
         let getClient = client => client.clientId === clientId
@@ -157,6 +171,7 @@ const AddAppointment = () => {
         // setTime('');
         // setDentistId('');
         setAssistantId('');
+        makeComponentUpdateAppointmentInvisible();
     }
 
   return (
@@ -277,4 +292,4 @@ const AddAppointment = () => {
   )
 }
 
-export default AddAppointment; 
+export default UpdateAppointment; 
