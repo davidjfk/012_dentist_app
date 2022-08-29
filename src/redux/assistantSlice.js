@@ -11,7 +11,7 @@ export const assistantListSlice = createSlice({
     addAssistant: (state, action) => {
       // const assistantToSave = action.payload;
       const {assistantId, lastName, firstName, phone, email, isSick, skillLevel} = action.payload
-      const assistantToSave = {assistantId, lastName, firstName, phone, email, isSick, skillLevel};
+      const assistantToSave = {assistantId, email, firstName, isSick, lastName,  phone, skillLevel};
       state.assistants.push(assistantToSave);
     },
     // use_case_00_create_mock_data

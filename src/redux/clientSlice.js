@@ -28,14 +28,16 @@ export const clientListSlice = createSlice({
       state.clients.splice(indexOfClientToDelete, 1)
     },
     // not a winc requirement
-    setDeleteDateAndTimeInReduxToolkit: (state, action) => {
+    setDateAndTimeOfDeletionOfClientsAppointmentsInReduxToolkit: (state, action) => {
       log('in the redux-toolkit: action setDeleteDateAndTimeInReduxToolkit: ')
+      log(`systemDateTime:`)
       log(action.payload.systemDateTime)
+      log(`clientId:`)
       log(action.payload.clientId)
       const indexOfClientToDelete = state.clients.findIndex(clientForWhomToSetDateAndTime => {
         return clientForWhomToSetDateAndTime.clientId === action.payload.clientId;
       });
-
+      log(`indexOfClientToDelete: `)
       log(indexOfClientToDelete)
       log(typeof(indexOfClientToDelete))
       state.clients[indexOfClientToDelete].appointmentsDeletedOnDateTime = action.payload.systemDateTime;
@@ -52,7 +54,7 @@ export const clientListSlice = createSlice({
       // log(state.assistants[indexOfClient].isSick = (!state.assistants[indexOfClient].isSick))
     }}
 })
-export const { addClient, addClients, deleteClient, setDeleteDateAndTimeInReduxToolkit, toggleHealthStatusOfClient } = clientListSlice.actions;
+export const { addClient, addClients, deleteClient, setDateAndTimeOfDeletionOfClientsAppointmentsInReduxToolkit, toggleHealthStatusOfClient } = clientListSlice.actions;
 
 export default clientListSlice.reducer;    
 

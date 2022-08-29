@@ -58,7 +58,7 @@ const AddClient = () => {
         const clientId = `${lastName}-${generateRandomPersonId()}`;
         const appointmentsLastDeletedOnDateTime = "null";
 
-        dispatch(addClient({clientId, lastName, firstName, phone, email, isSick, paymentMethod, birthYear, appointmentsLastDeletedOnDateTime }));   
+        dispatch(addClient({clientId, appointmentsLastDeletedOnDateTime, birthYear, email, firstName, isSick, lastName, phone, paymentMethod }));   
         
         // now reset the form for the next use:
         // setLastName('')

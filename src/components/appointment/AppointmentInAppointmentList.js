@@ -5,7 +5,8 @@ import { useSelector } from "react-redux";
 import { deleteAssistant } from "../../redux/assistantSlice";
 import { deleteClient } from "../../redux/clientSlice";
 
-import {setDateAndTimeOfDeletionOfClientsAppointmentsInReduxToolkit, toggleHealthStatusOfClient } from "../../redux/clientSlice";
+import {setDateAndTimeOfUpdateOfAppointmentInReduxToolkit} from "../../redux/appointmentSlice";
+import {saveAppointmentToReduxToolkit, toggleVisibilityOfComponentUpdateAppointment } from '../../redux/updateAppointmentSlice';
 import {Row, Column} from './ClientList.styled'
 import { ClientInClientListStyled } from './ClientInList.styled';
 import {StyledCheckbox} from '../styles/Checkbox.styled';
@@ -34,14 +35,8 @@ const log = console.log;
 
 
 //2do: move fn to folder utils and make more generic, so this fn can be used to delete appointments of each dentist and assistant (one per fn call) as well. 
-const deleteAllAppointmentsOfClient = (
-  clientId, 
-  appointmentsfromReduxToolkit, 
-  deleteAppointmentInReduxToolkit, 
-  deleteDayTimeClient, 
-  deleteDayTimeDentist, 
-  deleteDayTimeAssistant, 
-  dispatch) => {
+const deleteAllAppointmentsOfClient = (clientId, appointmentsfromReduxToolkit, deleteAppointmentInReduxToolkit, deleteDayTimeClient, 
+  deleteDayTimeDentist, deleteDayTimeAssistant, dispatch) => {
   log(`clientId: ${clientId}`)
   let getAppointment = appointment => appointment.clientId === clientId
   let appointmentsToDelete = selectObjectsByArrayObjectKey(appointmentsfromReduxToolkit.appointments, getAppointment)
@@ -63,18 +58,20 @@ const deleteAllAppointmentsOfClient = (
   })            
 } 
 
-const ClientInClientList = ({clients, item}) => {
+
+
+const AppointmentInAppointmentList = ({appointments, item}) => {
   // const dispatch = useDispatch();
   // const [personIsSick, setPersonIsSick] = useState(false);
   // let checkBoxStatus = useRef(false);
+  
+  const [isShowingComponentUpdateAppointment, setIsShowingComponentUpdateAppointment] = useState(true);
 
-
-  let healthStatus = (item.isSick === "true") ? "sick" : "healthy";
-  let appointmentLastUpdatedOnDateTime = (item.appointmentsDeletedOnDateTime === "null") ? "Not happened yet." : item.appointmentsDeletedOnDateTime ;
+  let appointmentLastUpdatedOnDateTime = (item.appointmentLastUpdatedOnDateTime === null) ? "Not happened yet." : item.appointmentLastUpdatedOnDateTime ;
 
   // let clientsfromReduxToolkit = useSelector((state) => state.client)
   let appointmentsfromReduxToolkit = useSelector((state) => state.appointment)
-  let dispatch = useDispatch();
+
 
  
   // class Test extends React.Component {
@@ -84,67 +81,64 @@ const ClientInClientList = ({clients, item}) => {
   //   }
   // }
 
+
+  let dispatch = useDispatch();
+
+
+  const saveDataFromAppointmentToReduxToolkitBeforeAppointmentIsDeleted = (item) => {
+    log(`inside fn saveTheAppointmentToUpdateToReduxToolkit: `)
+    log(item);
+    dispatch(saveAppointmentToReduxToolkit(item));
+  }
+
+
+  const toggleTheVisibilityOfComponentUpdateAppointment = () => {
+    // log("inside fn toggleVisibilityOfComponentUpdateAppointment: ");
+    setIsShowingComponentUpdateAppointment(current => !current);
+    // log(`isShowingComponentUpdateAppointment: ${isShowingComponentUpdateAppointment} `)
+    dispatch(toggleVisibilityOfComponentUpdateAppointment(isShowingComponentUpdateAppointment))
+  }
+
+
+
+
   return (
     <Row>
         <Column>
           <ClientInClientListStyled>
-            {clients.indexOf(item) + 1 }
+            {appointments.indexOf(item) + 1 }
           </ClientInClientListStyled>
         </Column>
         <Column>
           <ClientInClientListStyled>
-            {item.clientId}
+            {item.appointmentId}
           </ClientInClientListStyled>
         </Column>
         <Column>
           <ClientInClientListStyled>
-            {item.firstName}
+            {item.dentistId}
           </ClientInClientListStyled>
         </Column>
         <Column>
           <ClientInClientListStyled>
-            {item.paymentMethod}
+            {item.assistantId}
           </ClientInClientListStyled>
         </Column>
         <Column>
           <ClientInClientListStyled>
-            {healthStatus}
+            {item.appointmentPriority}
           </ClientInClientListStyled>
         </Column>
         <Column>
           <ClientInClientListStyled>
-            <div>
-              <StyledCheckbox
-                type="checkbox"
-                checked={((item.isSick === "true" ? true: false))}     
-                /*
-                  note to self: because of component AssistantAdd, this checkbox belongs to a just-added-appointment! So the initial state of this checkbox   
-                  resides in Redux-toolkit, just like the other values of an appoinment, that are all shown here in component AssistantInAssistantList as props. 
-                  So do not put this state inside e.g. a useState nor useRef inside this component AssistantInAssistantList itself.
-                */
-                // checked={personIsSick}          
-                // checked={checkBoxStatus.current}               
-                onChange={(e) => {
-                  // setPersonIsSick(e.target.checked)
-                  // checkBoxStatus.current = e.target.checked
-                  console.log(`in the event: ${e.target.checked}`)
-                  dispatch(toggleHealthStatusOfClient({clientId: item.clientId, isSick: e.target.checked ? "true": "false"}))
-                  console.log(`end of the event: ${e.target.checked}`)
-                  }
-                }
-              />
-            </div>
-            </ClientInClientListStyled>
+            {item.treatmentType}
+          </ClientInClientListStyled>
         </Column>
-
-
         <Column>
           <ClientInClientListStyled>
             {appointmentLastUpdatedOnDateTime}
           </ClientInClientListStyled>
         </Column>
-
-
         <Column>
           <ClientInClientListStyled>
               {/* use case: delete all appointments of a client. pitfall: do not use this code for dentist, assistant, nor appointment !!   */}
@@ -153,11 +147,32 @@ const ClientInClientList = ({clients, item}) => {
                   {/* <FaTimes onClick={() => deleteAllAppointmentsOfClient(item.clientId)} /> */}
                   <FaTimes 
                     onClick={() => {
-                      deleteAllAppointmentsOfClient(item.clientId, appointmentsfromReduxToolkit, deleteAppointmentInReduxToolkit,   deleteDayTimeClient, 
-                          deleteDayTimeDentist, deleteDayTimeAssistant,  dispatch);
+                      //2do: create fn updateAppointment.
+                      saveDataFromAppointmentToReduxToolkitBeforeAppointmentIsDeleted(item);
+
+                      // delete current appointment
+                      deleteDentalAppointment(
+                        appointmentsfromReduxToolkit, 
+                        item.appointmentId, 
+                        deleteAppointmentInReduxToolkit, 
+                        deleteDayTimeClient, 
+                        deleteDayTimeDentist, 
+                        deleteDayTimeAssistant, 
+                        dispatch
+                    )
+
+                      // create new appointment with data from the current appointment
+                      // working here.
+
+                      toggleTheVisibilityOfComponentUpdateAppointment();
+
+                      //2do: add systemDateTime in comp UpdateAppointment.
                       let systemDateTime = getSystemDatePlusTime();
-                      let clientId = item.clientId;
-                      dispatch(setDateAndTimeOfDeletionOfClientsAppointmentsInReduxToolkit({clientId, systemDateTime}));
+                      
+                      // 2do: access appointmentId from redux-toolkit, because item.appointmentId (and the whole item object) 
+                      //       has just been deleted. 
+                      // let appointmentId = item.appointmentId;
+                      // dispatch(setDateAndTimeOfUpdateOfAppointmentInReduxToolkit({appointmentId, systemDateTime}));
                     }} 
                   />
                 </StyledFaTimes>
@@ -171,10 +186,8 @@ const ClientInClientList = ({clients, item}) => {
                 <StyledFaTimes>
                   <FaTimes 
                       onClick={() => {
-                        deleteAllAppointmentsOfClient(item.clientId, appointmentsfromReduxToolkit, deleteAppointmentInReduxToolkit, deleteDayTimeClient, 
-                          deleteDayTimeDentist, deleteDayTimeAssistant,  dispatch);   
-                        let clientId = item.clientId;                     
-                        dispatch(deleteClient({clientId}))
+                        deleteDentalAppointment(appointmentsfromReduxToolkit,item.appointmentId, deleteAppointmentInReduxToolkit, deleteDayTimeClient, 
+                          deleteDayTimeDentist, deleteDayTimeAssistant,  dispatch)  
                       }}                         
                     />                
                 </StyledFaTimes>
@@ -185,7 +198,7 @@ const ClientInClientList = ({clients, item}) => {
   )
 }
 
-export default ClientInClientList;
+export default AppointmentInAppointmentList;
 
 
 

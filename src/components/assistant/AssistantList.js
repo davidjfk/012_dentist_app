@@ -59,7 +59,7 @@ const AssistantList = () => {
         } else {
             console.error(`component assistantList: not possible to sort with datatype ${typeof(sortProperty)}. Please investigate. `)
         }
-        };
+    };
     
 
 
@@ -197,6 +197,9 @@ const AssistantList = () => {
             </FormControlArea>
             <Headers>
                 <Column>
+                    <span>Nr</span>
+                </Column>
+                <Column>
                     <span>Assistant Id</span>
                 </Column>
                 <Column>
@@ -214,7 +217,7 @@ const AssistantList = () => {
             </Headers>
             <AssistantListAreaStyled>
                 { dataToRenderFromUseEffectPipeline.length !== 0 ? dataToRenderFromUseEffectPipeline.map((item, id) => (
-                        <AssistantInAssistantList key={id} item={item} />
+                        <AssistantInAssistantList key={id} item={item} assistants={assistants} />
                 )): <>Please hire dental assistants.</>}
             </AssistantListAreaStyled>
         </AssistantListStyled>  

@@ -3,9 +3,11 @@ import { useSelector } from "react-redux";
 import { useState, useEffect } from 'react';
 import skillLevelOptions from '../../dataInDentistAppWhenDentistAppStarts/skillLevelOptions';
 import paymentMethodsToAddToNewClientCreatedViaUI from '../../dataInDentistAppWhenDentistAppStarts/paymentMethodsToAddToNewClientCreatedViaUI';
+import dentalSkillsToAddToNewDentistCreatedViaUI from '../../dataInDentistAppWhenDentistAppStarts/dentalSkillsToAddToNewDentistCreatedViaUI';
+import appointmentPriorityLevelsInSelectbox from '../../dataInDentistAppWhenDentistAppStarts/appointmentPriorityLevelsInSelectbox';
 import healthStatusOptions from '../../dataInDentistAppWhenDentistAppStarts/healthStatusOptions';
 import {Container} from '../styles/Container.styled'
-import ClientInClientList from './ClientInClientList.js'
+import ClientInClientList from './AppointmentInAppointmentList.js'
 import {ClientListAreaStyled, ClientListStyled, Column, FormControlArea, Headers, Intro, Section1, Section2, Section3} from './ClientList.styled'
 import {StyledSelectbox} from '../styles/Selectbox.styled';
 
@@ -13,86 +15,88 @@ import {StyledSelectbox} from '../styles/Selectbox.styled';
 
 const log = console.log;
 
-const AssistantList = () => {
-    const { clients } = useSelector((state) => state.client);
+const AppointmentList = () => {
+    const { appointments } = useSelector((state) => state.appointment);
     
-    const [personObjectKeyToSortArrayWithPersons, setSongObjectKeyToSortArrayWithSongs] = useState('');
+    const [appointmentObjectKeyToSortArrayWithAppointments, setSongObjectKeyToSortArrayWithSongs] = useState('');
     const [dataToRenderFromUseEffectPipeline, setDataToRenderFromUseEffectPipeline] = useState([]);
-    const [healthStatusToFilterWith, setHealthStatusToFilterWith] = useState([""]);
-    const [paymentMethodToFilterWith, setSkillLevelToFilterWith] = useState([""]);
+    const [treatmentTypesToFilterWith, setTreatmentTypesToFilterWith] = useState([""]);
+    const [priorityLevelToFilterWith, setPriorityLevelToFilterWith] = useState([""]);
 
 
-    const sortAssistantList = (clients, JsxSelectBoxAttributeValue) => {
+    const sortAppointmentList = (appointments, JsxSelectBoxAttributeValue) => {
         if (!JsxSelectBoxAttributeValue) {
-            return clients;
+            return appointments;
         }  
         let JsxSelectBoxAttributeValueAsArray = JsxSelectBoxAttributeValue.split(' ');
         let personObjectKey = JsxSelectBoxAttributeValueAsArray[0];
         let isAscending = JsxSelectBoxAttributeValueAsArray[1] === "ascending" ? true : false;
 
-        const clientObject = {
+        const appointmentObject = {
+            appointmentId: 'appointmentId',
             clientId: 'clientId',
             lastName: 'lastName',
             firstName: 'firstName',
+            dentistId: 'dentistId',
             phone: 'phone',
             email: 'email',
-            isSick: 'isSick',
+            priorityLevel: 'priorityLevel',
             birthYear: 'birthYear',
-            paymentMethod: 'paymentMethod'
+            treatmentType: 'treatmentType'
         };
 
-        const sortProperty = clientObject[personObjectKey];  
+        const sortProperty = appointmentObject[personObjectKey];  
         let sortedPersons;
-        if (!isAscending && (sortProperty === "paymentMethod" || sortProperty === ""))  {
-            sortedPersons = [...clients].sort((person1, person2) => person2[sortProperty] - person1[sortProperty]);
+        if (!isAscending && (sortProperty === "priorityLevel" || sortProperty === ""))  {
+            sortedPersons = [...appointments].sort((person1, person2) => person2[sortProperty] - person1[sortProperty]);
             return sortedPersons;
-            // numbers sort descending by default, so the !isAscending causes the paymentMethod to display in an ascending fashion. 
-        } else if (isAscending && (sortProperty === "paymentMethod" || sortProperty === ""))  {
-            sortedPersons = [...clients].sort((person1, person2) => person2[sortProperty] - person1[sortProperty]);
+            // numbers sort descending by default, so the !isAscending causes the priorityLevel to display in an ascending fashion. 
+        } else if (isAscending && (sortProperty === "priorityLevel" || sortProperty === ""))  {
+            sortedPersons = [...appointments].sort((person1, person2) => person2[sortProperty] - person1[sortProperty]);
             return sortedPersons.reverse();
-        } else if (isAscending && (sortProperty === "clientId" || sortProperty === "firstName" || sortProperty === "isSick")) {
-            sortedPersons = [...clients].sort((person1, person2) => person1[sortProperty].localeCompare(person2[sortProperty], 'en', { ignorePunctuation: true }));
+        } else if (isAscending && (sortProperty === "appointmentId" || sortProperty === "dentistId" || sortProperty === "treatmentType")) {
+            sortedPersons = [...appointments].sort((person1, person2) => person1[sortProperty].localeCompare(person2[sortProperty], 'en', { ignorePunctuation: true }));
             return sortedPersons;
             // I choose 'en' as  the unicodeLanguage.
             // unicode allows user to enter any kind of character.
-        } else if (!isAscending && (sortProperty === "clientId" || sortProperty === "firstName" || sortProperty === "isSick")) {
-                sortedPersons = [...clients].sort((person1, person2) => person1[sortProperty].localeCompare(person2[sortProperty], 'en', { ignorePunctuation: true }));
+        } else if (!isAscending && (sortProperty === "appointmentId" || sortProperty === "dentistId" || sortProperty === "treatmentType")) {
+                sortedPersons = [...appointments].sort((person1, person2) => person1[sortProperty].localeCompare(person2[sortProperty], 'en', { ignorePunctuation: true }));
                 return sortedPersons.reverse();
         } else {
-            console.error(`component assistantList: not possible to sort with datatype ${typeof(sortProperty)}. Please investigate. `)
+            console.error(`component AppointmentInAppointmentList: not possible to sort with datatype ${typeof(sortProperty)}. Please investigate. `)
         }
     };
     
 
 
 
-    const handleFilterHealthStatusChange = (event) => {    
+    const handleFilterTreatmentTypeChange = (event) => {    
         let value = Array.from(
             event.target.selectedOptions, (option) => option.value
         )   
-        setHealthStatusToFilterWith(value);
+        setTreatmentTypesToFilterWith(value);
     };
     
-    const handleFilterPaymentMethodlChange = (event) => {
+    const handleFilterPriorityLevelChange = (event) => {
         let value = Array.from(
             event.target.selectedOptions, (option) => option.value
         )   
-        setSkillLevelToFilterWith(value);
+        setPriorityLevelToFilterWith(value);
     };
     
 
-    const filterByHealthStatus = (filteredData, healthStatusToFilterWith) => {
+    const filterByTreatmentTypes = (filteredData, treatmentTypesToFilterWith) => {
         let arrayFilteredOnAllCriteria = [];              
-        if (healthStatusToFilterWith[0] === "" ) {
+        if (treatmentTypesToFilterWith[0] === "" ) {
             return filteredData;
         }  else {
             let copyOfFilteredData = [...filteredData];
             let arrayFilteredOnOneCriterium;
             
-            for (let filtercriterium of healthStatusToFilterWith) {
+            for (let filtercriterium of treatmentTypesToFilterWith) {
                 arrayFilteredOnOneCriterium = copyOfFilteredData.filter(
                     (personObject) =>           
-                    personObject.isSick.indexOf(filtercriterium) !== -1 
+                    personObject.treatmentType.indexOf(filtercriterium) !== -1 
                 );
                 arrayFilteredOnAllCriteria.push(...arrayFilteredOnOneCriterium)
             }
@@ -101,14 +105,14 @@ const AssistantList = () => {
     };
 
 
-    const filterByPaymentMethod = (filteredData, paymentMethodToFilterWith) => {
+    const filterByPriorityLevel = (filteredData, priorityLevelToFilterWith) => {
         let arrayFilteredOnAllCriteria = [];  
-        if (paymentMethodToFilterWith[0] === "") {
+        if (priorityLevelToFilterWith[0] === "") {
         return filteredData;
         } else {
             let  copyOfFilteredData = [...filteredData];
             let arrayFilteredOnOneCriterium;
-            for (let ratingcriterium of paymentMethodToFilterWith) {
+            for (let ratingcriterium of priorityLevelToFilterWith) {
                 arrayFilteredOnOneCriterium = copyOfFilteredData.filter(
                     (personObject) =>           
                     parseInt(personObject.paymentMethod) === parseInt(ratingcriterium)
@@ -121,12 +125,12 @@ const AssistantList = () => {
 
 
     useEffect(() => {
-            let pipelineData = filterByPaymentMethod(clients, paymentMethodToFilterWith);
-            pipelineData = filterByHealthStatus(pipelineData, healthStatusToFilterWith);
-            pipelineData = sortAssistantList(pipelineData, personObjectKeyToSortArrayWithPersons);
+            let pipelineData = filterByPriorityLevel(appointments, priorityLevelToFilterWith);
+            pipelineData = filterByTreatmentTypes(pipelineData, treatmentTypesToFilterWith);
+            pipelineData = sortAppointmentList(pipelineData, appointmentObjectKeyToSortArrayWithAppointments);
             setDataToRenderFromUseEffectPipeline(pipelineData);
         }, 
-        [personObjectKeyToSortArrayWithPersons, paymentMethodToFilterWith, healthStatusToFilterWith, clients]
+        [appointmentObjectKeyToSortArrayWithAppointments, priorityLevelToFilterWith, treatmentTypesToFilterWith, appointments]
     );
 
 
@@ -145,7 +149,7 @@ const AssistantList = () => {
     <>
     <Container> 
         <ClientListStyled>
-            <Intro>Clients in Dentist company B.V.T. </Intro>
+            <Intro>Appointments in upcoming month in Dentist company B.V.T. </Intro>
             <FormControlArea>
                 <Section1>
                     <StyledSelectbox                  
@@ -153,26 +157,26 @@ const AssistantList = () => {
                     >                        
                         <option value="" >Sort by:</option>
                         <option value="" >do not sort</option>
-                        <option value="clientId ascending" >client id a-z</option>
-                        <option value="clientId descending" >client id z-a</option>
-                        <option value="firstName ascending" >first name a-z</option>
-                        <option value="firstName descending" >first name z-a</option>
-                        <option value="isSick ascending" >health status a-z</option>
-                        <option value="isSick descending" >health status z-a</option>
-                        <option value="paymentMethod ascending" >skill level 1-5</option>
-                        <option value="paymentMethod descending" >skill level 5-1</option>
+                        <option value="appointmentId ascending" >appointment id a-z</option>
+                        <option value="appointmentId descending" >appointment id z-a</option>
+                        <option value="dentistId ascending" >dentist id a-z</option>
+                        <option value="dentistId descending" >dentist id z-a</option>
+                        <option value="treatmentType ascending" > treatment type a-z</option>
+                        <option value="treatmentType descending" >treatment type z-a</option>
+                        <option value="priorityLevel ascending" >priority level 1-5</option>
+                        <option value="priorityLevel descending" >priority level 5-1</option>
                     </StyledSelectbox>
                 </Section1>
                 <Section2>
                     <div>
                     <StyledSelectbox 
                         multiple={true}
-                        value={healthStatusToFilterWith}
-                        onChange={(event) => handleFilterHealthStatusChange(event)  }                
+                        value={treatmentTypesToFilterWith}
+                        onChange={(event) => handleFilterTreatmentTypeChange(event)  }                
                     >                      
-                        <option value="" >health status:</option>
+                        <option value="" >treatment type:</option>
                         <option value="" >do not filter</option>
-                        {healthStatusOptions.map(item => {
+                        {dentalSkillsToAddToNewDentistCreatedViaUI.map(item => {
                             return (<option key={item.value} value={item.value}>{item.text}</option>);
                         })}   
                         </StyledSelectbox>
@@ -182,14 +186,14 @@ const AssistantList = () => {
                     <div>
                     <StyledSelectbox 
                         multiple={true}
-                        value={paymentMethodToFilterWith}
-                        onChange={(e) => handleFilterPaymentMethodlChange(e)  }     
+                        value={priorityLevelToFilterWith}
+                        onChange={(e) => handleFilterPriorityLevelChange(e)  }     
                         onMouseOver={handleMouseOver} 
                         onMouseOut={handleMouseOut}                 
                     >    
-                        <option value="" >payment method:</option>
+                        <option value="" >priority level:</option>
                         <option value="" >do not filter</option>  
-                        {paymentMethodsToAddToNewClientCreatedViaUI.map(item => {
+                        {appointmentPriorityLevelsInSelectbox.map(item => {
                             return (<option key={item.value} value={item.value}>{item.text}</option>);
                         })}
                     </StyledSelectbox>
@@ -202,34 +206,34 @@ const AssistantList = () => {
                     <span>Nr</span>
                 </Column>
                 <Column>
-                    <span>Client Id</span>
+                    <span>Appointment Id (clientId_day_time)</span>
                 </Column>
                 <Column>
-                    <span>First name</span>
+                    <span>dentist Id</span>
                 </Column>
                 <Column>
-                    <span>Payment method</span>
+                    <span>assistant Id</span>
                 </Column>
                 <Column>
-                    <span>Health status</span>
+                    <span>Priority</span>
                 </Column>
                 <Column>
-                    <span>Show as sick in views (purple background)</span>
+                    <span>Treatment type</span>
                 </Column>
                 <Column>
-                    <span>Appointments last deleted on</span>
+                    <span>Appointment last updated on</span>
                 </Column>
                 <Column>
-                    <span>Delete all appointments</span>
+                    <span>update appointment</span>
                 </Column>
                 <Column>
-                    <span>Delete client with all appointments</span>
+                    <span>delete appointment</span>
                 </Column>
             </Headers>
             <ClientListAreaStyled>
                 { dataToRenderFromUseEffectPipeline.length !== 0 ? dataToRenderFromUseEffectPipeline.map((item, id) => (
-                        <ClientInClientList key={id} item={item} clients={clients} />
-                )): <>Please attract clients.</>}
+                        <ClientInClientList key={id} item={item} appointments={appointments} />
+                )): <>Please create appointments.</>}
             </ClientListAreaStyled>
         </ClientListStyled>  
     </Container>
@@ -237,4 +241,4 @@ const AssistantList = () => {
   )
 }
 
-export default AssistantList;
+export default AppointmentList;

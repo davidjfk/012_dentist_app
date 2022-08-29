@@ -1,6 +1,6 @@
 import React from "react";
 // import { useSelector } from "react-redux";
-import { useState, useEffect } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import "./Day.css";
 // import {AppointmentInDay} from "../AppointmentInDay";
 // import { useSelector } from "react-redux"; 
@@ -17,8 +17,10 @@ import listOfValidWorkingDayNumbersInNextMonth from '../../dataInDentistAppWhenD
 export const SelectDayNrToDisplay = ({appointments}) => {
     // log('comp SelectDayNrToDisplay:')
     // log(appointments)
-    const [dataToRenderFromUseEffectPipeline, setDataToRenderFromUseEffectPipeline] = useState(appointments.filter(app => app.day === "01"));
+    // const [dayToFilterWith2] = useRef("01");
     const [dayToFilterWith, setDayToFilterWith] = useState("01");
+    const [dataToRenderFromUseEffectPipeline, setDataToRenderFromUseEffectPipeline] = useState(appointments.filter(app => app.day === dayToFilterWith.toString()));
+   
     // log(dataToRenderFromUseEffectPipeline)
 
     const handleDayChange = (event) => {    

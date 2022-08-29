@@ -1,9 +1,9 @@
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
-import "./App.css";
+import "../../App.css";
 
-import {createAppointment, getRandomPersonIdAsync, getRandomDay, getRandomTime, getRandomTreatmentForRandomAppointment } from './utils';
+import {createAppointment, getRandomPersonId, getRandomDay, getRandomTime, getRandomTreatmentForRandomAppointment } from '../../utils';
 
 export const CreateAppointment = () => {
     const log = console.log;
@@ -45,22 +45,23 @@ export const CreateAppointment = () => {
                 let time = getRandomTime() 
                 time="09"
                 log(`comp createManualAppointmentAfterDentistAppHasStarted: get random ids: `)
-                let clientId = getRandomPersonIdAsync(clientsFromReduxToolkit.clients, 'clientId')
-                let dentistId = getRandomPersonIdAsync(dentistsFromReduxToolkit.dentists, 'dentistId');  
-                let assistantId = getRandomPersonIdAsync(assistantsFromReduxToolkit.assistants, 'assistantId');
+                let clientId = getRandomPersonId(clientsFromReduxToolkit.clients, 'clientId')
+                let dentistId = getRandomPersonId(dentistsFromReduxToolkit.dentists, 'dentistId');  
+                let assistantId = ""; // assistant is not required for the appointment. 
                 let treatmentType = getRandomTreatmentForRandomAppointment(dentistId, dentistsFromReduxToolkit.dentists );
+                let appointmentPriority = "high";
                 
                 // or fill out any Id you like as a clientId, dentistId or assistantId, e.g. assistantId = "barryToTheRescue-03404";
-                let isAssistantNeededForAppointment = false;
+
                 
                 createAppointment(
                     clientId, 
+                    treatmentType,
+                    appointmentPriority,
                     day, 
                     time, 
                     dentistId, 
-                    treatmentType,
-                    isAssistantNeededForAppointment, 
-                    assistantId, 
+                    assistantId,          
                     clientsFromReduxToolkit, 
                     dentistsFromReduxToolkit, 
                     assistantsFromReduxToolkit, 
@@ -76,17 +77,17 @@ export const CreateAppointment = () => {
                     winc requirement 2of3:
                     - add an appointment WITH an assistant: newState = addAppointment(state, dayNumber, time, patientId, dentistId, assistentId)
                 */
-                isAssistantNeededForAppointment = true;
+                assistantId = getRandomPersonId(assistantsFromReduxToolkit.assistants, 'assistantId');
                 day="51" // same comment as  for day 50 above. 
                 time="10"
                 createAppointment(
                     clientId, 
+                    treatmentType,
+                    appointmentPriority,
                     day, 
                     time, 
                     dentistId, 
-                    treatmentType,
-                    isAssistantNeededForAppointment, 
-                    assistantId, 
+                    assistantId,          
                     clientsFromReduxToolkit, 
                     dentistsFromReduxToolkit, 
                     assistantsFromReduxToolkit, 
@@ -121,8 +122,8 @@ export const CreateAppointment = () => {
                     // isAssistantNeededForAppointment = false;
                     // day="50" // same comment as  for day 50 above. 
                     // time="09"
-                    // assistantId = getRandomPersonIdAsync(assistantsFromReduxToolkit.assistants, 'assistantId');
-                    // clientId = getRandomPersonIdAsync(clientsFromReduxToolkit.clients, 'clientId')
+                    // assistantId = getRandomPersonId(assistantsFromReduxToolkit.assistants, 'assistantId');
+                    // clientId = getRandomPersonId(clientsFromReduxToolkit.clients, 'clientId')
                     // createAppointment(
                     //     clientId, 
                     //     day, 

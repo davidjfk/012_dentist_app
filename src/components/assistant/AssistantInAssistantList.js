@@ -11,7 +11,7 @@ import { StyledFaTimes } from '../styles/FaTimes.styled'
 import { FaTimes } from 'react-icons/fa'
 const log = console.log;
 
-const AssistantInAssistantList = ({item}) => {
+const AssistantInAssistantList = ({assistants, item}) => {
   const dispatch = useDispatch();
   // const [personIsSick, setPersonIsSick] = useState(false);
   // let checkBoxStatus = useRef(false);
@@ -19,6 +19,11 @@ const AssistantInAssistantList = ({item}) => {
   let healthStatus = (item.isSick === "true") ? "sick" : "healthy";
   return (
     <Row>
+        <Column>
+          <AssistantInAssistantListStyled>
+            {assistants.indexOf(item) + 1 }
+          </AssistantInAssistantListStyled>
+        </Column>
         <Column>
           <AssistantInAssistantListStyled>
             {item.assistantId}

@@ -2,7 +2,7 @@
     const dentalSkillsToAddToNewDentistCreatedViaUI = [
         {value: 'brace', text: 'brace'},
         {value: 'bridge', text: 'bridge'},
-        {value: 'broken_or_knocked_out_tooth', text: 'broken_or_knocked_out_tooth'},
+        {value: 'broken_tooth', text: 'broken_tooth'},
         {value: 'crown', text: 'crown'},
         {value: 'dental_implant', text: 'dental_implant'},
         {value: 'dental_veneer', text: 'dental_veneer'},

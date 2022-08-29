@@ -20,7 +20,7 @@ export const dentistListSlice = createSlice({
     addDentist: (state, action) => {
       // const dentistToSave = action.payload;
       const {dentistId, lastName, firstName, phone, email, treatmentTypes, isSick, skillLevel} = action.payload
-      const dentistToSave = {dentistId, lastName, firstName, phone, email, treatmentTypes, isSick, skillLevel};      
+      const dentistToSave = {dentistId, email, firstName, isSick, lastName, phone, skillLevel, treatmentTypes};      
       state.dentists.push(dentistToSave);
     },
     // use_case_00_create_mock_data

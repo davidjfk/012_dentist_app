@@ -7,7 +7,7 @@ import appointmentReducer from "./appointmentSlice";
 import clientDayTimeReducer from "./clientDayTimeSlice";
 import dentistDayTimeReducer from "./dentistDayTimeSlice";
 import assistantDayTimeReducer from "./assistantDayTimeSlice";
-
+import updateAppointmentReducer from "./updateAppointmentSlice";
 
 export default configureStore({
   reducer: {
@@ -18,7 +18,8 @@ export default configureStore({
     appointment: appointmentReducer,
     clientDayTime: clientDayTimeReducer,
     dentistDayTime: dentistDayTimeReducer,
-    assistantDayTime: assistantDayTimeReducer 
+    assistantDayTime: assistantDayTimeReducer, 
+    updateAppointment: updateAppointmentReducer
   }
 });
 

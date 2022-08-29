@@ -3,7 +3,7 @@ import ClientAdd from './ClientAdd.js'
 import ClientList from './ClientList.js';
 
 
-function Assistant() {
+function Client() {
   
   return (
     <>
@@ -12,4 +12,4 @@ function Assistant() {
     </>
   );
 }
-export default Assistant;
+export default Client;

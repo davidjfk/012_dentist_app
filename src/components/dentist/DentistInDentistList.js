@@ -12,7 +12,7 @@ import { StyledFaTimes } from '../styles/FaTimes.styled'
 import { FaTimes } from 'react-icons/fa'
 const log = console.log;
 
-const DentistInDentistList = ({item}) => {
+const DentistInDentistList = ({dentists, item}) => {
   const dispatch = useDispatch();
   // const [personIsSick, setPersonIsSick] = useState(false);
   // let checkBoxStatus = useRef(false);
@@ -20,6 +20,13 @@ const DentistInDentistList = ({item}) => {
   let healthStatus = (item.isSick === "true") ? "sick" : "healthy";
   return (
     <Row>
+        <Column>
+          <DentistInDentistListStyled>
+          {/* <SkillsInListStyled> */}
+            {dentists.indexOf(item) + 1 }
+            {/* </SkillsInListStyled> */}
+          </DentistInDentistListStyled>
+        </Column>
         <Column>
           <DentistInDentistListStyled>
           {/* <SkillsInListStyled> */}
@@ -38,7 +45,7 @@ const DentistInDentistList = ({item}) => {
           {/* <DentistInDentistListStyled> */}
             <SkillsInListStyled>
               {item.treatmentTypes.map(item => {
-                return (<div key={item.index} >{item}</div>);
+                return (<div key={item} >{item}</div>);
               })}
             </SkillsInListStyled>
           {/* </DentistInDentistListStyled> */}
