@@ -46,6 +46,7 @@ selectObjectsByArrayObjectKey
 createAppointment  ------------------------------------------------
 updateAppointmentRecursivelyUntilUpdateSucceeds 
 deleteDentalAppointment_not_in_use
+deleteAllAppointmentsOfPerson
 deleteAllAppointmentsOfClient_not_in_use
 deleteDentalAppointment
 
@@ -915,7 +916,35 @@ export const loadSelectboxWithListOf = (arrayObjectKey, array) => {
     log('fn deleteAppointment end: ')
   }
 
-
+  export const deleteAllAppointmentsOfPerson = (
+    typeOfPersonId, //3 flavors: 'assistantId', 'clientId' or 'dentistId'.
+    idOfPerson, 
+    appointmentsfromReduxToolkit, 
+    deleteAppointmentInReduxToolkit, 
+    deleteDayTimeClient, 
+    deleteDayTimeDentist, 
+    deleteDayTimeAssistant, 
+    dispatch) => {
+    log(`idOfPerson (client, dentist or asssistant): ${idOfPerson}`)
+    let getAppointment = appointment => appointment[typeOfPersonId] === idOfPerson
+    let appointmentsToDelete = selectObjectsByArrayObjectKey(appointmentsfromReduxToolkit.appointments, getAppointment)
+    log(`appointmentsToDelete: ${appointmentsToDelete}`)
+    log(appointmentsToDelete)
+    let appointmentsToDeleteCopy = [...appointmentsToDelete];
+    appointmentsToDeleteCopy.forEach(appointmentToDelete => {
+        let appointmentId = appointmentToDelete.appointmentId;
+        if (appointmentsToDelete.length !== 0){
+            deleteDentalAppointment(
+                appointmentsfromReduxToolkit, 
+                appointmentId,
+                deleteAppointmentInReduxToolkit,
+                deleteDayTimeClient, 
+                deleteDayTimeDentist, 
+                deleteDayTimeAssistant, 
+                dispatch)  
+        }
+    })            
+  } 
 
   export const deleteAllAppointmentsOfClient_not_in_use = (clientId, appointmentsfromReduxToolkit, dispatch, deleteAppointmentVersionTwo, deleteDayTimeClient, deleteDayTimeDentist, deleteDayTimeAssistant ) => {
     // this fn uses the index to  delete an item in redux-toolkit.

@@ -149,8 +149,6 @@ const AppointmentInAppointmentList = ({appointments, item}) => {
                     onClick={() => {
                       //2do: create fn updateAppointment.
                       saveDataFromAppointmentToReduxToolkitBeforeAppointmentIsDeleted(item);
-
-                      // delete current appointment: 2do: uncomment fn call: 
                       
                       deleteDentalAppointment(
                         appointmentsfromReduxToolkit, 
@@ -161,10 +159,6 @@ const AppointmentInAppointmentList = ({appointments, item}) => {
                         deleteDayTimeAssistant, 
                         dispatch
                     )
-                    
-
-                      // create new appointment with data from the current appointment
-                      // working here.
 
                       toggleTheVisibilityOfComponentUpdateAppointment();
 

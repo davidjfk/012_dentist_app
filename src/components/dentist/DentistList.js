@@ -226,6 +226,15 @@ const DentistList = () => {
                 <Column>
                     <span>Show as sick in views (red background) </span>
                 </Column>
+                <Column>
+                    <span>Appointments last deleted on</span>
+                </Column>
+                <Column>
+                    <span>Delete all appointments</span>
+                </Column>
+                <Column>
+                    <span>Delete dentist with all appointments</span>
+                </Column>
             </Headers>
             <DentistListAreaStyled>
                 { dataToRenderFromUseEffectPipeline.length !== 0 ? dataToRenderFromUseEffectPipeline.map((item, id) => (

@@ -1,9 +1,10 @@
 import React from 'react'
-import { useSelector } from "react-redux";
 import { useState, useEffect } from 'react';
-import skillLevelOptions from '../../dataInDentistAppWhenDentistAppStarts/skillLevelOptions';
+import { useSelector } from "react-redux";
+
 import paymentMethodsToAddToNewClientCreatedViaUI from '../../dataInDentistAppWhenDentistAppStarts/paymentMethodsToAddToNewClientCreatedViaUI';
 import healthStatusOptions from '../../dataInDentistAppWhenDentistAppStarts/healthStatusOptions';
+
 import {Container} from '../styles/Container.styled'
 import ClientInClientList from './ClientInClientList.js'
 import {ClientListAreaStyled, ClientListStyled, Column, FormControlArea, Headers, Intro, Section1, Section2, Section3} from './ClientList.styled'

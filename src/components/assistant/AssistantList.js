@@ -1,11 +1,14 @@
 import React from 'react'
 import { useSelector } from "react-redux";
 import { useState, useEffect } from 'react';
+
 import skillLevelOptions from '../../dataInDentistAppWhenDentistAppStarts/skillLevelOptions';
 import healthStatusOptions from '../../dataInDentistAppWhenDentistAppStarts/healthStatusOptions';
+
 import {Container} from '../styles/Container.styled'
 import AssistantInAssistantList from './AssistantInAssistantList.js'
 import {AssistantListAreaStyled, AssistantListStyled, Column, FormControlArea, Headers, Intro, Section1, Section2, Section3} from './AssistantList.styled'
+
 import {StyledSelectbox} from '../styles/Selectbox.styled';
 
 
@@ -213,6 +216,15 @@ const AssistantList = () => {
                 </Column>
                 <Column>
                     <span>Show as sick in views (orange background) </span>
+                </Column>
+                <Column>
+                    <span>Appointments last deleted on</span>
+                </Column>
+                <Column>
+                    <span>Delete all appointments</span>
+                </Column>
+                <Column>
+                    <span>Delete assistant with all appointments</span>
                 </Column>
             </Headers>
             <AssistantListAreaStyled>

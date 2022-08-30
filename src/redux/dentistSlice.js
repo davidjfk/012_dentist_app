@@ -28,6 +28,31 @@ export const dentistListSlice = createSlice({
       const dentistsToSave = action.payload; 
       state.dentists = dentistsToSave; // dentistsToSave is an array with dentist objects.
     },
+    // not a winc requirement
+    deleteDentist: (state, action) => {
+      log('in the redux-toolkit: action deleteDentist: ')
+      log(action.payload.dentistId)
+      const indexOfDentistToDelete = state.dentists.findIndex(dentistToDelete => {
+        return dentistToDelete.dentistId === action.payload.dentistId;
+      });
+      log(`indexOfDentistToDelete: ${indexOfDentistToDelete}`)
+      state.dentists.splice(indexOfDentistToDelete, 1)
+    },
+    // not a winc requirement
+    setDateAndTimeOfDeletionOfAppointmentsOfDentistInReduxToolkit: (state, action) => {
+      log('in the redux-toolkit: action setDateAndTimeOfDeletionOfAppointmentsOfDentistInReduxToolkit: ')
+      log(`systemDateTime:`)
+      log(action.payload.systemDateTime)
+      log(`assistantId:`)
+      log(action.payload.dentistId)
+      const indexOfDentistToDelete = state.dentists.findIndex(dentistForWhomToSetDateAndTime => {
+        return dentistForWhomToSetDateAndTime.dentistId === action.payload.dentistId;
+      });
+      log(`indexOfDentistToDelete: `)
+      log(indexOfDentistToDelete)
+      log(typeof(indexOfDentistToDelete))
+      state.dentists[indexOfDentistToDelete].appointmentsDeletedOnDateTime = action.payload.systemDateTime;
+    },
     // use_case_08_give_appointments_of_sick_dentist_a_red_background_color: as direct fn call without UI
     setDentistToSick: (state, action) => {
       // console.log('inside dentistList Slice:')
@@ -45,7 +70,7 @@ export const dentistListSlice = createSlice({
       log(state.dentists[indexOfDentist].isSick = (action.payload.isSick))
     }}
 })
-export const {addDentalTreatmentsAsSkillSetToDentist, addDentist, addDentists, setDentistToSick, toggleHealthStatusOfDentist } = dentistListSlice.actions;
+export const {addDentalTreatmentsAsSkillSetToDentist, addDentist, addDentists, deleteDentist, setDateAndTimeOfDeletionOfAppointmentsOfDentistInReduxToolkit, setDentistToSick, toggleHealthStatusOfDentist } = dentistListSlice.actions;
 
 export default dentistListSlice.reducer;    
 
