@@ -8,8 +8,9 @@ export const Day = ({appointments} ) => {
   const appointmentsJSX = appointments
     .sort((appointment1, appointment2) => appointment2.time - appointment1.time).reverse()
     .map(
-      ({ time, day, client, dentist, assistant, clientId, dentistId, assistantId, treatmentType }, index) => (
+      ({ appointmentId, time, day, client, dentist, assistant, clientId, dentistId, assistantId, treatmentType }, index) => (
         <AppointmentInDay
+          appointmentId={appointmentId}
           time={time}
           day={day}
           client={client}

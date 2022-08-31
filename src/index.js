@@ -11,7 +11,9 @@ const theme = {
   colors: {
     bluegrey: "#a6b8b9",
     nearlyblack: "#3a3a55",
-    onHoverBackground: "#FFFFCC"
+    onHoverBackground: "#FFFFCC",
+    onHoverBackgroundColorDelete: "red",
+    onHoverBackgroundColorUpdate: "orange"
   },
   font: "Helvetica",
   fontSize: {

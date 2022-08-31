@@ -39,12 +39,22 @@
   padding: 10px;
 }
 
+/* .deleteButton {
+  float: right;
+  background-color: aquamarine;
+  font-size: 1.1rem;
+  padding: 6px;
+  margin-right: 20px;
+  margin-top: 20px;
+} */
+
 .treatmentType {
   float: right;
   background-color: aquamarine;
   font-size: 1.1rem;
   padding: 6px;
   margin-right: 20px;
+  margin-left: 20px;
   margin-top: 20px;
 }
 

@@ -14,7 +14,7 @@ import {Container} from '../styles/Container.styled';
 import {ClientAddStyled, Column, Form, Intro} from './ClientAdd.styled';
 import {StyledButtonAroundText} from '../styles/ButtonAroundText.styled';
 import {StyledSelectbox} from '../styles/Selectbox.styled';
-import {createAppointment, generateAppointmentId, getSystemDatePlusTime, loadSelectboxWithListOf, selectObjectsByArrayObjectKey, sortArrayWithObjects, updateAppointmentRecursivelyUntilUpdateSucceeds} from '../../utils';
+import {createAppointment, generateAppointmentId, getSystemDatePlusTime, loadSelectboxWithListOf, selectObjectsByArrayObjectKey, sortArrayWithObjects, updateAppointment_Phase2of2_updateAppointmentRecursivelyUntilUpdateSucceeds} from '../../utils';
 
 const log = console.log;
 
@@ -147,8 +147,10 @@ const UpdateAppointment = () => {
         let systemDateTime = getSystemDatePlusTime();
         let appointmentLastUpdatedOnDateTime = systemDateTime;
 
+
         
-        updateAppointmentRecursivelyUntilUpdateSucceeds (
+        
+        updateAppointment_Phase2of2_updateAppointmentRecursivelyUntilUpdateSucceeds (
             clientId, 
             treatmentType,
             appointmentPriority,

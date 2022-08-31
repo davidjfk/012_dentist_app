@@ -23,7 +23,6 @@ const App = ()  => {
   return(
     <>
       <Create150Appointments/>
-       
       <Router>
         <div>
           <nav>
@@ -81,8 +80,6 @@ const App = ()  => {
         </div>
       </Router>
   </>
-
-  );
-  
+ );
 };
 export default App;

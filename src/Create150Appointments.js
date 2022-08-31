@@ -53,7 +53,7 @@ const Create150Appointments = () => {
         The bigger the nr, the bigger the chance that the automatically generated appointment requires the precence of an assistant.
     */
     let nrOfAssistants = 4; 
-    let nrOfRandomGeneratedAppointments = 150;
+    let nrOfRandomGeneratedAppointments = 10;
     let nrOfClients = 5;
     let nrOfDentists = 2; 
     let nrOfDifferentTreatmentsAsTheSkillsOfADentist = 11;

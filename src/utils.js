@@ -673,8 +673,35 @@ export const loadSelectboxWithListOf = (arrayObjectKey, array) => {
     } 
   } 
 
+  // export const updateAppointment_Phase1of2_DisplayComponentUpdateAppointment = (
+  //   appointment,
+  //   appointmentId, 
+  //   appointmentsfromReduxToolkit, 
+  //   deleteAppointmentInReduxToolkit, 
+  //   deleteDayTimeClient, 
+  //   deleteDayTimeDentist, 
+  //   deleteDayTimeAssistant, 
+  //   dispatch
+  // ) => {
+  //   saveDataFromAppointmentToReduxToolkitBeforeAppointmentIsDeleted(appointment);
+                      
+  //   deleteDentalAppointment(
+  //     appointmentId, 
+  //     appointmentsfromReduxToolkit, 
+  //     deleteAppointmentInReduxToolkit, 
+  //     deleteDayTimeClient, 
+  //     deleteDayTimeDentist, 
+  //     deleteDayTimeAssistant, 
+  //     dispatch
+  //   );
+  //   toggleTheVisibilityOfComponentUpdateAppointment();
+  // }
 
-  export function updateAppointmentRecursivelyUntilUpdateSucceeds (
+
+
+
+
+  export function updateAppointment_Phase2of2_updateAppointmentRecursivelyUntilUpdateSucceeds (
     clientId, 
     treatmentType,
     appointmentPriority,
@@ -935,8 +962,8 @@ export const loadSelectboxWithListOf = (arrayObjectKey, array) => {
         let appointmentId = appointmentToDelete.appointmentId;
         if (appointmentsToDelete.length !== 0){
             deleteDentalAppointment(
-                appointmentsfromReduxToolkit, 
                 appointmentId,
+                appointmentsfromReduxToolkit, 
                 deleteAppointmentInReduxToolkit,
                 deleteDayTimeClient, 
                 deleteDayTimeDentist, 
@@ -965,8 +992,8 @@ export const loadSelectboxWithListOf = (arrayObjectKey, array) => {
         let appointmentId = appointmentToDelete.appointmentId;
         if (appointmentsToDelete.length !== 0){
             deleteDentalAppointment(
-                appointmentsfromReduxToolkit, 
                 appointmentId,
+                appointmentsfromReduxToolkit,          
                 appointmentIndexInAppointmentsArray, 
                 deleteAppointmentVersionTwo,
                 deleteDayTimeClient, 
@@ -979,8 +1006,8 @@ export const loadSelectboxWithListOf = (arrayObjectKey, array) => {
 
 
   export function deleteDentalAppointment (
-    appointmentsfromReduxToolkit, 
     appointmentId, 
+    appointmentsfromReduxToolkit, 
     deleteAppointmentInReduxToolkit, 
     deleteDayTimeClient, 
     deleteDayTimeDentist, 
