@@ -5,7 +5,9 @@ import {deleteAppointmentInReduxToolkit} from "../../redux/appointmentSlice";
 import {deleteDayTimeClient} from "../../redux/clientDayTimeSlice";
 import {deleteDayTimeDentist} from "../../redux/dentistDayTimeSlice";
 import {deleteDayTimeAssistant} from "../../redux/assistantDayTimeSlice";
-import {deleteDentalAppointment, selectObjectsByArrayObjectKey } from "../../utils";
+import {saveAppointmentToReduxToolkit, showComponentUpdateAppointmentReduxToolkit} from '../../redux/updateAppointmentSlice';
+
+import {deleteDentalAppointment, selectObjectsByArrayObjectKey, updateAppointment_Phase1of2_DisplayComponentUpdateAppointment } from "../../utils";
 
 import {StyledButtonWithWordDelete} from '../styles/ButtonWithWordDelete';
 import {StyledButtonWithWordUpdate} from '../styles/ButtonWithWordUpdate';
@@ -18,23 +20,18 @@ const format_time = time => (time < 10 ? `${time}:00u` : `${time}:00u`);
 export const AppointmentInDay = ({appointmentId, time, day, client, clientId, dentist, dentistId, assistant, assistantId, treatmentType }) => {
   
   let dispatch = useDispatch();
-  // let dentistsFromReduxToolkit  = useSelector((state) => state.dentist);
-  // console.log(dentistId) 
-  // let dentistIsSick;
-  
-  // // check if dentist is  ill:
-  // console.log(`dentists from redux toolkit:`)
-  // log(dentistsFromReduxToolkit.dentists)
-  // let getDentist = dentist => dentist.dentistId === dentistId
-  // let dentistFromreduxToolkit = selectObjectsByArrayObjectKey(dentistsFromReduxToolkit.dentists, getDentist)
-  // dentistIsSick = dentistFromreduxToolkit[0].isSick;
-  // dentistIsSick = (dentistIsSick === "true" || dentistIsSick === true);
-
+  log(`comp AppointmentInDay: start`)
+  let {appointments}  = useSelector((state) => state.appointment);
   let appointmentsfromReduxToolkit = useSelector((state) => state.appointment)
   let assistantsFromReduxToolkit  = useSelector((state) => state.assistant);
   let clientsFromReduxToolkit  = useSelector((state) => state.client);
   let dentistsFromReduxToolkit  = useSelector((state) => state.dentist);
-  
+
+  let getAppointmentObject = item => item.appointmentId === appointmentId ;
+  let appointment = selectObjectsByArrayObjectKey(appointments, getAppointmentObject);
+  appointment = appointment[0]
+  log(appointment)
+
   let assistantIsSick;
   let clientIsSick;
   let dentistIsSick;
@@ -84,7 +81,20 @@ export const AppointmentInDay = ({appointmentId, time, day, client, clientId, de
                       }}>
       delete appointment
     </StyledButtonWithWordDelete> 
-    <StyledButtonWithWordUpdate>
+    <StyledButtonWithWordUpdate
+      onClick={() => { updateAppointment_Phase1of2_DisplayComponentUpdateAppointment(
+                          appointment,
+                          appointmentId, 
+                          showComponentUpdateAppointmentReduxToolkit, 
+                          appointmentsfromReduxToolkit, 
+                          deleteAppointmentInReduxToolkit, 
+                          saveAppointmentToReduxToolkit,
+                          deleteDayTimeClient, 
+                          deleteDayTimeDentist, 
+                          deleteDayTimeAssistant,  
+                          dispatch
+                        );  
+                      }}>
       update appointment
     </StyledButtonWithWordUpdate>
     <div className="dentist">Dentist: {dentist}</div>

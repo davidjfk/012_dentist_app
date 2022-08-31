@@ -29,6 +29,13 @@ export const updateAppointmentSlice = createSlice({
       log(state.appointmentSavedInReduxToolkit);
     },
     // use_case_12_bonus_working_form_and_buttons_for_all_operations
+    showComponentUpdateAppointmentReduxToolkit: (state, action) => {
+      // log('in the redux-toolkit: action toggleVisibilityOfComponentUpdateAppointment: ')
+      // log(`action.payload:`)
+      // log(action.payload)
+      state.isNowUpdatingAppointment = true;
+    },
+    // use_case_12_bonus_working_form_and_buttons_for_all_operations
     toggleVisibilityOfComponentUpdateAppointment: (state, action) => {
       // log('in the redux-toolkit: action toggleVisibilityOfComponentUpdateAppointment: ')
       // log(`action.payload:`)
@@ -36,7 +43,7 @@ export const updateAppointmentSlice = createSlice({
       state.isNowUpdatingAppointment = action.payload;
     }}
 })
-export const {saveAppointmentToReduxToolkit, toggleVisibilityOfComponentUpdateAppointment} = updateAppointmentSlice.actions;
+export const {saveAppointmentToReduxToolkit, showComponentUpdateAppointmentReduxToolkit, toggleVisibilityOfComponentUpdateAppointment} = updateAppointmentSlice.actions;
 
 export default updateAppointmentSlice.reducer;    
 

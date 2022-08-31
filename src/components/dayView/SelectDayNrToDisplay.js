@@ -3,7 +3,9 @@ import React from "react";
 import { useRef, useState, useEffect } from 'react';
 import "./Day.css";
 // import {AppointmentInDay} from "../AppointmentInDay";
-// import { useSelector } from "react-redux"; 
+import { useSelector } from "react-redux"; 
+
+import AppointmentUpdate from '../appointment/AppointmentUpdate';
 
 import {Day} from "./Day";
 import {Container} from '../styles/Container.styled';
@@ -15,6 +17,8 @@ import listOfValidWorkingDayNumbersInNextMonth from '../../dataInDentistAppWhenD
 // const log = console.log;
 
 export const SelectDayNrToDisplay = ({appointments}) => {
+
+    const { isNowUpdatingAppointment } = useSelector((state) => state.updateAppointment);
     // log('comp SelectDayNrToDisplay:')
     // log(appointments)
     // const [dayToFilterWith2] = useRef("01");
@@ -64,37 +68,79 @@ export const SelectDayNrToDisplay = ({appointments}) => {
 
     return (
     <>
-        <Container> 
-            <AssistantListStyled>
-                <Intro>Select working day in next month </Intro>
-                <FormControlArea>
-                    <Section2>
-                        <div>
-                        <StyledSelectbox 
-                            value={dayToFilterWith}
-                            onChange={(event) => handleDayChange(event)  }                
-                        >                      
-                            {/* <option value="" >day nr:</option> */}
-                            <option value="" >hide all info</option>
-                            
-                            {listOfValidWorkingDayNumbersInNextMonth.map(item => {
-                                return (<option key={item.value} value={item.value}>{item.text}</option>);
-                            })}   
-                        </StyledSelectbox>
-                        </div>
-                    </Section2>
-            <ul className=" colorLegenda">
-                <li className="orange">orange: assistant is ill</li>  
-                <li className="purple">purple: client is ill</li>  
-                <li className="red">red: dentist is ill</li>  
-            </ul>  
-                </FormControlArea>
-            </AssistantListStyled>  
-        </Container>
+        <>
+            {isNowUpdatingAppointment ? 
+            <>
+                <Container> 
+                    <AssistantListStyled>
+                        <Intro>Select working day in next month </Intro>
+                        <FormControlArea>
+                            <Section2>
+                                <div>
+                                <StyledSelectbox 
+                                    value={dayToFilterWith}
+                                    onChange={(event) => handleDayChange(event)  }                
+                                >                      
+                                    {/* <option value="" >day nr:</option> */}
+                                    <option value="" >hide all info</option>
+                                    
+                                    {listOfValidWorkingDayNumbersInNextMonth.map(item => {
+                                        return (<option key={item.value} value={item.value}>{item.text}</option>);
+                                    })}   
+                                </StyledSelectbox>
+                                </div>
+                            </Section2>
+                    <ul className=" colorLegenda">
+                        <li className="orange">orange: assistant is ill</li>  
+                        <li className="purple">purple: client is ill</li>  
+                        <li className="red">red: dentist is ill</li>  
+                    </ul>  
+                        </FormControlArea>
+                    </AssistantListStyled>  
+                </Container>
 
-        { dataToRenderFromUseEffectPipeline.length !== 0 ? <Day  appointments = {dataToRenderFromUseEffectPipeline} /> : <Container>No appointments today.</Container>}
+                <AppointmentUpdate/>
 
-       {/* <Day  appointments = {dataToRenderFromUseEffectPipeline}    />                */}
+                { dataToRenderFromUseEffectPipeline.length !== 0 ? <Day  appointments = {dataToRenderFromUseEffectPipeline} /> : <Container>No appointments today.</Container>}
+            </>
+            :
+            <>
+                <Container> 
+                    <AssistantListStyled>
+                        <Intro>Select working day in next month </Intro>
+                        <FormControlArea>
+                            <Section2>
+                                <div>
+                                <StyledSelectbox 
+                                    value={dayToFilterWith}
+                                    onChange={(event) => handleDayChange(event)  }                
+                                >                      
+                                    {/* <option value="" >day nr:</option> */}
+                                    <option value="" >hide all info</option>
+                                    
+                                    {listOfValidWorkingDayNumbersInNextMonth.map(item => {
+                                        return (<option key={item.value} value={item.value}>{item.text}</option>);
+                                    })}   
+                                </StyledSelectbox>
+                                </div>
+                            </Section2>
+                    <ul className=" colorLegenda">
+                        <li className="orange">orange: assistant is ill</li>  
+                        <li className="purple">purple: client is ill</li>  
+                        <li className="red">red: dentist is ill</li>  
+                    </ul>  
+                        </FormControlArea>
+                    </AssistantListStyled>  
+                </Container>
+
+                { dataToRenderFromUseEffectPipeline.length !== 0 ? <Day  appointments = {dataToRenderFromUseEffectPipeline} /> : <Container>No appointments today.</Container>}
+            </>
+            } 
+            
+        </>
+
+
+
     </>
   )
 }

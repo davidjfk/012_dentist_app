@@ -44,8 +44,8 @@ isValidWorkingTime
 loadSelectboxWithListOf
 selectObjectsByArrayObjectKey
 createAppointment  ------------------------------------------------
-updateAppointmentRecursivelyUntilUpdateSucceeds 
-deleteDentalAppointment_not_in_use
+updateAppointment_Phase1of2_DisplayComponentUpdateAppointment
+updateAppointment_Phase2of2_updateAppointmentRecursivelyUntilUpdateSucceeds
 deleteAllAppointmentsOfPerson
 deleteAllAppointmentsOfClient_not_in_use
 deleteDentalAppointment
@@ -673,29 +673,39 @@ export const loadSelectboxWithListOf = (arrayObjectKey, array) => {
     } 
   } 
 
-  // export const updateAppointment_Phase1of2_DisplayComponentUpdateAppointment = (
-  //   appointment,
-  //   appointmentId, 
-  //   appointmentsfromReduxToolkit, 
-  //   deleteAppointmentInReduxToolkit, 
-  //   deleteDayTimeClient, 
-  //   deleteDayTimeDentist, 
-  //   deleteDayTimeAssistant, 
-  //   dispatch
-  // ) => {
-  //   saveDataFromAppointmentToReduxToolkitBeforeAppointmentIsDeleted(appointment);
+  export const updateAppointment_Phase1of2_DisplayComponentUpdateAppointment = (
+    appointment,
+    appointmentId, 
+    showComponentUpdateAppointmentReduxToolkit, 
+    appointmentsfromReduxToolkit, 
+    deleteAppointmentInReduxToolkit, 
+    saveAppointmentToReduxToolkit, 
+    deleteDayTimeClient, 
+    deleteDayTimeDentist, 
+    deleteDayTimeAssistant, 
+    dispatch
+  ) => {
+    const saveDataFromAppointmentToReduxToolkitBeforeAppointmentIsDeleted = (appointment) => {
+      log(`inside fn saveDataFromAppointmentToReduxToolkitBeforeAppointmentIsDeleted: `)
+      log(appointment);
+      dispatch(saveAppointmentToReduxToolkit(appointment));
+    }
+    saveDataFromAppointmentToReduxToolkitBeforeAppointmentIsDeleted(appointment);
                       
-  //   deleteDentalAppointment(
-  //     appointmentId, 
-  //     appointmentsfromReduxToolkit, 
-  //     deleteAppointmentInReduxToolkit, 
-  //     deleteDayTimeClient, 
-  //     deleteDayTimeDentist, 
-  //     deleteDayTimeAssistant, 
-  //     dispatch
-  //   );
-  //   toggleTheVisibilityOfComponentUpdateAppointment();
-  // }
+    deleteDentalAppointment(
+      appointmentId, 
+      appointmentsfromReduxToolkit, 
+      deleteAppointmentInReduxToolkit, 
+      deleteDayTimeClient, 
+      deleteDayTimeDentist, 
+      deleteDayTimeAssistant, 
+      dispatch
+    );
+    const toggleTheVisibilityOfComponentUpdateAppointment = () => {
+      dispatch(showComponentUpdateAppointmentReduxToolkit())
+    }
+    toggleTheVisibilityOfComponentUpdateAppointment();
+  }
 
 
 
@@ -720,7 +730,7 @@ export const loadSelectboxWithListOf = (arrayObjectKey, array) => {
     toggleVisibilityOfComponentUpdateAppointment,  // this parameter is not in fn createAppointment!
     dispatch
     ) {
-    log(`fn createAppointment: start: `)
+    log(`fn updateAppointment: start: `)
     
    
     // this fn is not in fn createAppointment !
@@ -904,44 +914,6 @@ export const loadSelectboxWithListOf = (arrayObjectKey, array) => {
     } 
   } 
 
-  export function deleteDentalAppointment_not_in_use (appointmentsfromReduxToolkit, appointmentId, appointmentIndexInAppointmentsArray, deleteAppointment, deleteDayTimeClient, deleteDayTimeDentist, deleteDayTimeAssistant, dispatch) {
-    log('fn deleteAppointment start: ')
-    // log(`appointmentsfromReduxToolkit: ${appointmentsfromReduxToolkit}`)
-    // log(`appointmentId: ${appointmentId}`)
-    // log(`appointmentIndexInAppointmentsArray: ${appointmentIndexInAppointmentsArray}`)
-    // log(`deleteDayTimeClient${deleteDayTimeClient}`)
-    // log(deleteDayTimeClient)
-    // log(`deleteDayTimeDentistClient${deleteDayTimeDentist}`)
-    // log(`deleteDayTimeAssistant${deleteDayTimeAssistant}`)
-    // log(`dispatch${deleteDayTimeClient}`)
-    // log(`appointmentIndexInAppointmentsArray (of appointment that will be deleted: )`)
-    // log(appointmentIndexInAppointmentsArray)
-    // log(typeof((appointmentIndexInAppointmentsArray)))
-
-    let getAppointment = appointment => appointment.appointmentId === appointmentId
-    let appointmentThatIsAboutToBeDeleted = selectObjectsByArrayObjectKey(appointmentsfromReduxToolkit.appointments, getAppointment)
-    
-    console.log('---appointmentThatWillBeDeleted:')
-    console.log(appointmentThatIsAboutToBeDeleted[0])
-  
-    let {clientId, day, time, dentistId, assistantId} = appointmentThatIsAboutToBeDeleted[0];
-  
-    let clientDayTimes  = createCombiOfPersonAndDayAndTime(clientId, day, time)
-    dispatch(deleteDayTimeClient(clientDayTimes));
-    
-    let dentistDayTimes = createCombiOfPersonAndDayAndTime(dentistId, day, time)
-    dispatch(deleteDayTimeDentist(dentistDayTimes));
-  
-
-    if (assistantId !== null) {
-        let assistantDayTimes = createCombiOfPersonAndDayAndTime(assistantId, day, time)
-        dispatch(deleteDayTimeAssistant(assistantDayTimes));
-    }
-  
-
-    dispatch(deleteAppointmentInReduxToolkit(appointmentIndexInAppointmentsArray))
-    log('fn deleteAppointment end: ')
-  }
 
   export const deleteAllAppointmentsOfPerson = (
     typeOfPersonId, //3 flavors: 'assistantId', 'clientId' or 'dentistId'.

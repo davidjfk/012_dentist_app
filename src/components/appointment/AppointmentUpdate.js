@@ -96,9 +96,11 @@ const UpdateAppointment = () => {
         const appointmentId = generateAppointmentId(clientId, day, time);
         let appointmentIdFromReduxToolkitSlice = appointmentSavedInReduxToolkit.appointmentId;
         if (appointmentId !== appointmentIdFromReduxToolkitSlice){
-            console.error(`There is a problem with the appointmentId that is used to update an appointment. Please investigate.`)
+            log(`So the new appointmentId ${appointmentId} differs from the old appointmentId ${appointmentIdFromReduxToolkitSlice}.
+            Reason:  Appointment has format clientId_day_time, and the appointment client and/or day and/or time have changed. 
+            This is not a problem.`)
         }
-
+        
         // skip this part until (...)
         // let getClient = client => client.clientId === clientId
         // let clientForWhomAnAppointmentIsBeingMade = selectObjectsByArrayObjectKey(clients, getClient)

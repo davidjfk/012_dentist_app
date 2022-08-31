@@ -18,8 +18,8 @@ const log = console.log;
 const App = ()  => {
 
   let appointmentsfromReduxToolkit = useSelector((state) => state.appointment)
-  log(`component App: start:  nr of auto-generated appointments in redux-toolkit: ${appointmentsfromReduxToolkit.appointments.length}`)
-  log()
+  // log(`component App: start:  nr of auto-generated appointments in redux-toolkit: ${appointmentsfromReduxToolkit.appointments.length}`)
+  // log()
   return(
     <>
       <Create150Appointments/>

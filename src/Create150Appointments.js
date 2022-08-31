@@ -54,8 +54,8 @@ const Create150Appointments = () => {
     */
     let nrOfAssistants = 4; 
     let nrOfRandomGeneratedAppointments = 10;
-    let nrOfClients = 5;
-    let nrOfDentists = 2; 
+    let nrOfClients = 50;
+    let nrOfDentists = 4; 
     let nrOfDifferentTreatmentsAsTheSkillsOfADentist = 11;
 
     useEffect(() => {

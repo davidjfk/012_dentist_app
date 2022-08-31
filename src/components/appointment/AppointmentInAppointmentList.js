@@ -6,7 +6,7 @@ import {deleteAppointmentInReduxToolkit} from "../../redux/appointmentSlice";
 import {deleteDayTimeClient} from "../../redux/clientDayTimeSlice";
 import {deleteDayTimeDentist} from "../../redux/dentistDayTimeSlice";
 import {deleteDayTimeAssistant} from "../../redux/assistantDayTimeSlice";
-import {saveAppointmentToReduxToolkit, toggleVisibilityOfComponentUpdateAppointment } from '../../redux/updateAppointmentSlice';
+import {saveAppointmentToReduxToolkit, showComponentUpdateAppointmentReduxToolkit} from '../../redux/updateAppointmentSlice';
 
 import {deleteDentalAppointment, updateAppointment_Phase1of2_DisplayComponentUpdateAppointment} from '../../utils';
 
@@ -21,45 +21,45 @@ const log = console.log;
 
 const AppointmentInAppointmentList = ({appointments, item}) => {
   let dispatch = useDispatch();
-  
-  const [isShowingComponentUpdateAppointment, setIsShowingComponentUpdateAppointment] = useState(true);
-  let appointmentLastUpdatedOnDateTime = (item.appointmentLastUpdatedOnDateTime === null) ? "Not happened yet." : item.appointmentLastUpdatedOnDateTime ;
   let appointmentsfromReduxToolkit = useSelector((state) => state.appointment)
+  
+  let appointmentLastUpdatedOnDateTime = (item.appointmentLastUpdatedOnDateTime === null) ? "Not happened yet." : item.appointmentLastUpdatedOnDateTime ;
+  
+  
 
-  const saveDataFromAppointmentToReduxToolkitBeforeAppointmentIsDeleted = (item) => {
-    log(`inside fn saveTheAppointmentToUpdateToReduxToolkit: `)
-    log(item);
-    dispatch(saveAppointmentToReduxToolkit(item));
-  }
 
-  const toggleTheVisibilityOfComponentUpdateAppointment = () => {
-    setIsShowingComponentUpdateAppointment(current => !current);
-    dispatch(toggleVisibilityOfComponentUpdateAppointment(isShowingComponentUpdateAppointment))
-  }
 
-  const updateAppointment_Phase1of2_DisplayComponentUpdateAppointment = (
-    appointment,
-    appointmentId, 
-    appointmentsfromReduxToolkit, 
-    deleteAppointmentInReduxToolkit, 
-    deleteDayTimeClient, 
-    deleteDayTimeDentist, 
-    deleteDayTimeAssistant, 
-    dispatch
-  ) => {
-    saveDataFromAppointmentToReduxToolkitBeforeAppointmentIsDeleted(appointment);
+  // const updateAppointment_Phase1of2_DisplayComponentUpdateAppointment = (
+  //   appointment,
+  //   appointmentId, 
+  //   appointmentsfromReduxToolkit, 
+  //   deleteAppointmentInReduxToolkit, 
+  //   deleteDayTimeClient, 
+  //   deleteDayTimeDentist, 
+  //   deleteDayTimeAssistant, 
+  //   dispatch
+  // ) => {
+  //   const saveDataFromAppointmentToReduxToolkitBeforeAppointmentIsDeleted = (item) => {
+  //     log(`inside fn saveDataFromAppointmentToReduxToolkitBeforeAppointmentIsDeleted: `)
+  //     log(item);
+  //     dispatch(saveAppointmentToReduxToolkit(item));
+  //   }
+  //   saveDataFromAppointmentToReduxToolkitBeforeAppointmentIsDeleted(appointment);
                       
-    deleteDentalAppointment(
-      appointmentId, 
-      appointmentsfromReduxToolkit, 
-      deleteAppointmentInReduxToolkit, 
-      deleteDayTimeClient, 
-      deleteDayTimeDentist, 
-      deleteDayTimeAssistant, 
-      dispatch
-    );
-    toggleTheVisibilityOfComponentUpdateAppointment();
-  }
+  //   deleteDentalAppointment(
+  //     appointmentId, 
+  //     appointmentsfromReduxToolkit, 
+  //     deleteAppointmentInReduxToolkit, 
+  //     deleteDayTimeClient, 
+  //     deleteDayTimeDentist, 
+  //     deleteDayTimeAssistant, 
+  //     dispatch
+  //   );
+  //   const toggleTheVisibilityOfComponentUpdateAppointment = () => {
+  //     dispatch(showComponentUpdateAppointment())
+  //   }
+  //   toggleTheVisibilityOfComponentUpdateAppointment();
+  // }
 
   return (
     <Row>
@@ -107,8 +107,10 @@ const AppointmentInAppointmentList = ({appointments, item}) => {
                       updateAppointment_Phase1of2_DisplayComponentUpdateAppointment(
                         item,
                         item.appointmentId, 
+                        showComponentUpdateAppointmentReduxToolkit, 
                         appointmentsfromReduxToolkit, 
                         deleteAppointmentInReduxToolkit, 
+                        saveAppointmentToReduxToolkit, 
                         deleteDayTimeClient, 
                         deleteDayTimeDentist, 
                         deleteDayTimeAssistant, 
