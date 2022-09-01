@@ -3,7 +3,7 @@ import {useState } from 'react';
 import {useDispatch, useSelector } from "react-redux";
 import {addAppointment } from "../../redux/appointmentSlice";
 
-import {toggleVisibilityOfComponentUpdateAppointment } from '../../redux/updateAppointmentSlice';
+import {hideComponentUpdateAppointmentReduxToolkit } from '../../redux/updateAppointmentSlice';
 
 import dentalSkillsToAddToNewDentistCreatedViaUI from '../../dataInDentistAppWhenDentistAppStarts/dentalSkillsToAddToNewDentistCreatedViaUI';
 import appointmentPriorityLevelsInSelectbox from '../../dataInDentistAppWhenDentistAppStarts/appointmentPriorityLevelsInSelectbox';
@@ -101,51 +101,8 @@ const UpdateAppointment = () => {
             This is not a problem.`)
         }
         
-        // skip this part until (...)
-        // let getClient = client => client.clientId === clientId
-        // let clientForWhomAnAppointmentIsBeingMade = selectObjectsByArrayObjectKey(clients, getClient)
-        // // variable client inside obj appointment is derived data from  the object client.
-        // let client = (`${(clientForWhomAnAppointmentIsBeingMade[0].firstName)} ${(clientForWhomAnAppointmentIsBeingMade[0].lastName)}`)
-
-        // let getDentist = dentist => dentist.dentistId === dentistId
-        // let dentistForWhomAnAppointmentIsBeingMade = selectObjectsByArrayObjectKey(dentists, getDentist)
-        // // variable dentist inside obj appointment is derived data from  the object dentist.
-        // let dentist = (`${(dentistForWhomAnAppointmentIsBeingMade[0].firstName)} ${(dentistForWhomAnAppointmentIsBeingMade[0].lastName)}`)
-
-        
-        // if (assistantId !== "") {
-        // let getAssistant = assistant => assistant.assistantId === assistantId
-        // let assistantForWhomAnAppointmentIsBeingMade = selectObjectsByArrayObjectKey(assistants, getAssistant)
-        // // variable assistant inside obj appointment is derived data from  the object assistant.
-        // let assistant = (`${(assistantForWhomAnAppointmentIsBeingMade[0].firstName)} ${(assistantForWhomAnAppointmentIsBeingMade[0].lastName)}`)
-        // }
-
-
-        // dispatch(addAppointment({
-        //     UIMade, 
-        //     appointmentId, 
-        //     appointmentLastUpdatedOnDateTime, 
-        //     appointmentPriority, 
-        //     assistant, 
-        //     assistantId, 
-        //     client, 
-        //     clientId, 
-        //     day, 
-        //     dentist, 
-        //     dentistId, 
-        //     isNowUpdatingAppointment, 
-        //     time, 
-        //     treatmentType 
-        // }));   
-
-        /*
-           (...) skip until here. Reason: instead of doing a dispatch, call fn createAppointment. This fn validates the business rules. Then as its final step it will do a dispatch. This dispatch looks exactly like the 
-           dispatch below.
-        */
-        
         // q: delete this key from obj appointment?    
         let isNowUpdatingAppointment = true;
-
         let systemDateTime = getSystemDatePlusTime();
         let appointmentLastUpdatedOnDateTime = systemDateTime;
 
@@ -168,12 +125,11 @@ const UpdateAppointment = () => {
             clientDayTimesFromReduxToolkit, 
             dentistDayTimesFromReduxToolkit, 
             assistantDayTimesFromReduxToolkit, 
-            toggleVisibilityOfComponentUpdateAppointment,
+            hideComponentUpdateAppointmentReduxToolkit,
             dispatch
         )
 
            
-
         // Do not reset the form! So do not:  
         // setClientId('');
         // setTreatmentType('');

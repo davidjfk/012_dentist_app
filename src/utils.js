@@ -9,7 +9,7 @@ import {addDayTimeDentist} from "./redux/dentistDayTimeSlice";
 import {addDayTimeAssistant} from "./redux/assistantDayTimeSlice";
 import {addDentalTreatmentsAsSkillSetToDentist} from  "./redux/dentistSlice"
 
-const log = console.log;
+export const log = console.log;
 
 /*
 
@@ -17,6 +17,7 @@ isCombiOfPersonAndDayAndTimeAvailableToCreateAppointmentViaUI
 addTreatmentTypesToDentist
 
 createCombiOfPersonAndDayAndTime
+generateAppointmentId
 generateRandomPersonId
 generateRandomAppointmentId
 generateRandomAppointmentFromWinc
@@ -26,6 +27,8 @@ getAppointmentId
 getAssistantId
 getClientId
 getDentistId
+
+getArrayObjectWithObjectKeyValuePair
 getNrOfRandomElementsFromArray
 getRandomDay
 getRandomDay2  (use getRandomDay instead)
@@ -108,6 +111,8 @@ export const addTreatmentTypesToDentist = (arrayWithDentistObjects, arrayWithDen
 export const createCombiOfPersonAndDayAndTime = (personId, day, time) => personId + "_" + day + "_" + time;
 
 // export const generateRandomAppointmentId = () => Math.floor(10000000 + Math.random() *  9000000); // 7 digits
+
+
 export const generateAppointmentId = (clientId, day, time) => ( `${clientId}_${day}_${time}`);
 
 
@@ -147,6 +152,8 @@ export function getAppointmentObject(appointmentsfromReduxToolkit, indexOfAppoin
   return appointmentObject
 }
 
+
+
 export function getAppointmentId(appointmentsfromReduxToolkit, indexOfAppointment) {
   const appointment = appointmentsfromReduxToolkit.appointments[indexOfAppointment]
   log('fn getAppointmentId: start:')
@@ -176,7 +183,6 @@ export function getClientId(clientsfromReduxToolkit, indexOfClient) {
 }
 
 
-
 export function getDentistId(dentistsfromReduxToolkit, indexOfDentist) {
   const dentist = dentistsfromReduxToolkit.dentists[indexOfDentist]
   log('fn getDentistId: start:')
@@ -185,6 +191,18 @@ export function getDentistId(dentistsfromReduxToolkit, indexOfDentist) {
   log('fn getDentistId: end.')
   return dentistId
 }
+
+
+
+export const getArrayObjectWithObjectKeyValuePair = (arrayObjectPropertyKeyToFilterWith, arrayObjectPropertyValueToFilterWith, array) => {
+  // sample fn call: let objectFromArray = getArrayObjectWithObjectKeyValuePair("lastName", "Witting", clients);
+  let filterFn = item => item[arrayObjectPropertyKeyToFilterWith] === arrayObjectPropertyValueToFilterWith ;
+  let object = array.filter(filterFn)
+  return object;
+}
+
+
+
 
 export const getRandomDay = () => {
   /*
@@ -204,23 +222,10 @@ export const getRandomDay = () => {
   return randomDay
 }
  
-// export const getRandomDay2 = () => {
-//   /*
-//       winc-requirement: The practice is closed on the weekend.
-//       // status: I have updated fn getRandomDay, so now it complies with this requirement.
-//   */
-//   let randomDay = 6;
-//   while ([6, 7, 13, 14, 20, 21, 27, 28].includes(randomDay)){
-//     randomDay = Math.floor(Math.random() * 28) + 1;
-//     if (![6, 7, 13, 14, 20, 21, 27, 28].includes(randomDay)){
-//       if (randomDay < 10){
-//         randomDay = "0" + randomDay;
-//       }
-//       return randomDay.toString();
-//     } 
-//   }
-//   return randomDay
-// }
+
+
+
+
 
 
 export const getNrOfRandomElementsFromArray = (array, nrOfArrayElements = 8) => {
@@ -709,8 +714,6 @@ export const loadSelectboxWithListOf = (arrayObjectKey, array) => {
 
 
 
-
-
   export function updateAppointment_Phase2of2_updateAppointmentRecursivelyUntilUpdateSucceeds (
     clientId, 
     treatmentType,
@@ -727,7 +730,7 @@ export const loadSelectboxWithListOf = (arrayObjectKey, array) => {
     clientDayTimesFromReduxToolkit, 
     dentistDayTimesFromReduxToolkit, 
     assistantDayTimesFromReduxToolkit, 
-    toggleVisibilityOfComponentUpdateAppointment,  // this parameter is not in fn createAppointment!
+    hideComponentUpdateAppointmentReduxToolkit,  // this parameter is not in fn createAppointment!
     dispatch
     ) {
     log(`fn updateAppointment: start: `)
@@ -737,7 +740,7 @@ export const loadSelectboxWithListOf = (arrayObjectKey, array) => {
     const makeComponentUpdateAppointmentInvisible = () => {
       // log("inside fn toggleVisibilityOfComponentUpdateAppointment: ");
       // log(`isShowingComponentUpdateAppointment: ${isShowingComponentUpdateAppointment} `)
-      dispatch(toggleVisibilityOfComponentUpdateAppointment(false))
+      dispatch(hideComponentUpdateAppointmentReduxToolkit())
   }
     
     
@@ -998,9 +1001,12 @@ export const loadSelectboxWithListOf = (arrayObjectKey, array) => {
     // log(appointmentIndexInAppointmentsArray)
     // log(typeof((appointmentIndexInAppointmentsArray)))
 
-    let getAppointment = appointment => appointment.appointmentId === appointmentId
-    let appointmentThatIsAboutToBeDeleted = selectObjectsByArrayObjectKey(appointmentsfromReduxToolkit.appointments, getAppointment)
+    // 2 lines below also work, instead of using my fn getArrayObjectWithObjectKeyValuePair.
+    // let getAppointment = appointment => appointment.appointmentId === appointmentId
+    // let appointmentThatIsAboutToBeDeleted = selectObjectsByArrayObjectKey(appointmentsfromReduxToolkit.appointments, getAppointment)
     
+    let appointmentThatIsAboutToBeDeleted = getArrayObjectWithObjectKeyValuePair("appointmentId", appointmentId, appointmentsfromReduxToolkit.appointments)
+
     console.log('---appointmentThatWillBeDeleted:')
     log(appointmentsfromReduxToolkit.appointments)
     console.log(appointmentThatIsAboutToBeDeleted)

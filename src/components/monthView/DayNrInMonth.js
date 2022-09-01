@@ -9,7 +9,7 @@ export const DayNrInMonth = ({dayNrInMonth}) => {
 
   return(
   <div>
-      <span className="dayAsNumber">Day: {dayNrInMonth }  </span>    
+      <span className="dayAsNumber">Day: {dayNrInMonth }</span>     
   </div>
   );
 };

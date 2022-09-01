@@ -1,21 +1,46 @@
 import React from "react";
-import { useSelector } from "react-redux";
-import { selectObjectsByArrayObjectKey } from "../../utils";
+import {useDispatch, useSelector } from "react-redux";
+
+import {deleteAppointmentInReduxToolkit} from "../../redux/appointmentSlice";
+import {deleteDayTimeClient} from "../../redux/clientDayTimeSlice";
+import {deleteDayTimeDentist} from "../../redux/dentistDayTimeSlice";
+import {deleteDayTimeAssistant} from "../../redux/assistantDayTimeSlice";
+import {saveAppointmentToReduxToolkit, showComponentUpdateAppointmentReduxToolkit} from '../../redux/updateAppointmentSlice';
+
+import {deleteDentalAppointment, generateAppointmentId, selectObjectsByArrayObjectKey, updateAppointment_Phase1of2_DisplayComponentUpdateAppointment } from "../../utils";
+
+import {StyledButtonWithWordDelete} from '../styles/ButtonWithWordDelete';
+import {StyledButtonWithWordUpdate} from '../styles/ButtonWithWordUpdate';
 
 const log = console.log;
 
 const format_time = time => (time < 10 ? `${time}:00u` : `${time}:00u`);
 
 export const AppointmentInMonthDay = ({day, time, client, clientId, dentistId, assistantId }) => {
-  
+  let dispatch = useDispatch();
+  let {appointments}  = useSelector((state) => state.appointment);
+  let appointmentsfromReduxToolkit = useSelector((state) => state.appointment)
   let assistantsFromReduxToolkit  = useSelector((state) => state.assistant);
   let clientsFromReduxToolkit  = useSelector((state) => state.client);
   let dentistsFromReduxToolkit  = useSelector((state) => state.dentist);
   
+  let appointmentId = generateAppointmentId(clientId, day, time);
+  log(`comp AppointmentInMonthDay:`)
+  log(`appointmentId: ${appointmentId}`)
+
+  let getAppointmentObject = item => item.appointmentId === appointmentId ;
+  let appointment = selectObjectsByArrayObjectKey(appointments, getAppointmentObject);
+  appointment = appointment[0]
+  log(appointment)
+
   let assistantIsSick;
   let clientIsSick;
   let dentistIsSick;
   let colorToIndicateSickness;
+
+
+
+
   
   let getClient = client => client.clientId === clientId
   let clientFromreduxToolkit = selectObjectsByArrayObjectKey(clientsFromReduxToolkit.clients, getClient)
@@ -56,9 +81,39 @@ export const AppointmentInMonthDay = ({day, time, client, clientId, dentistId, a
       {/* <span className="dayAsNumber">day: {day} </span>     */}
       <span className="time">{format_time(time)}</span>
     </span>
+    <StyledButtonWithWordDelete 
+      onClick={() => { deleteDentalAppointment(
+                          appointmentId, 
+                          appointmentsfromReduxToolkit, 
+                          deleteAppointmentInReduxToolkit, 
+                          deleteDayTimeClient, 
+                          deleteDayTimeDentist, 
+                          deleteDayTimeAssistant,  
+                          dispatch
+                        );  
+                      }}>
+      delete appointment
+    </StyledButtonWithWordDelete> 
+    <StyledButtonWithWordUpdate
+      onClick={() => { updateAppointment_Phase1of2_DisplayComponentUpdateAppointment(
+                          appointment,
+                          appointmentId, 
+                          showComponentUpdateAppointmentReduxToolkit, 
+                          appointmentsfromReduxToolkit, 
+                          deleteAppointmentInReduxToolkit, 
+                          saveAppointmentToReduxToolkit,
+                          deleteDayTimeClient, 
+                          deleteDayTimeDentist, 
+                          deleteDayTimeAssistant,  
+                          dispatch
+                        );  
+                      }}>
+      update appointment
+    </StyledButtonWithWordUpdate>
     <span className="client"> client: {client} </span>
     <span className="dentist">dentist: {dentistId}</span> 
     <span className="assistant">assistant: {assistantId}</span> 
+    <br></br>
   </div>
   );
 };

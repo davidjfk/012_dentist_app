@@ -1,6 +1,5 @@
 import React from "react";
-import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {deleteAppointmentInReduxToolkit} from "../../redux/appointmentSlice";
 import {deleteDayTimeClient} from "../../redux/clientDayTimeSlice";
 import {deleteDayTimeDentist} from "../../redux/dentistDayTimeSlice";
@@ -11,6 +10,7 @@ import {deleteDentalAppointment, selectObjectsByArrayObjectKey, updateAppointmen
 
 import {StyledButtonWithWordDelete} from '../styles/ButtonWithWordDelete';
 import {StyledButtonWithWordUpdate} from '../styles/ButtonWithWordUpdate';
+
 const log = console.log;
 
 const format_time = time => (time < 10 ? `${time}:00u` : `${time}:00u`);
@@ -22,7 +22,10 @@ export const AppointmentInDay = ({appointmentId, time, day, client, clientId, de
   let dispatch = useDispatch();
   log(`comp AppointmentInDay: start`)
   let {appointments}  = useSelector((state) => state.appointment);
+  log(`appointments:`)
+  log(appointments)
   let appointmentsfromReduxToolkit = useSelector((state) => state.appointment)
+  log(appointmentsfromReduxToolkit.appointments)
   let assistantsFromReduxToolkit  = useSelector((state) => state.assistant);
   let clientsFromReduxToolkit  = useSelector((state) => state.client);
   let dentistsFromReduxToolkit  = useSelector((state) => state.dentist);

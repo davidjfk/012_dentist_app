@@ -1,5 +1,4 @@
 import React from 'react';
-import { useState} from 'react';
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import {deleteAppointmentInReduxToolkit} from "../../redux/appointmentSlice";
@@ -24,42 +23,6 @@ const AppointmentInAppointmentList = ({appointments, item}) => {
   let appointmentsfromReduxToolkit = useSelector((state) => state.appointment)
   
   let appointmentLastUpdatedOnDateTime = (item.appointmentLastUpdatedOnDateTime === null) ? "Not happened yet." : item.appointmentLastUpdatedOnDateTime ;
-  
-  
-
-
-
-  // const updateAppointment_Phase1of2_DisplayComponentUpdateAppointment = (
-  //   appointment,
-  //   appointmentId, 
-  //   appointmentsfromReduxToolkit, 
-  //   deleteAppointmentInReduxToolkit, 
-  //   deleteDayTimeClient, 
-  //   deleteDayTimeDentist, 
-  //   deleteDayTimeAssistant, 
-  //   dispatch
-  // ) => {
-  //   const saveDataFromAppointmentToReduxToolkitBeforeAppointmentIsDeleted = (item) => {
-  //     log(`inside fn saveDataFromAppointmentToReduxToolkitBeforeAppointmentIsDeleted: `)
-  //     log(item);
-  //     dispatch(saveAppointmentToReduxToolkit(item));
-  //   }
-  //   saveDataFromAppointmentToReduxToolkitBeforeAppointmentIsDeleted(appointment);
-                      
-  //   deleteDentalAppointment(
-  //     appointmentId, 
-  //     appointmentsfromReduxToolkit, 
-  //     deleteAppointmentInReduxToolkit, 
-  //     deleteDayTimeClient, 
-  //     deleteDayTimeDentist, 
-  //     deleteDayTimeAssistant, 
-  //     dispatch
-  //   );
-  //   const toggleTheVisibilityOfComponentUpdateAppointment = () => {
-  //     dispatch(showComponentUpdateAppointment())
-  //   }
-  //   toggleTheVisibilityOfComponentUpdateAppointment();
-  // }
 
   return (
     <Row>
@@ -116,20 +79,7 @@ const AppointmentInAppointmentList = ({appointments, item}) => {
                         deleteDayTimeAssistant, 
                         dispatch
                       )
-                      // saveDataFromAppointmentToReduxToolkitBeforeAppointmentIsDeleted(item);
-                      
-                      // deleteDentalAppointment(
-                      //   item.appointmentId, 
-                      //   appointmentsfromReduxToolkit, 
-                      //   deleteAppointmentInReduxToolkit, 
-                      //   deleteDayTimeClient, 
-                      //   deleteDayTimeDentist, 
-                      //   deleteDayTimeAssistant, 
-                      //   dispatch
-                      // );
-                      // toggleTheVisibilityOfComponentUpdateAppointment();
                     }} 
-
                   />
                 </StyledFaTimes>
               </StyledButtonAroundSymbol>
