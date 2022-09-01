@@ -1,4 +1,6 @@
 import React from "react";
+import { useSelector } from "react-redux"; 
+import AppointmentUpdate from '../appointment/AppointmentUpdate';
 import {DayInMonth} from "./DayInMonth";
 import "./Calendar.css";
 
@@ -19,6 +21,7 @@ const divideByDay = appointments => {
 };
 
 export const Calendar = ( {appointments} ) => {
+  const { isNowUpdatingAppointment } = useSelector((state) => state.updateAppointment);
   // log(appointments)
 
   const appointmentsByDay = divideByDay(appointments);
@@ -126,31 +129,58 @@ let daysInMonthJSXSortedWithoutDayNr = daysInMonthJSXSorted.map(element => eleme
   ));
 
 
-
-
   // you are mapping all days of the month.
   return (
     <>
-      <ul className="calendarview colorLegenda">
-        <li className="orange">orange = assistant is ill</li>  
-        <li className="purple">purple = client is ill</li>  
-        <li className="red">red = dentist is ill</li>  
-      </ul>
-      <div className="calendarview">
-        <div className="header">
-          <div>Monday</div>
-          <div>Tuesday</div>
-          <div>Wednesday</div>
-          <div>Thursday</div>
-          <div>Friday</div>
-        </div>
-        { daysInMonthJSX.length !== 0 ? <div className="table" >{daysInMonthJSX}</div> : <>No appointments upcoming month.</>}
-        {/* <div className="table">{daysInMonthJSX}</div> */}
-        {/* <div>{appointmentsInDay[0]}</div> */}
-      </div>
+        {isNowUpdatingAppointment ? 
+        <>
+          <AppointmentUpdate/>
+          <ul className="calendarview colorLegenda">
+            <li className="orange">orange = assistant is ill</li>  
+            <li className="purple">purple = client is ill</li>  
+            <li className="red">red = dentist is ill</li>  
+          </ul>
+          <div className="calendarview">
+            <div className="header">
+              <div>Monday</div>
+              <div>Tuesday</div>
+              <div>Wednesday</div>
+              <div>Thursday</div>
+              <div>Friday</div>
+            </div>
+            { daysInMonthJSX.length !== 0 ? <div className="table" >{daysInMonthJSX}</div> : <>No appointments upcoming month.</>}
+            {/* <div className="table">{daysInMonthJSX}</div> */}
+            {/* <div>{appointmentsInDay[0]}</div> */}
+          </div>
+        </>
+
+      
+        :
+        <>
+
+          <ul className="calendarview colorLegenda">
+            <li className="orange">orange = assistant is ill</li>  
+            <li className="purple">purple = client is ill</li>  
+            <li className="red">red = dentist is ill</li>  
+          </ul>
+          <div className="calendarview">
+            <div className="header">
+              <div>Monday</div>
+              <div>Tuesday</div>
+              <div>Wednesday</div>
+              <div>Thursday</div>
+              <div>Friday</div>
+            </div>
+            { daysInMonthJSX.length !== 0 ? <div className="table" >{daysInMonthJSX}</div> : <>No appointments upcoming month.</>}
+            {/* <div className="table">{daysInMonthJSX}</div> */}
+            {/* <div>{appointmentsInDay[0]}</div> */}
+          </div>
+            
+        </>
+        } 
+        
     </>
-  );
 
 
-
+  )
 };
