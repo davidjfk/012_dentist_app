@@ -34,7 +34,7 @@ const ClientInClientList = ({clients, item}) => {
   let appointmentLastUpdatedOnDateTime = (item.appointmentsDeletedOnDateTime === "null") ? "Not happened yet." : item.appointmentsDeletedOnDateTime ;
 
   // let clientsfromReduxToolkit = useSelector((state) => state.client)
-  let appointmentsfromReduxToolkit = useSelector((state) => state.appointment)
+  let appointmentsfromReduxToolkit = useSelector((state) => state.appointment.appointments)
 
 
  

@@ -2,7 +2,9 @@ import React from "react";
 import "./Day.css";
 import {AppointmentInDay} from "./AppointmentInDay";
 
-const log = console.log;
+import {log} from "../../utils";
+import {DayStyled } from "./DayView.styled";
+// import "./Day.css"; 
 
 export const Day = ({appointments} ) => {
   const appointmentsJSX = appointments
@@ -25,7 +27,9 @@ export const Day = ({appointments} ) => {
       )
     );
   return (
-    <ul className="dayview">{appointmentsJSX}</ul>
+    <DayStyled>
+      {appointmentsJSX}
+    </DayStyled>
     );
 }; 
  

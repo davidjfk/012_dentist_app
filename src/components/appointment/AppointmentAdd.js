@@ -7,11 +7,13 @@ import appointmentPriorityLevelsInSelectbox from '../../dataInDentistAppWhenDent
 import listOfValidWorkingDayNumbersInNextMonth from '../../dataInDentistAppWhenDentistAppStarts/listOfValidWorkingDayNumbersInNextMonth';
 import listOfValidWorkingHours from '../../dataInDentistAppWhenDentistAppStarts/listOfValidWorkingHours';
 
+
+import {createAppointment, generateAppointmentId, loadSelectboxWithListOf, selectObjectsByArrayObjectKey, sortArrayWithObjects} from '../../utils';
+
 import {Container} from '../styles/Container.styled';
-import {ClientAddStyled, Column, Form, Intro} from './ClientAdd.styled';
+import {AppointmentAddStyled, Column, Form, Intro} from './AppointmentAdd.styled';
 import {StyledButtonAroundText} from '../styles/ButtonAroundText.styled';
 import {StyledSelectbox} from '../styles/Selectbox.styled';
-import {createAppointment, generateAppointmentId, loadSelectboxWithListOf, selectObjectsByArrayObjectKey, sortArrayWithObjects} from '../../utils';
 
 const log = console.log;
 
@@ -77,51 +79,7 @@ const AddAppointment = () => {
             return
         } 
 
-
-        // skip this part until (...)
-        let UIMade="UIMade_temp_remove_this_after_the_test";
-        const appointmentId = generateAppointmentId(clientId, day, time);
-
-        let getClient = client => client.clientId === clientId
-        let clientForWhomAnAppointmentIsBeingMade = selectObjectsByArrayObjectKey(clients, getClient)
-        // variable client inside obj appointment is derived data from  the object client.
-        let client = (`${(clientForWhomAnAppointmentIsBeingMade[0].firstName)} ${(clientForWhomAnAppointmentIsBeingMade[0].lastName)}`)
-
-        let getDentist = dentist => dentist.dentistId === dentistId
-        let dentistForWhomAnAppointmentIsBeingMade = selectObjectsByArrayObjectKey(dentists, getDentist)
-        // variable dentist inside obj appointment is derived data from  the object dentist.
-        let dentist = (`${(dentistForWhomAnAppointmentIsBeingMade[0].firstName)} ${(dentistForWhomAnAppointmentIsBeingMade[0].lastName)}`)
-
-        
-        if (assistantId !== "") {
-        let getAssistant = assistant => assistant.assistantId === assistantId
-        let assistantForWhomAnAppointmentIsBeingMade = selectObjectsByArrayObjectKey(assistants, getAssistant)
-        // variable assistant inside obj appointment is derived data from  the object assistant.
-        let assistant = (`${(assistantForWhomAnAppointmentIsBeingMade[0].firstName)} ${(assistantForWhomAnAppointmentIsBeingMade[0].lastName)}`)
-        }
-        /*
-           (...) skip until here. Reason: instead of doing a dispatch, call fn createAppointment. This fn validates the business rules. Then as its final step it will do a dispatch. This dispatch looks exactly like the 
-           dispatch below.
-        */
-
-        // dispatch(addAppointment({
-        //     UIMade, 
-        //     appointmentId, 
-        //     appointmentLastUpdatedOnDateTime, 
-        //     appointmentPriority, 
-        //     assistant, 
-        //     assistantId, 
-        //     client, 
-        //     clientId, 
-        //     day, 
-        //     dentist, 
-        //     dentistId, 
-        //     isNowUpdatingAppointment, 
-        //     time, 
-        //     treatmentType 
-        // }));   
-        
-        let isNowUpdatingAppointment = false;
+    
         let appointmentLastUpdatedOnDateTime = null;
 
         createAppointment (
@@ -132,8 +90,7 @@ const AddAppointment = () => {
             time, 
             dentistId, 
             assistantId, 
-            appointmentLastUpdatedOnDateTime,  
-            isNowUpdatingAppointment,       
+            appointmentLastUpdatedOnDateTime,        
             clientsFromReduxToolkit, 
             dentistsFromReduxToolkit, 
             assistantsFromReduxToolkit, 
@@ -155,7 +112,7 @@ const AddAppointment = () => {
 
   return (
     <Container> 
-        <ClientAddStyled>
+        <AppointmentAddStyled>
             <Intro>Add Appointment</Intro>
             <Form>
                 <Column>
@@ -262,11 +219,11 @@ const AddAppointment = () => {
                 </Column>
                 <Column>
                     <StyledButtonAroundText onClick={onSubmit}>
-                        Add appointment 
+                        Add appointment
                     </StyledButtonAroundText>                  
                 </Column>
             </Form>
-        </ClientAddStyled>  
+        </AppointmentAddStyled>  
     </Container>
   )
 }

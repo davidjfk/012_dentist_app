@@ -32,25 +32,21 @@ const AssistantList = () => {
         let personObjectKey = JsxSelectBoxAttributeValueAsArray[0];
         let isAscending = JsxSelectBoxAttributeValueAsArray[1] === "ascending" ? true : false;
 
-        const assistantObject = {
-            assistantId: 'assistantId',
-            lastName: 'lastName',
-            firstName: 'firstName',
-            phone: 'phone',
-            email: 'email',
-            isSick: 'isSick',
-            skillLevel: 'skillLevel'
+        const assistantObjectSortCriteriaToSortInUISelectBox = {
+            assistantId: 'assistantId', 
+            firstName: 'firstName', 
+            isSick: 'isSick', 
+            skillLevel: 'skillLevel' 
         };
 
-        const sortProperty = assistantObject[personObjectKey];  
+        const sortProperty = assistantObjectSortCriteriaToSortInUISelectBox[personObjectKey];  
         let sortedPersons;
         if (!isAscending && (sortProperty === "skillLevel" || sortProperty === ""))  {
-            sortedPersons = [...assistants].sort((person1, person2) => person2[sortProperty] - person1[sortProperty]);
-            return sortedPersons;
-            // numbers sort descending by default, so the !isAscending causes the skillLevel to display in an ascending fashion. 
-        } else if (isAscending && (sortProperty === "skillLevel" || sortProperty === ""))  {
-            sortedPersons = [...assistants].sort((person1, person2) => person2[sortProperty] - person1[sortProperty]);
+            sortedPersons = [...assistants].sort((person1, person2) => person1[sortProperty].localeCompare(person2[sortProperty], 'en', { ignorePunctuation: true }));
             return sortedPersons.reverse();
+        } else if (isAscending && (sortProperty === "skillLevel" || sortProperty === ""))  {
+            sortedPersons = [...assistants].sort((person1, person2) => person1[sortProperty].localeCompare(person2[sortProperty], 'en', { ignorePunctuation: true }));
+            return sortedPersons;
         } else if (isAscending && (sortProperty === "assistantId" || sortProperty === "firstName" || sortProperty === "isSick")) {
             sortedPersons = [...assistants].sort((person1, person2) => person1[sortProperty].localeCompare(person2[sortProperty], 'en', { ignorePunctuation: true }));
             return sortedPersons;
@@ -160,8 +156,8 @@ const AssistantList = () => {
                         <option value="firstName descending" >first name z-a</option>
                         <option value="isSick ascending" >health status a-z</option>
                         <option value="isSick descending" >health status z-a</option>
-                        <option value="skillLevel ascending" >skill level 1-5</option>
-                        <option value="skillLevel descending" >skill level 5-1</option>
+                        <option value="skillLevel ascending" >skill level 1-7</option>
+                        <option value="skillLevel descending" >skill level 7-1</option>
                     </StyledSelectbox>
                 </Section1>
                 <Section2>

@@ -9,10 +9,11 @@ import {saveAppointmentToReduxToolkit, showComponentUpdateAppointmentReduxToolki
 
 import {deleteDentalAppointment, updateAppointment_Phase1of2_DisplayComponentUpdateAppointment} from '../../utils';
 
-import {Row, Column} from './ClientList.styled'
-import { ClientInClientListStyled } from './ClientInList.styled';
+import {Row, Column} from './AppointmentList.styled'
+import { AppointmentInAppointmentListStyled } from './AppointmentInAppointmentList.styled';
 import { StyledFaTimes } from '../styles/FaTimes.styled'
-import { FaTimes } from 'react-icons/fa'
+import { FaTimes } from 'react-icons/fa';
+import { GrUpdate } from "react-icons/gr";
 import {StyledButtonAroundSymbol} from '../styles/ButtonAroundSymbol.styled';
 import "../../App.css";
 
@@ -20,52 +21,52 @@ const log = console.log;
 
 const AppointmentInAppointmentList = ({appointments, item}) => {
   let dispatch = useDispatch();
-  let appointmentsfromReduxToolkit = useSelector((state) => state.appointment)
+  let appointmentsfromReduxToolkit = useSelector((state) => state.appointment.appointments)
   
   let appointmentLastUpdatedOnDateTime = (item.appointmentLastUpdatedOnDateTime === null) ? "Not happened yet." : item.appointmentLastUpdatedOnDateTime ;
 
   return (
     <Row>
         <Column>
-          <ClientInClientListStyled>
+          <AppointmentInAppointmentListStyled>
             {appointments.indexOf(item) + 1 }
-          </ClientInClientListStyled>
+          </AppointmentInAppointmentListStyled>
         </Column>
         <Column>
-          <ClientInClientListStyled>
+          <AppointmentInAppointmentListStyled>
             {item.appointmentId}
-          </ClientInClientListStyled>
+          </AppointmentInAppointmentListStyled>
         </Column>
         <Column>
-          <ClientInClientListStyled>
+          <AppointmentInAppointmentListStyled>
             {item.dentistId}
-          </ClientInClientListStyled>
+          </AppointmentInAppointmentListStyled>
         </Column>
         <Column>
-          <ClientInClientListStyled>
+          <AppointmentInAppointmentListStyled>
             {item.assistantId}
-          </ClientInClientListStyled>
+          </AppointmentInAppointmentListStyled>
         </Column>
         <Column>
-          <ClientInClientListStyled>
+          <AppointmentInAppointmentListStyled>
             {item.appointmentPriority}
-          </ClientInClientListStyled>
+          </AppointmentInAppointmentListStyled>
         </Column>
         <Column>
-          <ClientInClientListStyled>
+          <AppointmentInAppointmentListStyled>
             {item.treatmentType}
-          </ClientInClientListStyled>
+          </AppointmentInAppointmentListStyled>
         </Column>
         <Column>
-          <ClientInClientListStyled>
+          <AppointmentInAppointmentListStyled>
             {appointmentLastUpdatedOnDateTime}
-          </ClientInClientListStyled>
+          </AppointmentInAppointmentListStyled>
         </Column>
         <Column>
-          <ClientInClientListStyled>
+          <AppointmentInAppointmentListStyled>
               <StyledButtonAroundSymbol>
                 <StyledFaTimes>
-                  <FaTimes 
+                  <GrUpdate 
                     onClick={() => {
                       updateAppointment_Phase1of2_DisplayComponentUpdateAppointment(
                         item,
@@ -83,10 +84,10 @@ const AppointmentInAppointmentList = ({appointments, item}) => {
                   />
                 </StyledFaTimes>
               </StyledButtonAroundSymbol>
-            </ClientInClientListStyled>
+            </AppointmentInAppointmentListStyled>
         </Column>
         <Column>
-          <ClientInClientListStyled>
+          <AppointmentInAppointmentListStyled>
               <StyledButtonAroundSymbol>
                 <StyledFaTimes>
                   <FaTimes 
@@ -104,7 +105,7 @@ const AppointmentInAppointmentList = ({appointments, item}) => {
                     />                
                 </StyledFaTimes>
               </StyledButtonAroundSymbol>
-            </ClientInClientListStyled>
+            </AppointmentInAppointmentListStyled>
         </Column>
     </Row>
   )

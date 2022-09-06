@@ -1,10 +1,8 @@
 import React from "react";
-// import { useState } from "react";
 import { useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import "./App.css";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
 import clientsDentistCompanyBVT from "./dataInDentistAppWhenDentistAppStarts/clients"
 import dentistsDentistCompanyBVT from "./dataInDentistAppWhenDentistAppStarts/dentists"
@@ -23,45 +21,34 @@ import {addAppointment } from "./redux/appointmentSlice";
 import {addDentalTreatmentsArrayFromExternalSource} from "./redux/dentalTreatments";
 // import {addDentalTreatmentsAsSkillSetToDentist} from  "./redux/dentistSlice"
 
-import {createCombiOfPersonAndDayAndTime, generateAppointmentId, getNrOfRandomElementsFromArray, getRandomPersonId, getRandomDay, getRandomPersons, getRandomUniqueObjectsFromArray, getRandomTime, selectObjectsByArrayObjectKey } from './utils';
+import { generateAppointmentId, getNrOfRandomElementsFromArray, getRandomPersonId, getRandomDay, getRandomPersons, getRandomUniqueObjectsFromArray, getRandomTime, selectObjectsByArrayObjectKey } from './utils';
 
-
-import {UseEffectHookCalls} from "./UseEffectHookCalls";
-import Appointment from "./components/appointment/Appointment";
-import Assistant from "./components/assistant/Assistant";
-import Client from "./components/client/Client";
-import Dentist from "./components/dentist/Dentist";
-import {Calendar} from "./components/monthView/Calendar";
-import {SelectDayNrToDisplay} from "./components/dayView/SelectDayNrToDisplay";
-import {getRandomTreatmentForRandomAppointment, getRandomTreatmentTypes} from "./utils";
-import InitalDataSetup from "./Initial_Data_Setup";
+import {createCombiOfPersonAndDayAndTime, getRandomTreatmentForRandomAppointment, getRandomTreatmentTypes} from "./utils";
 
 const log = console.log;
 
 
 const Create150Appointments = () => {
-   
+    const CONFIGCHANCETHATAPPOINTMENTNEEDSASSISTANT = 0.5;  
+    /*  value between 0 (included) and 1 (included). 
+        The bigger the nr, the bigger the chance that the automatically generated appointment requires the precence of an assistant.
+    */
+    const CONFIGNROFASSISTANTS = 4; 
+    const CONFIGNROFRANDOMLYGENERATEDAPPOINTMENTS = 150;
+    const CONFIGNROFCLIENTS = 5;
+    const CONFIGNROFDENTISTS = 4; 
+    const CONFIGNROFDIFFERENTTREATMENTSASTHESKILLSOFADENTIST = 7;
+
     const dispatch = useDispatch();
     // helper variables (only accessible inside the useEffect hook below)
     let randomClients;
     let randomDentists;
     let randomAssistants;
     let dentistsWithTreatmentTypesRef = useRef([]); // see comment below for explanation. 
-
-    let chanceThatAppointmentNeedsAsssistant = 1;  
-    /*  value between 0 (included) and 1 (included). 
-        The bigger the nr, the bigger the chance that the automatically generated appointment requires the precence of an assistant.
-    */
-    let nrOfAssistants = 4; 
-    let nrOfRandomGeneratedAppointments = 10;
-    let nrOfClients = 50;
-    let nrOfDentists = 4; 
-    let nrOfDifferentTreatmentsAsTheSkillsOfADentist = 11;
-
     useEffect(() => {
-        randomClients = getRandomUniqueObjectsFromArray(clientsDentistCompanyBVT, nrOfClients);
+        randomClients = getRandomUniqueObjectsFromArray(clientsDentistCompanyBVT, CONFIGNROFCLIENTS);
         dispatch(addClients(randomClients));
-        randomDentists = getRandomUniqueObjectsFromArray(dentistsDentistCompanyBVT, nrOfDentists);
+        randomDentists = getRandomUniqueObjectsFromArray(dentistsDentistCompanyBVT, CONFIGNROFDENTISTS);
         /*
           problem 1: "no time to go up-and-down to redux-toolkit"
           while this useEffect hook runs (with [] as a dependency) while the application starts, (e.g.) the array with dentists cannot be dispatched into redux-toolkit and obtained from redux-toolkit, so next, a set of treatmentTypes can be connected to each dentist in the array. Reason: the useEffect hook runs during the first render, but the "dispatching-and-getting" from redux-toolkit runs during the same first render in parallel as well (and possibly takes a few more renders to complete). So the data to-and-from redux-toolkit is not available quickly enough to be of use inside this useEffect-hook.
@@ -75,17 +62,17 @@ const Create150Appointments = () => {
         */
         dentistsWithTreatmentTypesRef.current.push(randomDentists);
 
-        const addSkillsToAutomaticallyCreatedDentists = (dentistsWithTreatmentTypesRef, nrOfDentists) => {
-          for (let i = 0; i < nrOfDentists; i++) {
-            let skillSetOfDentist = getRandomTreatmentTypes(dentalSkillsToAddToNewDentistToAutomaticallyCreateDentists, nrOfDifferentTreatmentsAsTheSkillsOfADentist);
+        const addSkillsToAutomaticallyCreatedDentists = (dentistsWithTreatmentTypesRef, CONFIGNROFDENTISTS) => {
+          for (let i = 0; i < CONFIGNROFDENTISTS; i++) {
+            let skillSetOfDentist = getRandomTreatmentTypes(dentalSkillsToAddToNewDentistToAutomaticallyCreateDentists, CONFIGNROFDIFFERENTTREATMENTSASTHESKILLSOFADENTIST);
             dentistsWithTreatmentTypesRef.current[0][i].treatmentTypes = skillSetOfDentist;
           }
         }
-        addSkillsToAutomaticallyCreatedDentists(dentistsWithTreatmentTypesRef, nrOfDentists);
+        addSkillsToAutomaticallyCreatedDentists(dentistsWithTreatmentTypesRef, CONFIGNROFDENTISTS);
         dispatch(addDentists(dentistsWithTreatmentTypesRef.current[0]));
     
 
-        randomAssistants = getRandomUniqueObjectsFromArray(assistantsDentistCompanyBVT, nrOfAssistants); 
+        randomAssistants = getRandomUniqueObjectsFromArray(assistantsDentistCompanyBVT, CONFIGNROFASSISTANTS); 
         dispatch(addAssistants(randomAssistants));
 
         dispatch(addDentalTreatmentsArrayFromExternalSource(dentalSkillsToAddToNewDentistToAutomaticallyCreateDentists));
@@ -147,10 +134,9 @@ const Create150Appointments = () => {
 
         let isAssistantNeededForAppointment = false;
         let randomNrThatDecidesIfAssistantMustBePresentAtAppointment = Math.random();
-        if (randomNrThatDecidesIfAssistantMustBePresentAtAppointment < chanceThatAppointmentNeedsAsssistant){    
+        if (randomNrThatDecidesIfAssistantMustBePresentAtAppointment < CONFIGCHANCETHATAPPOINTMENTNEEDSASSISTANT){    
             isAssistantNeededForAppointment = true;
             assistantId = getRandomPersonId(randomAssistants, 'assistantId');
-            // console.log(assistantId);
         } 
         
         if (isAssistantNeededForAppointment) {
@@ -207,7 +193,6 @@ const Create150Appointments = () => {
                   day, 
                   dentist, 
                   dentistId, 
-                  isNowUpdatingAppointment:false,
                   time, 
                   treatmentType
                 }; 
@@ -260,7 +245,6 @@ const Create150Appointments = () => {
                 day, 
                 dentist, 
                 dentistId, 
-                isNowUpdatingAppointment:false,
                 time, 
                 treatmentType
               };
@@ -279,7 +263,7 @@ const Create150Appointments = () => {
                       .fill(0) 
                       .map(_ => generateRandomAppointment());
                 }
-                generateRandomAppointments(nrOfRandomGeneratedAppointments)
+                generateRandomAppointments(CONFIGNROFRANDOMLYGENERATEDAPPOINTMENTS)
   
             } , [] 
         );

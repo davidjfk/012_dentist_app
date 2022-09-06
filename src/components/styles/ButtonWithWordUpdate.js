@@ -20,7 +20,8 @@ export const StyledButtonWithWordUpdate = styled.button`
   &:hover {
     opacity: 0.9;
     transform: scale(0.97);
-    background-color: ${({ theme}) => theme.colors.onHoverBackgroundColorUpdate };
+    background: ${({ theme}) => theme.colors.onHoverBackground01 };
+    color: white;
     font-weight: 700;
     border-style: dotted;
   }

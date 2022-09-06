@@ -60,7 +60,8 @@ const AddDentist = () => {
         const dentistId = `${lastName}-${generateRandomPersonId()}`;
 
         let treatmentTypes = skillsOfDentist;
-        dispatch(addDentist({dentistId, email, isSick, firstName, lastName, phone,  skillLevel, treatmentTypes }));   
+        let appointmentsDeletedOnDateTime = "null";
+        dispatch(addDentist({dentistId, email, isSick, firstName, lastName, phone,  skillLevel, treatmentTypes, appointmentsDeletedOnDateTime}));   
         
         // now reset the form for the next use:
         // setLastName('')

@@ -19,8 +19,8 @@ export const dentistListSlice = createSlice({
     // use_case_05_add_dentist
     addDentist: (state, action) => {
       // const dentistToSave = action.payload;
-      const {dentistId, lastName, firstName, phone, email, treatmentTypes, isSick, skillLevel} = action.payload
-      const dentistToSave = {dentistId, email, firstName, isSick, lastName, phone, skillLevel, treatmentTypes};      
+      const {dentistId, lastName, firstName, phone, email, treatmentTypes, isSick, skillLevel, appointmentsDeletedOnDateTime} = action.payload
+      const dentistToSave = {dentistId, email, firstName, isSick, lastName, phone, skillLevel, treatmentTypes, appointmentsDeletedOnDateTime};      
       state.dentists.push(dentistToSave);
     },
     // use_case_00_create_mock_data
@@ -70,7 +70,7 @@ export const dentistListSlice = createSlice({
       log(state.dentists[indexOfDentist].isSick = (action.payload.isSick))
     }}
 })
-export const {addDentalTreatmentsAsSkillSetToDentist, addDentist, addDentists, deleteDentist, setDateAndTimeOfDeletionOfAppointmentsOfDentistInReduxToolkit, setDentistToSick, toggleHealthStatusOfDentist } = dentistListSlice.actions;
+export const { addDentist, addDentists, deleteDentist, setDateAndTimeOfDeletionOfAppointmentsOfDentistInReduxToolkit, setDentistToSick, toggleHealthStatusOfDentist } = dentistListSlice.actions;
 
 export default dentistListSlice.reducer;    
 

@@ -31,7 +31,7 @@ export const updateAppointmentSlice = createSlice({
       state.isNowUpdatingAppointment = true;
     },
     // use_case_12_bonus_working_form_and_buttons_for_all_operations
-    xxxtoggleVisibilityOfComponentUpdateAppointment: (state, action) => {
+    toggleVisibilityOfComponentUpdateAppointment: (state, action) => {
       state.isNowUpdatingAppointment = action.payload;
     }}
 })

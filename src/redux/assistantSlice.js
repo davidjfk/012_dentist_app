@@ -10,8 +10,8 @@ export const assistantListSlice = createSlice({
     // use_case_10_add_assistant (as direct fn call without UI)
     addAssistant: (state, action) => {
       // const assistantToSave = action.payload;
-      const {assistantId, lastName, firstName, phone, email, isSick, skillLevel} = action.payload
-      const assistantToSave = {assistantId, email, firstName, isSick, lastName,  phone, skillLevel};
+      const {assistantId, lastName, firstName, phone, email, isSick, skillLevel, appointmentsDeletedOnDateTime} = action.payload
+      const assistantToSave = {assistantId, email, firstName, isSick, lastName,  phone, skillLevel, appointmentsDeletedOnDateTime};
       state.assistants.push(assistantToSave);
     },
     // use_case_00_create_mock_data

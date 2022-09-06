@@ -8,6 +8,6 @@ export const StyledInputfield = styled.input`
     color: black;
   }
   &:hover {
-    background-color: ${({ theme}) => theme.colors.onHoverBackground };
+    background-color: ${({ theme}) => theme.colors.onHoverBackground02 };
   }
 `

@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 import Create150Appointments from "./Create150Appointments";
-import {UseEffectHookCalls} from "./UseEffectHookCalls";
+// import {UseEffectHookCalls} from "./components/obsolete_fnCalls_winc_operations_witout_UI/UseEffectHookCalls";
 import Appointment from "./components/appointment/Appointment";
 import Assistant from "./components/assistant/Assistant";
 import Client from "./components/client/Client";
@@ -11,21 +11,20 @@ import Dentist from "./components/dentist/Dentist";
 import {Calendar} from "./components/monthView/Calendar";
 import {SelectDayNrToDisplay} from "./components/dayView/SelectDayNrToDisplay";
 
-import "./App.css";
+import {log} from './utils';
 
-const log = console.log;
+// import "./App.css";
+import {NavigationStyled} from "./Navigation.styled";
+
 
 const App = ()  => {
-
   let appointmentsfromReduxToolkit = useSelector((state) => state.appointment)
-  // log(`component App: start:  nr of auto-generated appointments in redux-toolkit: ${appointmentsfromReduxToolkit.appointments.length}`)
-  // log()
   return(
     <>
       <Create150Appointments/>
       <Router>
-        <div>
-          <nav>
+        <NavigationStyled>
+          <nav className="navBar">
             <ul>  
               <li>
                 <Link to="/">Calendar view</Link>
@@ -45,9 +44,6 @@ const App = ()  => {
               <li>
                 <Link to="/dentist">Dentist</Link>
               </li>
-              <li>
-                <Link to="/useEffectHookCalls">useEffect-hook-calls</Link>
-              </li>
             </ul>
           </nav>
           <main>
@@ -65,19 +61,14 @@ const App = ()  => {
                 <Appointment  />
               </Route>
               <Route path="/day">
-                {/* <Day appointments={appointmentsfromReduxToolkit.appointments.filter(app => app.day === "03")} /> */}
-                {/* <Day appointments={appointmentsfromReduxToolkit.appointments} /> */}
                 <SelectDayNrToDisplay appointments={appointmentsfromReduxToolkit.appointments} />
-              </Route>
-              <Route path="/useEffectHookCalls">
-                <UseEffectHookCalls />
               </Route>
               <Route path="/">
                 <Calendar appointments={appointmentsfromReduxToolkit.appointments}  />
               </Route>
             </Switch>
           </main>
-        </div>
+        </NavigationStyled>
       </Router>
   </>
  );

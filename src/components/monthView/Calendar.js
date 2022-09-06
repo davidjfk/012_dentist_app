@@ -2,7 +2,9 @@ import React from "react";
 import { useSelector } from "react-redux"; 
 import AppointmentUpdate from '../appointment/AppointmentUpdate';
 import {DayInMonth} from "./DayInMonth";
-import "./Calendar.css";
+
+import {CalendarMonthStyled, ColorLegendaStyled, HeaderInMonthStyled, MonthViewStyled, OrangeStyled, PurpleStyled, RedStyled,  TableInMonthStyled} from './MonthView.styled';
+// import "./Calendar.css";
 
 const log = console.log;
 
@@ -133,54 +135,50 @@ let daysInMonthJSXSortedWithoutDayNr = daysInMonthJSXSorted.map(element => eleme
   return (
     <>
         {isNowUpdatingAppointment ? 
+
         <>
           <AppointmentUpdate/>
-          <ul className="calendarview colorLegenda">
-            <li className="orange">orange = assistant is ill</li>  
-            <li className="purple">purple = client is ill</li>  
-            <li className="red">red = dentist is ill</li>  
-          </ul>
-          <div className="calendarview">
-            <div className="header">
+          <ColorLegendaStyled>
+            <OrangeStyled>orange = assistant is ill</OrangeStyled>  
+            <PurpleStyled className="purple">purple = client is ill</PurpleStyled>  
+            <RedStyled className="red">red = dentist is ill</RedStyled>  
+          </ColorLegendaStyled>
+          <MonthViewStyled>
+            <HeaderInMonthStyled>
               <div>Monday</div>
               <div>Tuesday</div>
               <div>Wednesday</div>
               <div>Thursday</div>
               <div>Friday</div>
-            </div>
-            { daysInMonthJSX.length !== 0 ? <div className="table" >{daysInMonthJSX}</div> : <>No appointments upcoming month.</>}
+            </HeaderInMonthStyled>
+            { daysInMonthJSX.length !== 0 ? <TableInMonthStyled>{daysInMonthJSX}</TableInMonthStyled> : <>No appointments upcoming month.</>}
             {/* <div className="table">{daysInMonthJSX}</div> */}
             {/* <div>{appointmentsInDay[0]}</div> */}
-          </div>
+          </MonthViewStyled>
         </>
-
-      
         :
         <>
-
-          <ul className="calendarview colorLegenda">
-            <li className="orange">orange = assistant is ill</li>  
-            <li className="purple">purple = client is ill</li>  
-            <li className="red">red = dentist is ill</li>  
-          </ul>
-          <div className="calendarview">
-            <div className="header">
+          <ColorLegendaStyled>
+            <OrangeStyled>orange = assistant is ill</OrangeStyled>  
+            <PurpleStyled className="purple">purple = client is ill</PurpleStyled>  
+            <RedStyled className="red">red = dentist is ill</RedStyled>  
+          </ColorLegendaStyled>
+          <MonthViewStyled>
+            <HeaderInMonthStyled>
               <div>Monday</div>
               <div>Tuesday</div>
               <div>Wednesday</div>
               <div>Thursday</div>
               <div>Friday</div>
-            </div>
-            { daysInMonthJSX.length !== 0 ? <div className="table" >{daysInMonthJSX}</div> : <>No appointments upcoming month.</>}
+            </HeaderInMonthStyled>
+            { daysInMonthJSX.length !== 0 ? <TableInMonthStyled>{daysInMonthJSX}</TableInMonthStyled> : <>No appointments upcoming month.</>}
             {/* <div className="table">{daysInMonthJSX}</div> */}
             {/* <div>{appointmentsInDay[0]}</div> */}
-          </div>
+          </MonthViewStyled>
             
         </>
         } 
         
     </>
-
-
   )
 };

@@ -3,14 +3,14 @@ import styled from "styled-components";
 
 export const DentistListAreaStyled = styled.div`
   grid-area: dentistList;  
-  background: yellow;
-  color: black;
+  background: ${({ theme}) => theme.colors.background02};
+  color: ${({ theme}) => theme.colors.fontColor01};
   padding: 0.25rem;
 `;
 
 export const DentistListStyled = styled.div`
   display: grid;
-  color: white;
+  color:  ${({ theme}) => theme.colors.fontColor01};
 
   grid-template-areas:
       "intro intro intro intro"
@@ -20,7 +20,7 @@ export const DentistListStyled = styled.div`
       ;
   text-align: center;
   grid-gap: 0.25rem;
-  font-family: ${({ theme}) => theme.font };
+  // font-family: ${({ theme}) => theme.font };
   font-size: ${({ theme}) => theme.fontSize.default };
 `;
 
@@ -44,8 +44,9 @@ export const FormControlArea = styled.nav`
 
 export const Headers = styled.main`
   grid-area: header;  
-  background: ${({ theme}) => theme.colors.nearlyblack };
-  color: white;
+  background: ${({ theme}) => theme.colors.header01 };
+  color:   ${({ theme}) => theme.colors.fontColor01};
+  font-weight: bold;
   padding: 0.25rem;
   display: flex;
   font-size: ${({ theme}) => theme.fontSize.default };
@@ -54,8 +55,10 @@ export const Headers = styled.main`
 
 export const Intro = styled.div`
   grid-area: intro;
-  background: ${({ theme}) => theme.colors.nearlyblack };
+  background: ${({ theme}) => theme.colors.header01 };
+  font-weight: bold;
   padding: 0.25rem;
+
 `;
 
 export const Row = styled.div`
@@ -64,7 +67,7 @@ export const Row = styled.div`
 `
 
 export const Section1 = styled.section`
-  background: ${({ theme}) => theme.colors.bluegrey };
+  background: ${({ theme}) => theme.colors.background02};
   padding: 0.25rem;
   width: 100%;
   height: 100%;

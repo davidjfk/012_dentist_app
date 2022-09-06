@@ -14,7 +14,7 @@ import {StyledSelectbox} from '../styles/Selectbox.styled';
 
 const log = console.log;
 
-const AssistantList = () => {
+const ClientList = () => {
     const { clients } = useSelector((state) => state.client);
     
     const [personObjectKeyToSortArrayWithPersons, setSongObjectKeyToSortArrayWithSongs] = useState('');
@@ -31,31 +31,25 @@ const AssistantList = () => {
         let personObjectKey = JsxSelectBoxAttributeValueAsArray[0];
         let isAscending = JsxSelectBoxAttributeValueAsArray[1] === "ascending" ? true : false;
 
-        const clientObject = {
+        const clientObjectSortCriteriaToSortInUISelectBox = {
             clientId: 'clientId',
-            lastName: 'lastName',
             firstName: 'firstName',
-            phone: 'phone',
-            email: 'email',
             isSick: 'isSick',
-            birthYear: 'birthYear',
             paymentMethod: 'paymentMethod'
         };
 
-        const sortProperty = clientObject[personObjectKey];  
+        const sortProperty = clientObjectSortCriteriaToSortInUISelectBox[personObjectKey];  
         let sortedPersons;
         if (!isAscending && (sortProperty === "paymentMethod" || sortProperty === ""))  {
-            sortedPersons = [...clients].sort((person1, person2) => person2[sortProperty] - person1[sortProperty]);
-            return sortedPersons;
-            // numbers sort descending by default, so the !isAscending causes the paymentMethod to display in an ascending fashion. 
-        } else if (isAscending && (sortProperty === "paymentMethod" || sortProperty === ""))  {
-            sortedPersons = [...clients].sort((person1, person2) => person2[sortProperty] - person1[sortProperty]);
-            return sortedPersons.reverse();
-        } else if (isAscending && (sortProperty === "clientId" || sortProperty === "firstName" || sortProperty === "isSick")) {
             sortedPersons = [...clients].sort((person1, person2) => person1[sortProperty].localeCompare(person2[sortProperty], 'en', { ignorePunctuation: true }));
-            return sortedPersons;
+            return sortedPersons.reverse();
             // I choose 'en' as  the unicodeLanguage.
             // unicode allows user to enter any kind of character.
+        } else if (isAscending && (sortProperty === "paymentMethod" || sortProperty === ""))  {
+            sortedPersons = [...clients].sort((person1, person2) => person1[sortProperty].localeCompare(person2[sortProperty], 'en', { ignorePunctuation: true }));
+            return sortedPersons;
+        } else if (isAscending && (sortProperty === "clientId" || sortProperty === "firstName" || sortProperty === "isSick")) {
+            sortedPersons = [...clients].sort((person1, person2) => person1[sortProperty].localeCompare(person2[sortProperty], 'en', { ignorePunctuation: true }));
         } else if (!isAscending && (sortProperty === "clientId" || sortProperty === "firstName" || sortProperty === "isSick")) {
                 sortedPersons = [...clients].sort((person1, person2) => person1[sortProperty].localeCompare(person2[sortProperty], 'en', { ignorePunctuation: true }));
                 return sortedPersons.reverse();
@@ -160,8 +154,8 @@ const AssistantList = () => {
                         <option value="firstName descending" >first name z-a</option>
                         <option value="isSick ascending" >health status a-z</option>
                         <option value="isSick descending" >health status z-a</option>
-                        <option value="paymentMethod ascending" >skill level 1-5</option>
-                        <option value="paymentMethod descending" >skill level 5-1</option>
+                        <option value="paymentMethod ascending" >payment method a-z</option>
+                        <option value="paymentMethod descending" > payment method z-a</option>
                     </StyledSelectbox>
                 </Section1>
                 <Section2>
@@ -238,4 +232,4 @@ const AssistantList = () => {
   )
 }
 
-export default AssistantList;
+export default ClientList;

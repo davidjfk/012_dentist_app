@@ -3,14 +3,14 @@ import styled from "styled-components";
 
 export const ClientListAreaStyled = styled.div`
   grid-area: assistantList;  
-  background: yellow;
-  color: black;
+  background: ${({ theme}) => theme.colors.background02};
+  color: ${({ theme}) => theme.colors.fontColor01};
   padding: 0.25rem;
 `;
 
 export const ClientListStyled = styled.div`
   display: grid;
-  color: white;
+  color: ${({ theme}) => theme.colors.fontColor01};
 
   grid-template-areas:
       "intro intro intro intro"
@@ -43,19 +43,21 @@ export const FormControlArea = styled.nav`
 `;
 
 export const Headers = styled.main`
-  grid-area: header;  
-  background: ${({ theme}) => theme.colors.nearlyblack };
-  color: white;
-  padding: 0.25rem;
-  display: flex;
-  font-size: ${({ theme}) => theme.fontSize.default };
+grid-area: header;  
+background: ${({ theme}) => theme.colors.header01 };
+color: ${({ theme}) => theme.colors.fontColor01};
+font-weight: bold;
+padding: 0.25rem;
+display: flex;
+font-size: ${({ theme}) => theme.fontSize.default };
 `;
 
 
 export const Intro = styled.div`
-  grid-area: intro;
-  background: ${({ theme}) => theme.colors.nearlyblack };
-  padding: 0.25rem;
+grid-area: intro;
+background: ${({ theme}) => theme.colors.header01 };
+font-weight: bold;
+padding: 0.25rem;
 `;
 
 export const Row = styled.div`
@@ -64,7 +66,7 @@ export const Row = styled.div`
 `
 
 export const Section1 = styled.section`
-  background: ${({ theme}) => theme.colors.bluegrey };
+  background: ${({ theme}) => theme.colors.background02 };
   padding: 0.25rem;
   width: 100%;
   height: 100%;

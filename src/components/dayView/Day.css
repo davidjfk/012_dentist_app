@@ -1,101 +1,73 @@
-.dayview li {
-  list-style-type: none;
+.appointmentInDayView {
+  /* list-style-type: none;
   background-color: lightyellow;
+
+  border-top: 2px solid grey;
+  width: 92.8vw;
+  width: 76.8vw;
+  margin-bottom: 20px;
+
+  padding: 0.1rem;
+  border-top-style: solid;
+  border-width: 1px;
+  margin-top: 0.2rem;
+  margin-right: 2rem; */
 }
 
-
-
-.dayview .time,
-.dayview .client {
-  height: 30px;
-  padding: 10px;
-}
-
-.dayview .time {
-  float: right;
-  background-color: aquamarine;
-  font-size: 1.1rem;
-}
-
-.dayview .dayAsNumber {
-  float: right;
+.dayNrInDayView {
+  /* float: right;
   font-weight: bold;
   font-size: 1.1rem;
-}
 
-.dayAsNumber {
   margin-top: 10px;
-  margin-right: 10px;
+  margin-right: 10px; */
+
 }
 
-.dayview .client {
-  font-weight: bold;
+
+
+.assistantInDayViewAppointment,
+.dentistInDayViewAppointment {
+  padding: 10px;
+  font-size: 1.1rem;
+  padding-left: 11vw;
+}
+
+.clientInDayView,
+.timeInDayView {
+  /* height: 30px;
+  padding: 10px; */
+}
+
+.clientInDayView {           
+  /* font-weight: bold;
   background-color: deepskyblue;
   font-size: 1.1rem;
+  padding-left: 7vw; */
 }
 
-.dayview .dentist,
-.dayview .assistant {
-  padding: 10px;
-}
 
-/* .deleteButton {
-  float: right;
+.timeInDayView {
+  /* float: right;
   background-color: aquamarine;
-  font-size: 1.1rem;
-  padding: 6px;
-  margin-right: 20px;
-  margin-top: 20px;
-} */
+  font-size: 1.1rem; */
+}
+
+
 
 .treatmentType {
-  float: right;
+  /* float: right;
   background-color: aquamarine;
   font-size: 1.1rem;
   padding: 6px;
   margin-right: 20px;
   margin-left: 20px;
-  margin-top: 20px;
+  margin-top: 20px; */
 }
 
-.assistant,
-.dentist {
-  font-size: 1.1rem;
-}
 
-.dayview .appointment {
-  border: 2px solid grey;
-  width: 60%;
-  margin-bottom: 20px;
-}
 
-.appointment {
-  padding: 0.1rem;
-  
-}
 
-.colorLegenda {
-  list-style: none;
-  padding-left: 1rem;
-  font-size: 1.4rem;
-  width: 15rem;
-  font-weight: 500;
-  
-}
 
-.orange{
-  background-color: orange;
-  padding: 0.2rem;
-}
-
-.purple{
-  background-color: purple;
-  padding: 0.2rem;
-}
-
-.red{
-  background-color: red;
-  padding: 0.2rem;
-}
 
 

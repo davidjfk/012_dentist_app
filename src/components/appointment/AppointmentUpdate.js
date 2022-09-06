@@ -11,7 +11,7 @@ import listOfValidWorkingDayNumbersInNextMonth from '../../dataInDentistAppWhenD
 import listOfValidWorkingHours from '../../dataInDentistAppWhenDentistAppStarts/listOfValidWorkingHours';
 
 import {Container} from '../styles/Container.styled';
-import {ClientAddStyled, Column, Form, Intro} from './ClientAdd.styled';
+import {AppointmentAddStyled, Column, Form, Intro} from './AppointmentAdd.styled';
 import {StyledButtonAroundText} from '../styles/ButtonAroundText.styled';
 import {StyledSelectbox} from '../styles/Selectbox.styled';
 import {createAppointment, generateAppointmentId, getSystemDatePlusTime, loadSelectboxWithListOf, selectObjectsByArrayObjectKey, sortArrayWithObjects, updateAppointment_Phase2of2_updateAppointmentRecursivelyUntilUpdateSucceeds} from '../../utils';
@@ -52,7 +52,8 @@ const UpdateAppointment = () => {
 
 
     let {appointmentSavedInReduxToolkit}  = useSelector((state) => state.updateAppointment);
-    log(appointmentSavedInReduxToolkit);
+    // log('02')
+    // log(appointmentSavedInReduxToolkit);
 
     //2do: load initial data from redux-toolkit updateAppointmentSlice.
     let [clientId, setClientId] = useState(appointmentSavedInReduxToolkit.clientId);
@@ -92,6 +93,9 @@ const UpdateAppointment = () => {
             return
         } 
         
+
+        
+
         // alternative with same result: load appointmentId from redux-toolkit updateAppointmentSlice.
         const appointmentId = generateAppointmentId(clientId, day, time);
         let appointmentIdFromReduxToolkitSlice = appointmentSavedInReduxToolkit.appointmentId;
@@ -102,7 +106,6 @@ const UpdateAppointment = () => {
         }
         
         // q: delete this key from obj appointment?    
-        let isNowUpdatingAppointment = true;
         let systemDateTime = getSystemDatePlusTime();
         let appointmentLastUpdatedOnDateTime = systemDateTime;
 
@@ -117,8 +120,7 @@ const UpdateAppointment = () => {
             time, 
             dentistId, 
             assistantId, 
-            appointmentLastUpdatedOnDateTime,  
-            isNowUpdatingAppointment,       
+            appointmentLastUpdatedOnDateTime,        
             clientsFromReduxToolkit, 
             dentistsFromReduxToolkit, 
             assistantsFromReduxToolkit, 
@@ -142,7 +144,7 @@ const UpdateAppointment = () => {
 
   return (
     <Container> 
-        <ClientAddStyled>
+        <AppointmentAddStyled>
             <Intro>Update Appointment</Intro>
             <Form>
                 <Column>
@@ -253,7 +255,7 @@ const UpdateAppointment = () => {
                     </StyledButtonAroundText>                  
                 </Column>
             </Form>
-        </ClientAddStyled>  
+        </AppointmentAddStyled>  
     </Container>
   )
 }

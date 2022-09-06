@@ -28,7 +28,7 @@ const DentistInDentistList = ({dentists, item}) => {
   // let checkBoxStatus = useRef(false);
   let healthStatus = (item.isSick === "true") ? "sick" : "healthy";
   let appointmentLastUpdatedOnDateTime = (item.appointmentsDeletedOnDateTime === "null") ? "Not happened yet." : item.appointmentsDeletedOnDateTime ;
-  let appointmentsfromReduxToolkit = useSelector((state) => state.appointment);
+  let appointmentsfromReduxToolkit = useSelector((state) => state.appointment.appointments);
 
 
   return (
@@ -57,6 +57,7 @@ const DentistInDentistList = ({dentists, item}) => {
         <Column>
           {/* <DentistInDentistListStyled> */}
             <SkillsInListStyled>
+              
               {item.treatmentTypes.map(item => {
                 return (<div key={item} >{item}</div>);
               })}
