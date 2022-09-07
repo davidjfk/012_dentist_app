@@ -2,14 +2,17 @@ import React from "react";
 import "./Day.css";
 import {AppointmentInDay} from "./AppointmentInDay";
 
-const log = console.log;
+import {log} from "../../utils";
+import {DayStyled } from "./DayView.styled";
+// import "./Day.css"; 
 
 export const Day = ({appointments} ) => {
   const appointmentsJSX = appointments
     .sort((appointment1, appointment2) => appointment2.time - appointment1.time).reverse()
     .map(
-      ({ time, day, client, dentist, assistant, clientId, dentistId, assistantId, treatmentType }, index) => (
+      ({ appointmentId, time, day, client, dentist, assistant, clientId, dentistId, assistantId, treatmentType }, index) => (
         <AppointmentInDay
+          appointmentId={appointmentId}
           time={time}
           day={day}
           client={client}
@@ -24,7 +27,9 @@ export const Day = ({appointments} ) => {
       )
     );
   return (
-    <ul className="dayview">{appointmentsJSX}</ul>
+    <DayStyled>
+      {appointmentsJSX}
+    </DayStyled>
     );
 }; 
  

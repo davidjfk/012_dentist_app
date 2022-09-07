@@ -1,9 +1,10 @@
 import React from 'react'
+import { useState, useEffect, useRef } from 'react';
 import { useSelector } from "react-redux";
-import { useState, useEffect } from 'react';
-import skillLevelOptions from '../../dataInDentistAppWhenDentistAppStarts/skillLevelOptions';
+
 import paymentMethodsToAddToNewClientCreatedViaUI from '../../dataInDentistAppWhenDentistAppStarts/paymentMethodsToAddToNewClientCreatedViaUI';
 import healthStatusOptions from '../../dataInDentistAppWhenDentistAppStarts/healthStatusOptions';
+
 import {Container} from '../styles/Container.styled'
 import ClientInClientList from './ClientInClientList.js'
 import {ClientListAreaStyled, ClientListStyled, Column, FormControlArea, Headers, Intro, Section1, Section2, Section3} from './ClientList.styled'
@@ -13,7 +14,7 @@ import {StyledSelectbox} from '../styles/Selectbox.styled';
 
 const log = console.log;
 
-const AssistantList = () => {
+const ClientList = () => {
     const { clients } = useSelector((state) => state.client);
     
     const [personObjectKeyToSortArrayWithPersons, setSongObjectKeyToSortArrayWithSongs] = useState('');
@@ -29,40 +30,37 @@ const AssistantList = () => {
         let JsxSelectBoxAttributeValueAsArray = JsxSelectBoxAttributeValue.split(' ');
         let personObjectKey = JsxSelectBoxAttributeValueAsArray[0];
         let isAscending = JsxSelectBoxAttributeValueAsArray[1] === "ascending" ? true : false;
+        log(`isAscending: ${isAscending}`)
 
-        const clientObject = {
+        const clientObjectSortCriteriaToSortInUISelectBox = {
             clientId: 'clientId',
-            lastName: 'lastName',
             firstName: 'firstName',
-            phone: 'phone',
-            email: 'email',
             isSick: 'isSick',
-            birthYear: 'birthYear',
             paymentMethod: 'paymentMethod'
         };
 
-        const sortProperty = clientObject[personObjectKey];  
+        const sortProperty = clientObjectSortCriteriaToSortInUISelectBox[personObjectKey];  
         let sortedPersons;
         if (!isAscending && (sortProperty === "paymentMethod" || sortProperty === ""))  {
-            sortedPersons = [...clients].sort((person1, person2) => person2[sortProperty] - person1[sortProperty]);
-            return sortedPersons;
-            // numbers sort descending by default, so the !isAscending causes the paymentMethod to display in an ascending fashion. 
-        } else if (isAscending && (sortProperty === "paymentMethod" || sortProperty === ""))  {
-            sortedPersons = [...clients].sort((person1, person2) => person2[sortProperty] - person1[sortProperty]);
+            sortedPersons = [...clients].sort((person1, person2) => person1[sortProperty].localeCompare(person2[sortProperty], 'en', { ignorePunctuation: true }));
             return sortedPersons.reverse();
+            // I choose 'en' as  the unicodeLanguage.
+            // unicode allows user to enter any kind of character.
+        } else if (isAscending && (sortProperty === "paymentMethod" || sortProperty === ""))  {
+            sortedPersons = [...clients].sort((person1, person2) => person1[sortProperty].localeCompare(person2[sortProperty], 'en', { ignorePunctuation: true }));
+            return sortedPersons;
         } else if (isAscending && (sortProperty === "clientId" || sortProperty === "firstName" || sortProperty === "isSick")) {
             sortedPersons = [...clients].sort((person1, person2) => person1[sortProperty].localeCompare(person2[sortProperty], 'en', { ignorePunctuation: true }));
             return sortedPersons;
-            // I choose 'en' as  the unicodeLanguage.
-            // unicode allows user to enter any kind of character.
         } else if (!isAscending && (sortProperty === "clientId" || sortProperty === "firstName" || sortProperty === "isSick")) {
                 sortedPersons = [...clients].sort((person1, person2) => person1[sortProperty].localeCompare(person2[sortProperty], 'en', { ignorePunctuation: true }));
                 return sortedPersons.reverse();
         } else {
-            console.error(`component assistantList: not possible to sort with datatype ${typeof(sortProperty)}. Please investigate. `)
+            console.error(`component clientList: not possible to sort with datatype ${typeof(sortProperty)}. Please investigate. `)
         }
     };
     
+
 
 
 
@@ -111,7 +109,7 @@ const AssistantList = () => {
             for (let ratingcriterium of paymentMethodToFilterWith) {
                 arrayFilteredOnOneCriterium = copyOfFilteredData.filter(
                     (personObject) =>           
-                    parseInt(personObject.paymentMethod) === parseInt(ratingcriterium)
+                    personObject.paymentMethod === ratingcriterium
                 );
                 arrayFilteredOnAllCriteria.push(...arrayFilteredOnOneCriterium)
             }
@@ -140,6 +138,13 @@ const AssistantList = () => {
       setIsHovering(false);
     };
 
+    log(`comp ClientList: data to  render:`)
+    log(dataToRenderFromUseEffectPipeline)
+
+    let counterOfClientInList = useRef(0);
+    function increment() {
+        counterOfClientInList.current +=1;
+    }
 
     return (
     <>
@@ -159,8 +164,8 @@ const AssistantList = () => {
                         <option value="firstName descending" >first name z-a</option>
                         <option value="isSick ascending" >health status a-z</option>
                         <option value="isSick descending" >health status z-a</option>
-                        <option value="paymentMethod ascending" >skill level 1-5</option>
-                        <option value="paymentMethod descending" >skill level 5-1</option>
+                        <option value="paymentMethod ascending" >payment method a-z</option>
+                        <option value="paymentMethod descending" > payment method z-a</option>
                     </StyledSelectbox>
                 </Section1>
                 <Section2>
@@ -227,14 +232,24 @@ const AssistantList = () => {
                 </Column>
             </Headers>
             <ClientListAreaStyled>
-                { dataToRenderFromUseEffectPipeline.length !== 0 ? dataToRenderFromUseEffectPipeline.map((item, id) => (
+                {/* { dataToRenderFromUseEffectPipeline.length !== 0 ? dataToRenderFromUseEffectPipeline.map((item, id) => (
                         <ClientInClientList key={id} item={item} clients={clients} />
-                )): <>Please attract clients.</>}
+                )): <>Please attract clients.</>} */}
+
+                { dataToRenderFromUseEffectPipeline.length !== 0 ? dataToRenderFromUseEffectPipeline.map((item, id) => {
+                    increment()                                          
+                    return ( 
+                    <ClientInClientList index={counterOfClientInList.current} key={id} item={item} clients={clients} />
+                    )})
+                    : 
+                    <>Please attract clients.</>
+                }
             </ClientListAreaStyled>
         </ClientListStyled>  
     </Container>
+    <div disabled={true}>{counterOfClientInList.current = 0}</div>
     </>
   )
 }
 
-export default AssistantList;
+export default ClientList;

@@ -1,16 +1,21 @@
 import React from 'react';
 import {useState } from 'react';
 import {useDispatch } from "react-redux";
+
 import {addAssistant } from "../../redux/assistantSlice";
+
 import skillLevelOptions from '../../dataInDentistAppWhenDentistAppStarts/skillLevelOptions';
 import healthStatusOptions from '../../dataInDentistAppWhenDentistAppStarts/healthStatusOptions';
+
+import {generateRandomPersonId} from '../../utils';
+
 import {Container} from '../styles/Container.styled';
 import {AssistantAddStyled, Column, Form, Intro} from './AssistantAdd.styled';
-import {StyledButtonAroundText} from '../styles/ButtonAroundText.styled';
+import {StyledButtonInsideAddOrUpdateComponent} from '../styles/ButtonInsideAddOrUpdateComponent.styled';
 import {StyledInputfield} from '../styles/Inputfield.styled';
 import {StyledSelectbox} from '../styles/Selectbox.styled';
 
-import {generateRandomPersonId} from '../../utils';
+
 
 const log = console.log;
 
@@ -49,8 +54,8 @@ const AddAssistant = () => {
         } 
 
         const assistantId = `${lastName}-${generateRandomPersonId()}`;
-
-        dispatch(addAssistant({assistantId, email, firstName, isSick, lastName, phone, skillLevel }));   
+        let appointmentsDeletedOnDateTime = "null";
+        dispatch(addAssistant({assistantId, email, firstName, isSick, lastName, phone, skillLevel, appointmentsDeletedOnDateTime}));   
         
         // now reset the form for the next use:
         // setLastName('')
@@ -129,9 +134,9 @@ const AddAssistant = () => {
                     </StyledSelectbox>
                 </Column>
                 <Column>
-                    <StyledButtonAroundText onClick={onSubmit}>
+                    <StyledButtonInsideAddOrUpdateComponent onClick={onSubmit}>
                         Add assistant 
-                    </StyledButtonAroundText>                  
+                    </StyledButtonInsideAddOrUpdateComponent>                  
                 </Column>
             </Form>
         </AssistantAddStyled>  

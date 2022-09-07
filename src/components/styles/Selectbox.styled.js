@@ -1,11 +1,12 @@
 import styled from 'styled-components'
 
 export const StyledSelectbox = styled.select`
-font-size: ${({ theme}) => theme.fontSize.default };
+
+  font-size: ${({ theme}) => theme.fontSize.default };
   padding-left: 0.6rem;
   padding-right: 0.6rem;
   &:hover {
-    background-color: ${({ theme}) => theme.colors.onHoverBackground };
+    background-color: ${({ theme}) => theme.colors.onHoverBackground02};
   }
  
   @media (max-width: 700px) {

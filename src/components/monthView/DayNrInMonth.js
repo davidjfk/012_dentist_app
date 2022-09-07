@@ -1,16 +1,15 @@
 import React from "react";
 
-const log = console.log;
+import {log} from "../../utils";
 
+// import "./Calendar.css";
+import {DayNrInMonthStyled} from './DayNrInMonth.styled';
 
 export const DayNrInMonth = ({dayNrInMonth}) => {
-  // log(`DayNrInMonth: `)
-  // log(dayNrInMonth)
-
   return(
-  <div>
-      <span className="dayAsNumber">Day: {dayNrInMonth }  </span>    
-  </div>
+  <DayNrInMonthStyled>
+      Day: {dayNrInMonth }     
+  </DayNrInMonthStyled>
   );
 };
 

@@ -1,7 +1,8 @@
 import styled from 'styled-components'
 
 export const StyledButtonAroundSymbol = styled.button`
-  background-color: #A6B8B9;  
+  pointer-events ${({ theme}) => theme.pointerEvents}; 
+  background-color: ${({ theme}) => theme.colors.background03}; 
   border-radius: 50px;
   border: none;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.15);

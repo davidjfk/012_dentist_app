@@ -10,8 +10,8 @@ export const assistantListSlice = createSlice({
     // use_case_10_add_assistant (as direct fn call without UI)
     addAssistant: (state, action) => {
       // const assistantToSave = action.payload;
-      const {assistantId, lastName, firstName, phone, email, isSick, skillLevel} = action.payload
-      const assistantToSave = {assistantId, email, firstName, isSick, lastName,  phone, skillLevel};
+      const {assistantId, lastName, firstName, phone, email, isSick, skillLevel, appointmentsDeletedOnDateTime} = action.payload
+      const assistantToSave = {assistantId, email, firstName, isSick, lastName,  phone, skillLevel, appointmentsDeletedOnDateTime};
       state.assistants.push(assistantToSave);
     },
     // use_case_00_create_mock_data
@@ -19,12 +19,15 @@ export const assistantListSlice = createSlice({
       const assistantsToSave = action.payload; 
       state.assistants = assistantsToSave; // dentistsToSave is an array with dentist objects.
     },
-    // use_case_03_delete_appointment (use this action only to delete an appointment, but not to delete an assistant)
+    // not a winc requirement
     deleteAssistant: (state, action) => {
-      const indexOfSongToDelete = state.assistants.findIndex(songToDelete => {
-        return songToDelete.id === action.payload;
+      log('in the redux-toolkit: action deleteAssistant: ')
+      log(action.payload.assistantId)
+      const indexOfAssistantToDelete = state.assistants.findIndex(assistantToDelete => {
+        return assistantToDelete.assistantId === action.payload.assistantid;
       });
-      state.assistants.splice(indexOfSongToDelete, 1)
+      log(`indexOfAssistantToDelete: ${indexOfAssistantToDelete}`)
+      state.assistants.splice(indexOfAssistantToDelete, 1)
     },
     // use_case_09_give_appointments_of_sick_assistant_an_orange_background_color: as direct fn call without UI
     setAssistantToSick: (state, action) => {
@@ -32,6 +35,21 @@ export const assistantListSlice = createSlice({
       let index = action.payload; 
       state.assistants[index].isSick = true; 
       // console.log(typeof(index) )
+    },
+    // not a winc requirement
+    setDateAndTimeOfDeletionOfAppointmentsOfAssistantInReduxToolkit: (state, action) => {
+      log('in the redux-toolkit: action setDateAndTimeOfDeletionOfAppointmentsOfAssistantInReduxToolkit: ')
+      log(`systemDateTime:`)
+      log(action.payload.systemDateTime)
+      log(`assistantId:`)
+      log(action.payload.assistantId)
+      const indexOfAssistantToDelete = state.assistants.findIndex(assistantForWhomToSetDateAndTime => {
+        return assistantForWhomToSetDateAndTime.assistantId === action.payload.assistantId;
+      });
+      log(`indexOfAssistantToDelete: `)
+      log(indexOfAssistantToDelete)
+      log(typeof(indexOfAssistantToDelete))
+      state.assistants[indexOfAssistantToDelete].appointmentsDeletedOnDateTime = action.payload.systemDateTime;
     },
     // use_case_09_give_appointments_of_sick_assistant_an_orange_background_color: via UI
     toggleHealthStatusOfAssistant: (state, action) => {
@@ -46,7 +64,7 @@ export const assistantListSlice = createSlice({
     }}
 
 })
-export const { addAssistant, addAssistants, deleteAssistant, setAssistantToSick, toggleHealthStatusOfAssistant } = assistantListSlice.actions;
+export const { addAssistant, addAssistants, deleteAssistant, setAssistantToSick, setDateAndTimeOfDeletionOfAppointmentsOfAssistantInReduxToolkit, toggleHealthStatusOfAssistant } = assistantListSlice.actions;
 
 export default assistantListSlice.reducer;    
 

@@ -1,100 +1,128 @@
 import React from "react";
-// import { useSelector } from "react-redux";
-import { useRef, useState, useEffect } from 'react';
-import "./Day.css";
-// import {AppointmentInDay} from "../AppointmentInDay";
-// import { useSelector } from "react-redux"; 
+import {useState, useEffect } from 'react';
+import { useDispatch, useSelector } from "react-redux"; 
 
-import {Day} from "./Day";
-import {Container} from '../styles/Container.styled';
-import {AssistantListStyled, FormControlArea, Intro, Section2} from '../assistant/AssistantList.styled';
-import {StyledSelectbox} from '../styles/Selectbox.styled';
 import listOfValidWorkingDayNumbersInNextMonth from '../../dataInDentistAppWhenDentistAppStarts/listOfValidWorkingDayNumbersInNextMonth';
 
+import {saveLastSelectedDayInDayView } from '../../redux/saveLastSelectedDayInDayView';
 
-// const log = console.log;
+import AppointmentUpdate from '../appointment/AppointmentUpdate';
+import {Day} from "./Day"; 
+
+import {log} from "../../utils";
+
+import {ColorOrange, ColorPurple, ColorRed, SelectDayNrToDisplayStyled, FlexboxAreaStyled, Header, BoxAroundSelectBox, LegendaStyled } from "./DayView.styled";
+// import {Container} from '../styles/Container.styled';
+import {StyledSelectbox} from '../styles/Selectbox.styled';
+
+
 
 export const SelectDayNrToDisplay = ({appointments}) => {
-    // log('comp SelectDayNrToDisplay:')
-    // log(appointments)
-    // const [dayToFilterWith2] = useRef("01");
-    const [dayToFilterWith, setDayToFilterWith] = useState("01");
-    const [dataToRenderFromUseEffectPipeline, setDataToRenderFromUseEffectPipeline] = useState(appointments.filter(app => app.day === dayToFilterWith.toString()));
-   
-    // log(dataToRenderFromUseEffectPipeline)
+    log(`SelectDayNrToDisplay: start: `)
+    const dispatch = useDispatch();
+    const { isNowUpdatingAppointment } = useSelector((state) => state.updateAppointment);
+
+    // const [dayToFilterWith, setDayToFilterWith] = useState('01'); 
+    const {day}  = useSelector((state) => state.saveLastSelectedDayInDayView);
+    log(`day from redux-toolkit: ${day}`);
+    log(day)
+    log(typeof(day))
+
+    const [dataToRenderFromUseEffectPipeline, setDataToRenderFromUseEffectPipeline] = useState(appointments.filter(app => app.day === day));
+    
 
     const handleDayChange = (event) => {    
-        // log('fn handleDayChange:')
         let value = Array.from(
             event.target.selectedOptions, (option) => option.value
         ) 
-        // log(typeof(value.toString()))  
-        setDayToFilterWith(value);
+        // setDayToFilterWith(value);
+        dispatch(saveLastSelectedDayInDayView(value));
     };
-    
     
 
     const filterWithDayNr = (arrayOfWhichTheDayObjectsContainAppointments, dayToFilterWith) => {
-        // log('inside fn filterWithDayNr')
         let appointmentsOnAFilteredDay = [];              
-
         let copyOfArrayOfWhichTheDayObjectsContainAppointments = [...arrayOfWhichTheDayObjectsContainAppointments];
         
         appointmentsOnAFilteredDay = copyOfArrayOfWhichTheDayObjectsContainAppointments.filter(
-            (appointmentObject) => appointmentObject.day === dayToFilterWith);
-        // log(appointmentsOnAFilteredDay)
+        (appointmentObject) => appointmentObject.day === dayToFilterWith);
         return appointmentsOnAFilteredDay;
     };
 
 
     useEffect(() => {
-            // log('inside useEffect')
-            // log(appointments)
-            // log(dayToFilterWith)
-            let pipelineData = filterWithDayNr(appointments, dayToFilterWith.toString());
-            // log('again inside useEffect')
-            // log(pipelineData)
+            let pipelineData = filterWithDayNr(appointments, day);
             setDataToRenderFromUseEffectPipeline(pipelineData);
         }, 
-        [dayToFilterWith, appointments]
+        [day, appointments]
     );
-
-    // log('before the return: ')
-    // log(dataToRenderFromUseEffectPipeline)
 
     return (
     <>
-        <Container> 
-            <AssistantListStyled>
-                <Intro>Select working day in next month </Intro>
-                <FormControlArea>
-                    <Section2>
-                        <div>
-                        <StyledSelectbox 
-                            value={dayToFilterWith}
-                            onChange={(event) => handleDayChange(event)  }                
-                        >                      
-                            {/* <option value="" >day nr:</option> */}
-                            <option value="" >hide all info</option>
-                            
-                            {listOfValidWorkingDayNumbersInNextMonth.map(item => {
-                                return (<option key={item.value} value={item.value}>{item.text}</option>);
-                            })}   
-                        </StyledSelectbox>
-                        </div>
-                    </Section2>
-            <ul className=" colorLegenda">
-                <li className="orange">orange: assistant is ill</li>  
-                <li className="purple">purple: client is ill</li>  
-                <li className="red">red: dentist is ill</li>  
-            </ul>  
-                </FormControlArea>
-            </AssistantListStyled>  
-        </Container>
+        <>
+            {isNowUpdatingAppointment ? 
+            <>
+                    <SelectDayNrToDisplayStyled>
+                            <Header>Select working day in next month </Header>
+                            <FlexboxAreaStyled>
+                                <BoxAroundSelectBox>
+                                    <StyledSelectbox 
+                                        value={day}
+                                        onChange={(event) => handleDayChange(event)  }                
+                                    >                      
+                                        {/* <option value="" >day nr:</option> */}
+                                        <option value="" >hide all info</option>
+                                        
+                                        {listOfValidWorkingDayNumbersInNextMonth.map(item => {
+                                            return (<option key={item.value} value={item.value}>{item.text}</option>);
+                                        })}   
+                                    </StyledSelectbox>
+                                </BoxAroundSelectBox> 
+                                <LegendaStyled>
+                                        <ColorOrange>orange: assistant is ill</ColorOrange>  
+                                        <ColorPurple>purple: client is ill</ColorPurple>  
+                                        <ColorRed>red: dentist is ill</ColorRed>   
+                                </LegendaStyled>
+                            </FlexboxAreaStyled> 
+                    </SelectDayNrToDisplayStyled>  
+                <AppointmentUpdate/>
 
-        { dataToRenderFromUseEffectPipeline.length !== 0 ? <Day  appointments = {dataToRenderFromUseEffectPipeline} /> : <Container>No appointments today.</Container>}
+                { dataToRenderFromUseEffectPipeline.length !== 0 ? <Day  appointments = {dataToRenderFromUseEffectPipeline} /> : <SelectDayNrToDisplayStyled>No appointments today.</SelectDayNrToDisplayStyled>}
+            </>
+            :
+            <>
+                    <SelectDayNrToDisplayStyled>
+                        <Header>Select working day in next month </Header>
+                        <FlexboxAreaStyled>
+                            <BoxAroundSelectBox>
+                                <StyledSelectbox 
+                                    value={day}
+                                    onChange={(event) => handleDayChange(event)  }                
+                                >                      
+                                    {/* <option value="" >day nr:</option> */}
+                                    <option value="" >hide all info</option>
+                                    
+                                    {listOfValidWorkingDayNumbersInNextMonth.map(item => {
+                                        return (<option key={item.value} value={item.value}>{item.text}</option>);
+                                    })}   
+                                </StyledSelectbox>
+                            </BoxAroundSelectBox>
+                            <LegendaStyled>
+                                    <ColorOrange>orange: assistant is ill</ColorOrange>  
+                                    <ColorPurple>purple: client is ill</ColorPurple>  
+                                    <ColorRed>red: dentist is ill</ColorRed>  
+                            </LegendaStyled> 
+                        </FlexboxAreaStyled>
+                    </SelectDayNrToDisplayStyled>  
 
-       {/* <Day  appointments = {dataToRenderFromUseEffectPipeline}    />                */}
+                { dataToRenderFromUseEffectPipeline.length !== 0 ? <Day  appointments = {dataToRenderFromUseEffectPipeline} /> : <SelectDayNrToDisplayStyled>No appointments today.</SelectDayNrToDisplayStyled>}
+            </>
+            } 
+        
+        </>
+
+
+
     </>
   )
 }

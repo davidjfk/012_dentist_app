@@ -2,16 +2,16 @@
 const dentalSkillsToAddToNewDentistToAutomaticallyCreateDentists = [
     "brace",
     "bridge",
-    "broken_tooth",
+    "broken-tooth",
     "crown", 
-    "dental_implant",
-    "dental_veneer",
+    "dental-implant",
+    "dental-veneer",
     "dentures",
     "filling",
-    "root_canal_treatment",
-    "scale_and_polish",
-    "teeth_whitening",
-    "wisdom_tooth_removal",
+    "root-canal-treatment",
+    "scale-and-polish",
+    "teeth-whitening",
+    "wisdom-tooth-removal",
 ];
 
 export default dentalSkillsToAddToNewDentistToAutomaticallyCreateDentists;

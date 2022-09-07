@@ -1,14 +1,17 @@
 import React from 'react'
 import { useSelector } from "react-redux";
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import skillLevelOptions from '../../dataInDentistAppWhenDentistAppStarts/skillLevelOptions';
 import paymentMethodsToAddToNewClientCreatedViaUI from '../../dataInDentistAppWhenDentistAppStarts/paymentMethodsToAddToNewClientCreatedViaUI';
 import dentalSkillsToAddToNewDentistCreatedViaUI from '../../dataInDentistAppWhenDentistAppStarts/dentalSkillsToAddToNewDentistCreatedViaUI';
 import appointmentPriorityLevelsInSelectbox from '../../dataInDentistAppWhenDentistAppStarts/appointmentPriorityLevelsInSelectbox';
 import healthStatusOptions from '../../dataInDentistAppWhenDentistAppStarts/healthStatusOptions';
+
+import AppointmentInAppointmentList from './AppointmentInAppointmentList.js'
+
 import {Container} from '../styles/Container.styled'
-import ClientInClientList from './AppointmentInAppointmentList.js'
-import {ClientListAreaStyled, ClientListStyled, Column, FormControlArea, Headers, Intro, Section1, Section2, Section3} from './ClientList.styled'
+
+import {AppointmentListAreaStyled, AppointmentListStyled, Column, FormControlArea, Headers, Intro, Section1, Section2, Section3} from './AppointmentList.styled'
 import {StyledSelectbox} from '../styles/Selectbox.styled';
 
 
@@ -32,28 +35,21 @@ const AppointmentList = () => {
         let personObjectKey = JsxSelectBoxAttributeValueAsArray[0];
         let isAscending = JsxSelectBoxAttributeValueAsArray[1] === "ascending" ? true : false;
 
-        const appointmentObject = {
+        const appointmentObjectSortCriteriaToSortInUISelectBox = {
             appointmentId: 'appointmentId',
-            clientId: 'clientId',
-            lastName: 'lastName',
-            firstName: 'firstName',
             dentistId: 'dentistId',
-            phone: 'phone',
-            email: 'email',
-            priorityLevel: 'priorityLevel',
-            birthYear: 'birthYear',
+            priorityLevel: 'appointmentPriority',
             treatmentType: 'treatmentType'
         };
 
-        const sortProperty = appointmentObject[personObjectKey];  
+        const sortProperty = appointmentObjectSortCriteriaToSortInUISelectBox[personObjectKey];  
         let sortedPersons;
-        if (!isAscending && (sortProperty === "priorityLevel" || sortProperty === ""))  {
-            sortedPersons = [...appointments].sort((person1, person2) => person2[sortProperty] - person1[sortProperty]);
-            return sortedPersons;
-            // numbers sort descending by default, so the !isAscending causes the priorityLevel to display in an ascending fashion. 
-        } else if (isAscending && (sortProperty === "priorityLevel" || sortProperty === ""))  {
-            sortedPersons = [...appointments].sort((person1, person2) => person2[sortProperty] - person1[sortProperty]);
+        if (!isAscending && (sortProperty === "appointmentPriority" || sortProperty === ""))  {
+            sortedPersons = [...appointments].sort((person1, person2) => person1[sortProperty].localeCompare(person2[sortProperty], 'en', { ignorePunctuation: true }));
             return sortedPersons.reverse();
+        } else if (isAscending && (sortProperty === "appointmentPriority" || sortProperty === ""))  {
+            sortedPersons = [...appointments].sort((person1, person2) => person1[sortProperty].localeCompare(person2[sortProperty], 'en', { ignorePunctuation: true }));
+            return sortedPersons;
         } else if (isAscending && (sortProperty === "appointmentId" || sortProperty === "dentistId" || sortProperty === "treatmentType")) {
             sortedPersons = [...appointments].sort((person1, person2) => person1[sortProperty].localeCompare(person2[sortProperty], 'en', { ignorePunctuation: true }));
             return sortedPersons;
@@ -115,7 +111,7 @@ const AppointmentList = () => {
             for (let ratingcriterium of priorityLevelToFilterWith) {
                 arrayFilteredOnOneCriterium = copyOfFilteredData.filter(
                     (personObject) =>           
-                    parseInt(personObject.paymentMethod) === parseInt(ratingcriterium)
+                    parseInt(personObject.appointmentPriority) === parseInt(ratingcriterium)
                 );
                 arrayFilteredOnAllCriteria.push(...arrayFilteredOnOneCriterium)
             }
@@ -145,10 +141,16 @@ const AppointmentList = () => {
     };
 
 
+
+    let counterOfAppointmentsInList = useRef(0);
+    function increment() {
+        counterOfAppointmentsInList.current +=1;
+    }
+
     return (
     <>
     <Container> 
-        <ClientListStyled>
+        <AppointmentListStyled>
             <Intro>Appointments in upcoming month in Dentist company B.V.T. </Intro>
             <FormControlArea>
                 <Section1>
@@ -163,8 +165,8 @@ const AppointmentList = () => {
                         <option value="dentistId descending" >dentist id z-a</option>
                         <option value="treatmentType ascending" > treatment type a-z</option>
                         <option value="treatmentType descending" >treatment type z-a</option>
-                        <option value="priorityLevel ascending" >priority level 1-5</option>
-                        <option value="priorityLevel descending" >priority level 5-1</option>
+                        <option value="priorityLevel ascending" >priority level 1-4</option>
+                        <option value="priorityLevel descending" >priority level 4-1</option>
                     </StyledSelectbox>
                 </Section1>
                 <Section2>
@@ -194,6 +196,7 @@ const AppointmentList = () => {
                         <option value="" >priority level:</option>
                         <option value="" >do not filter</option>  
                         {appointmentPriorityLevelsInSelectbox.map(item => {
+
                             return (<option key={item.value} value={item.value}>{item.text}</option>);
                         })}
                     </StyledSelectbox>
@@ -230,13 +233,20 @@ const AppointmentList = () => {
                     <span>delete appointment</span>
                 </Column>
             </Headers>
-            <ClientListAreaStyled>
-                { dataToRenderFromUseEffectPipeline.length !== 0 ? dataToRenderFromUseEffectPipeline.map((item, id) => (
-                        <ClientInClientList key={id} item={item} appointments={appointments} />
-                )): <>Please create appointments.</>}
-            </ClientListAreaStyled>
-        </ClientListStyled>  
+            <AppointmentListAreaStyled>
+                { dataToRenderFromUseEffectPipeline.length !== 0 ? dataToRenderFromUseEffectPipeline.map((item, id) => {
+                        // count.current = 0;
+                        increment()                                          
+                        return ( 
+                        <AppointmentInAppointmentList index={counterOfAppointmentsInList.current} key={id} item={item} appointments={appointments} />
+                       )})
+                       : 
+                        <>Please create appointments.</>
+                }
+            </AppointmentListAreaStyled>
+        </AppointmentListStyled>  
     </Container>
+    <div disabled={true}>{counterOfAppointmentsInList.current = 0}</div>
     </>
   )
 }

@@ -1,49 +1,50 @@
 import React from "react";
-import { useSelector } from "react-redux";
-import { selectObjectsByArrayObjectKey } from "../../utils";
-const log = console.log;
+import { useDispatch, useSelector } from "react-redux";
+import {deleteAppointmentInReduxToolkit} from "../../redux/appointmentSlice";
+import {deleteDayTimeClient} from "../../redux/clientDayTimeSlice";
+import {deleteDayTimeDentist} from "../../redux/dentistDayTimeSlice";
+import {deleteDayTimeAssistant} from "../../redux/assistantDayTimeSlice";
+import {disableUiControlsDuringAppointmentUpdate, saveAppointmentToReduxToolkit, showComponentUpdateAppointmentReduxToolkit} from '../../redux/updateAppointmentSlice';
 
-const format_time = time => (time < 10 ? `${time}:00u` : `${time}:00u`);
+import {deleteDentalAppointment, formatTime, log, selectObjectsByArrayObjectKey, updateAppointment_Phase1of2_DisplayComponentUpdateAppointment } from "../../utils";
+
+// import "./Day.css"; 
+import {AppointmentInDayStyled, AssistantInDayViewStyled, ClientInDayViewStyled, DayNrInDayViewStyled, DentistInDayViewStyled, TimeInDayViewStyled, TreatmentTypeStyled } from "./DayView.styled";
+import {StyledButtonInsideCalendarOrDayView} from '../styles/ButtonInsideCalendarOrDayView';
+// import {StyledButtonWithWordUpdate} from '../styles/ButtonWithWordUpdate';
 
 
 
-export const AppointmentInDay = ({ time, day, client, clientId, dentist, dentistId, assistant, assistantId, treatmentType }) => {
+export const AppointmentInDay = ({appointmentId, time, day, client, clientId, dentist, dentistId, assistant, assistantId, treatmentType }) => {
   
+  let dispatch = useDispatch();
+  // log(`comp AppointmentInDay: start`)
+  let appointmentsfromReduxToolkit = useSelector((state) => state.appointment.appointments)
+  let assistantsFromReduxToolkit  = useSelector((state) => state.assistant.assistants);
+  let clientsFromReduxToolkit  = useSelector((state) => state.client.clients);
+  let dentistsFromReduxToolkit  = useSelector((state) => state.dentist.dentists);
 
-  // let dentistsFromReduxToolkit  = useSelector((state) => state.dentist);
-  // console.log(dentistId) 
-  // let dentistIsSick;
-  
-  // // check if dentist is  ill:
-  // console.log(`dentists from redux toolkit:`)
-  // log(dentistsFromReduxToolkit.dentists)
-  // let getDentist = dentist => dentist.dentistId === dentistId
-  // let dentistFromreduxToolkit = selectObjectsByArrayObjectKey(dentistsFromReduxToolkit.dentists, getDentist)
-  // dentistIsSick = dentistFromreduxToolkit[0].isSick;
-  // dentistIsSick = (dentistIsSick === "true" || dentistIsSick === true);
+  let getAppointmentObject = item => item.appointmentId === appointmentId ;
+  let appointment = selectObjectsByArrayObjectKey(appointmentsfromReduxToolkit, getAppointmentObject);
+  appointment = appointment[0]
 
-
-  let assistantsFromReduxToolkit  = useSelector((state) => state.assistant);
-  let clientsFromReduxToolkit  = useSelector((state) => state.client);
-  let dentistsFromReduxToolkit  = useSelector((state) => state.dentist);
-  
   let assistantIsSick;
   let clientIsSick;
   let dentistIsSick;
   let colorToIndicateSickness;
   
   let getClient = client => client.clientId === clientId
-  let clientFromreduxToolkit = selectObjectsByArrayObjectKey(clientsFromReduxToolkit.clients, getClient)
+  let clientFromreduxToolkit = selectObjectsByArrayObjectKey(clientsFromReduxToolkit, getClient)
   clientIsSick = clientFromreduxToolkit[0]?.isSick;
   clientIsSick = (clientIsSick === "true" || clientIsSick === true);
 
   let getAssistant = assistant => assistant.assistantId === assistantId
-  let assistantFromreduxToolkit = selectObjectsByArrayObjectKey(assistantsFromReduxToolkit.assistants, getAssistant)
+  let assistantFromreduxToolkit = selectObjectsByArrayObjectKey(assistantsFromReduxToolkit, getAssistant)
   assistantIsSick = assistantFromreduxToolkit[0]?.isSick;
   assistantIsSick = (assistantIsSick === "true" || assistantIsSick === true);
 
   let getDentist = dentist => dentist.dentistId === dentistId
-  let dentistFromreduxToolkit = selectObjectsByArrayObjectKey(dentistsFromReduxToolkit.dentists, getDentist)
+  let dentistFromreduxToolkit = selectObjectsByArrayObjectKey(dentistsFromReduxToolkit, getDentist)
   dentistIsSick = dentistFromreduxToolkit[0]?.isSick;
   dentistIsSick = (dentistIsSick === "true" || dentistIsSick === true);
 
@@ -58,16 +59,46 @@ export const AppointmentInDay = ({ time, day, client, clientId, dentist, dentist
   (assistantIsSick && clientIsSick && dentistIsSick) && (colorToIndicateSickness = "linear-gradient(45deg, #ffa500 16.67%, #ff0000 16.67%, #ff0000 33.33%, #c632d1 33.33%, #c632d1 50%, #ffa500 50%, #ffa500 66.67%, #ff0000 66.67%, #ff0000 83.33%, #c632d1 83.33%, #c632d1 100%)");
 
   return(
-  <li className="appointment" style={{backgroundImage : colorToIndicateSickness}}>
-    <div className="time">{format_time(time)}</div>
-    <div className="dayAsNumber">Day: {day}</div>
-    <div className="client">Client: {client}</div>
-    <div className="treatmentType">{treatmentType}</div>
-    <div className="dentist">Dentist: {dentist}</div>
+  <AppointmentInDayStyled 
+    style={{backgroundImage : colorToIndicateSickness}}>
+    <TimeInDayViewStyled>{formatTime(time)}</TimeInDayViewStyled>
+    <DayNrInDayViewStyled>Day: {day}</DayNrInDayViewStyled>
+    <ClientInDayViewStyled>Client: {client}</ClientInDayViewStyled>
+    <TreatmentTypeStyled>{treatmentType}</TreatmentTypeStyled>
+    <StyledButtonInsideCalendarOrDayView 
+      onClick={() => { deleteDentalAppointment(
+                          appointmentId, 
+                          appointmentsfromReduxToolkit, 
+                          deleteAppointmentInReduxToolkit, 
+                          deleteDayTimeClient, 
+                          deleteDayTimeDentist, 
+                          deleteDayTimeAssistant,  
+                          dispatch
+                        );  
+                      }}>
+      delete appointment
+    </StyledButtonInsideCalendarOrDayView> 
+    <StyledButtonInsideCalendarOrDayView
+      onClick={() => { updateAppointment_Phase1of2_DisplayComponentUpdateAppointment(
+                          appointment,
+                          appointmentId, 
+                          showComponentUpdateAppointmentReduxToolkit, 
+                          appointmentsfromReduxToolkit, 
+                          deleteAppointmentInReduxToolkit, 
+                          saveAppointmentToReduxToolkit,
+                          disableUiControlsDuringAppointmentUpdate,
+                          deleteDayTimeClient, 
+                          deleteDayTimeDentist, 
+                          deleteDayTimeAssistant,  
+                          dispatch
+                        );  
+                      }}>
+      update appointment
+    </StyledButtonInsideCalendarOrDayView>
+    <DentistInDayViewStyled >Dentist: {dentist}</DentistInDayViewStyled>
   
-    <div className="assistant">Assistant: {assistant}</div>
-
-  </li>
+    <AssistantInDayViewStyled>Assistant: {assistant}</AssistantInDayViewStyled>
+  </AppointmentInDayStyled>
   )
 };
 

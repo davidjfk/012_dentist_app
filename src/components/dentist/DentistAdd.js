@@ -7,7 +7,7 @@ import dentalSkillsToAddToNewDentistCreatedViaUI from '../../dataInDentistAppWhe
 import healthStatusOptions from '../../dataInDentistAppWhenDentistAppStarts/healthStatusOptions';
 import {Container} from '../styles/Container.styled';
 import {DentistAddStyled, Column, Form, Intro} from './DentistAdd.styled';
-import {StyledButtonAroundText} from '../styles/ButtonAroundText.styled';
+import {StyledButtonInsideAddOrUpdateComponent} from '../styles/ButtonInsideAddOrUpdateComponent.styled';
 import {StyledInputfield} from '../styles/Inputfield.styled';
 import {StyledSelectbox} from '../styles/Selectbox.styled';
 
@@ -60,7 +60,8 @@ const AddDentist = () => {
         const dentistId = `${lastName}-${generateRandomPersonId()}`;
 
         let treatmentTypes = skillsOfDentist;
-        dispatch(addDentist({dentistId, email, isSick, firstName, lastName, phone,  skillLevel, treatmentTypes }));   
+        let appointmentsDeletedOnDateTime = "null";
+        dispatch(addDentist({dentistId, email, isSick, firstName, lastName, phone,  skillLevel, treatmentTypes, appointmentsDeletedOnDateTime}));   
         
         // now reset the form for the next use:
         // setLastName('')
@@ -180,9 +181,9 @@ const AddDentist = () => {
                 </Column>
 
                 <Column>
-                    <StyledButtonAroundText onClick={onSubmit}>
+                    <StyledButtonInsideAddOrUpdateComponent onClick={onSubmit}>
                         Add dentist 
-                    </StyledButtonAroundText>                  
+                    </StyledButtonInsideAddOrUpdateComponent>                  
                 </Column>
             </Form>
         </DentistAddStyled>  

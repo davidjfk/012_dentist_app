@@ -1,27 +1,40 @@
 import React from 'react';
-import { useState, useRef } from 'react';
-import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
+
+import { useDispatch, useSelector } from "react-redux";
+
 import { deleteAssistant } from "../../redux/assistantSlice";
-import { toggleHealthStatusOfAssistant } from "../../redux/assistantSlice";
+import {deleteAppointmentInReduxToolkit} from "../../redux/appointmentSlice";
+import {deleteDayTimeClient} from "../../redux/clientDayTimeSlice";
+import {deleteDayTimeDentist} from "../../redux/dentistDayTimeSlice";
+import {deleteDayTimeAssistant} from "../../redux/assistantDayTimeSlice";
+import {setDateAndTimeOfDeletionOfAppointmentsOfAssistantInReduxToolkit, toggleHealthStatusOfAssistant } from "../../redux/assistantSlice";
+
+import {deleteAllAppointmentsOfPerson, getSystemDatePlusTime} from '../../utils';
+
 import {Row, Column} from './AssistantList.styled'
 import { AssistantInAssistantListStyled } from './AssistantInList.styled';
 import {StyledCheckbox} from '../styles/Checkbox.styled';
 import { StyledFaTimes } from '../styles/FaTimes.styled'
-import { FaTimes } from 'react-icons/fa'
+import { FaTimes } from 'react-icons/fa';
+import {StyledButtonAroundSymbol} from '../styles/ButtonAroundSymbol.styled';
+import "../../App.css";
+
 const log = console.log;
 
-const AssistantInAssistantList = ({assistants, item}) => {
+const AssistantInAssistantList = ({assistants, item, index}) => {
   const dispatch = useDispatch();
   // const [personIsSick, setPersonIsSick] = useState(false);
   // let checkBoxStatus = useRef(false);
-
   let healthStatus = (item.isSick === "true") ? "sick" : "healthy";
+  let appointmentLastUpdatedOnDateTime = (item.appointmentsDeletedOnDateTime === "null") ? "Not happened yet." : item.appointmentsDeletedOnDateTime ;
+  let appointmentsfromReduxToolkit = useSelector((state) => state.appointment.appointments);
+
   return (
     <Row>
         <Column>
           <AssistantInAssistantListStyled>
-            {assistants.indexOf(item) + 1 }
+            {/* {assistants.indexOf(item) + 1 } */}
+            {index}
           </AssistantInAssistantListStyled>
         </Column>
         <Column>
@@ -78,6 +91,52 @@ const AssistantInAssistantList = ({assistants, item}) => {
                 <FaTimes onClick={() => dispatch(deleteAssistant(item.assistantId))} />
               </StyledFaTimes> */}
 
+            </AssistantInAssistantListStyled>
+        </Column>
+
+
+
+
+        <Column>
+          <AssistantInAssistantListStyled>
+            {appointmentLastUpdatedOnDateTime}
+          </AssistantInAssistantListStyled>
+        </Column>
+        <Column>
+          <AssistantInAssistantListStyled>
+              {/* use case: delete all appointments of a client. pitfall: do not use this code for dentist, assistant, nor appointment !!   */}
+              <StyledButtonAroundSymbol disabled={true}>
+                <StyledFaTimes>
+                  {/* <FaTimes onClick={() => deleteAllAppointmentsOfClient(item.clientId)} /> */}
+                  <FaTimes 
+                    onClick={() => {
+                      deleteAllAppointmentsOfPerson("assistantId", item.assistantId, appointmentsfromReduxToolkit, deleteAppointmentInReduxToolkit,   deleteDayTimeClient, 
+                          deleteDayTimeDentist, deleteDayTimeAssistant,  dispatch);
+                      let systemDateTime = getSystemDatePlusTime();
+                      let assistantId = item.assistantId;
+                      dispatch(setDateAndTimeOfDeletionOfAppointmentsOfAssistantInReduxToolkit({assistantId, systemDateTime}));
+                    }} 
+                  />
+                </StyledFaTimes>
+              </StyledButtonAroundSymbol>
+            </AssistantInAssistantListStyled>
+        </Column>
+        <Column>
+          <AssistantInAssistantListStyled>
+              {/* use case: delete all appointments of a client. pitfall: do not use this code for dentist, assistant, nor appointment !!   */}
+              <StyledButtonAroundSymbol >      
+                <StyledFaTimes>
+                    <FaTimes 
+                      onClick={() => {
+                        deleteAllAppointmentsOfPerson("assistantid", item.assistantId, appointmentsfromReduxToolkit, deleteAppointmentInReduxToolkit, deleteDayTimeClient, 
+                          deleteDayTimeDentist, deleteDayTimeAssistant,  dispatch);   
+                        let assistantId = item.assistantId;                     
+                        dispatch(deleteAssistant({assistantId}))
+                      }}  
+                      />                                     
+                </StyledFaTimes>
+        
+              </StyledButtonAroundSymbol>
             </AssistantInAssistantListStyled>
         </Column>
     </Row>

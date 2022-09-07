@@ -2,16 +2,16 @@
     const dentalSkillsToAddToNewDentistCreatedViaUI = [
         {value: 'brace', text: 'brace'},
         {value: 'bridge', text: 'bridge'},
-        {value: 'broken_tooth', text: 'broken_tooth'},
+        {value: 'broken-tooth', text: 'broken-tooth'},
         {value: 'crown', text: 'crown'},
-        {value: 'dental_implant', text: 'dental_implant'},
-        {value: 'dental_veneer', text: 'dental_veneer'},
+        {value: 'dental-implant', text: 'dental-implant'},
+        {value: 'dental-veneer', text: 'dental-veneer'},
         {value: 'dentures', text: 'dentures'},
         {value: 'filling', text: 'filling'},
-        {value: 'root_canal_treatment', text: 'root_canal_treatment'},
-        {value: 'scale_and_polish', text: 'scale_and_polish'},
-        {value: 'teeth_whitening', text: 'teeth_whitening'},
-        {value: 'wisdom_tooth_removal', text: 'wisdom_tooth_removal'}
+        {value: 'root-canal-treatment', text: 'root-canal-treatment'},
+        {value: 'scale-and-polish', text: 'scale-and-polish'},
+        {value: 'teeth-whitening', text: 'teeth-whitening'},
+        {value: 'wisdom-tooth-removal', text: 'wisdom-tooth-removal'}
     ];
 
     export default dentalSkillsToAddToNewDentistCreatedViaUI;

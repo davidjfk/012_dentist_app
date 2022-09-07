@@ -1,6 +1,6 @@
 import React from 'react'
 import { useSelector } from "react-redux";
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import skillLevelOptions from '../../dataInDentistAppWhenDentistAppStarts/skillLevelOptions';
 import healthStatusOptions from '../../dataInDentistAppWhenDentistAppStarts/healthStatusOptions';
 import {Container} from '../styles/Container.styled'
@@ -30,31 +30,27 @@ const DentistList = () => {
         let personObjectKey = JsxSelectBoxAttributeValueAsArray[0];
         let isAscending = JsxSelectBoxAttributeValueAsArray[1] === "ascending" ? true : false;
 
-        const assistantObject = {
-            assistantId: 'assistantId',
-            lastName: 'lastName',
+        const dentistObjectSortCriteriaToSortInUISelectBox = {
+            dentistId: 'dentistId',
             firstName: 'firstName',
-            phone: 'phone',
-            email: 'email',
             isSick: 'isSick',
             skillLevel: 'skillLevel'
         };
 
-        const sortProperty = assistantObject[personObjectKey];  
+        const sortProperty = dentistObjectSortCriteriaToSortInUISelectBox[personObjectKey];  
         let sortedPersons;
         if (!isAscending && (sortProperty === "skillLevel" || sortProperty === ""))  {
-            sortedPersons = [...dentists].sort((person1, person2) => person2[sortProperty] - person1[sortProperty]);
-            return sortedPersons;
-            // numbers sort descending by default, so the !isAscending causes the skillLevel to display in an ascending fashion. 
-        } else if (isAscending && (sortProperty === "skillLevel" || sortProperty === ""))  {
-            sortedPersons = [...dentists].sort((person1, person2) => person2[sortProperty] - person1[sortProperty]);
+            sortedPersons = [...dentists].sort((person1, person2) => person1[sortProperty].localeCompare(person2[sortProperty], 'en', { ignorePunctuation: true }));
             return sortedPersons.reverse();
-        } else if (isAscending && (sortProperty === "assistantId" || sortProperty === "firstName" || sortProperty === "isSick")) {
+        } else if (isAscending && (sortProperty === "skillLevel" || sortProperty === ""))  {
+            sortedPersons = [...dentists].sort((person1, person2) => person1[sortProperty].localeCompare(person2[sortProperty], 'en', { ignorePunctuation: true }));
+            return sortedPersons;
+        } else if (isAscending && (sortProperty === "dentistId" || sortProperty === "firstName" || sortProperty === "isSick")) {
             sortedPersons = [...dentists].sort((person1, person2) => person1[sortProperty].localeCompare(person2[sortProperty], 'en', { ignorePunctuation: true }));
             return sortedPersons;
             // I choose 'en' as  the unicodeLanguage.
             // unicode allows user to enter any kind of character.
-        } else if (!isAscending && (sortProperty === "assistantId" || sortProperty === "firstName" || sortProperty === "isSick")) {
+        } else if (!isAscending && (sortProperty === "dentistId" || sortProperty === "firstName" || sortProperty === "isSick")) {
                 sortedPersons = [...dentists].sort((person1, person2) => person1[sortProperty].localeCompare(person2[sortProperty], 'en', { ignorePunctuation: true }));
                 return sortedPersons.reverse();
         } else {
@@ -139,6 +135,10 @@ const DentistList = () => {
       setIsHovering(false);
     };
 
+    let counterOfDentistInList = useRef(0);
+    function increment() {
+        counterOfDentistInList.current +=1;
+    }
 
     return (
     <>
@@ -158,8 +158,8 @@ const DentistList = () => {
                         <option value="firstName descending" >first name z-a</option>
                         <option value="isSick ascending" >health status a-z</option>
                         <option value="isSick descending" >health status z-a</option>
-                        <option value="skillLevel ascending" >skill level 1-5</option>
-                        <option value="skillLevel descending" >skill level 5-1</option>
+                        <option value="skillLevel ascending" >skill level 1-7</option>
+                        <option value="skillLevel descending" >skill level 7-1</option>
                     </StyledSelectbox>
                 </Section1>
                 <Section2>
@@ -226,14 +226,34 @@ const DentistList = () => {
                 <Column>
                     <span>Show as sick in views (red background) </span>
                 </Column>
+                <Column>
+                    <span>Appointments last deleted on</span>
+                </Column>
+                <Column>
+                    <span>Delete all appointments</span>
+                </Column>
+                <Column>
+                    <span>Delete dentist with all appointments</span>
+                </Column>
             </Headers>
             <DentistListAreaStyled>
-                { dataToRenderFromUseEffectPipeline.length !== 0 ? dataToRenderFromUseEffectPipeline.map((item, id) => (
+
+                {/* { dataToRenderFromUseEffectPipeline.length !== 0 ? dataToRenderFromUseEffectPipeline.map((item, id) => (
                         <DentistInDentistList key={id} item={item} dentists={dentists} />
-                )): <>Please hire dentists.</>}
+                )): <>Please hire dentists.</>} */}
+
+                { dataToRenderFromUseEffectPipeline.length !== 0 ? dataToRenderFromUseEffectPipeline.map((item, id) => {
+                    increment()                                          
+                    return ( 
+                    <DentistInDentistList index={counterOfDentistInList.current} key={id} item={item} dentists={dentists} />
+                    )})
+                    : 
+                    <>Please hire dentists.</>
+                }
             </DentistListAreaStyled>
         </DentistListStyled>  
     </Container>
+    <div disabled={true}>{counterOfDentistInList.current = 0}</div>
     </>
   )
 }

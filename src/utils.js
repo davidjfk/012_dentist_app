@@ -1,22 +1,21 @@
-// remove imports after use case 1 has been completed. See fn generateRandomAppointment below.
 import clientsDentistCompanyBVT from "./dataInDentistAppWhenDentistAppStarts/clients"
 import dentistsDentistCompanyBVT from "./dataInDentistAppWhenDentistAppStarts/dentists"
 import assistantsDentistCompanyBVT from "./dataInDentistAppWhenDentistAppStarts/assistants"
 
-import { addAppointment, deleteAppointmentInReduxToolkit} from "./redux/appointmentSlice";
+import {addAppointment} from "./redux/appointmentSlice";
 import {addDayTimeClient} from "./redux/clientDayTimeSlice";
 import {addDayTimeDentist} from "./redux/dentistDayTimeSlice";
 import {addDayTimeAssistant} from "./redux/assistantDayTimeSlice";
-import {addDentalTreatmentsAsSkillSetToDentist} from  "./redux/dentistSlice"
 
-const log = console.log;
+export const log = console.log;
 
 /*
-
-isCombiOfPersonAndDayAndTimeAvailableToCreateAppointmentViaUI
-addTreatmentTypesToDentist
-
+createAppointment  ------------------------------------------------
 createCombiOfPersonAndDayAndTime
+deleteAllAppointmentsOfPerson
+deleteDentalAppointment
+formatTime
+generateAppointmentId
 generateRandomPersonId
 generateRandomAppointmentId
 generateRandomAppointmentFromWinc
@@ -26,9 +25,9 @@ getAppointmentId
 getAssistantId
 getClientId
 getDentistId
+getArrayObjectWithObjectKeyValuePair
 getNrOfRandomElementsFromArray
 getRandomDay
-getRandomDay2  (use getRandomDay instead)
 getRandomName
 getRandomPaymentMethod (not in use)
 getRandomPersonId
@@ -39,74 +38,287 @@ getRandomTime
 getRandomTreatmentForRandomAppointment
 getRandomTreatmentTypes
 getSystemDatePlusTime
+isCombiOfPersonAndDayAndTimeAvailableToCreateAppointmentViaUI
 isValidWorkingDay
 isValidWorkingTime
 loadSelectboxWithListOf
 selectObjectsByArrayObjectKey
-createAppointment  ------------------------------------------------
-updateAppointmentRecursivelyUntilUpdateSucceeds 
-deleteDentalAppointment_not_in_use
-deleteAllAppointmentsOfClient_not_in_use
-deleteDentalAppointment
-
+sortArrayWithObjects
+updateAppointment_Phase1of2_DisplayComponentUpdateAppointment
+updateAppointment_Phase2of2_updateAppointmentRecursivelyUntilUpdateSucceeds
 */
 
 
 
-
-export function isCombiOfPersonAndDayAndTimeAvailableToCreateAppointmentViaUI (
-  personId, 
+export function createAppointment (
+  clientId, 
+  treatmentType,
+  appointmentPriority,
   day, 
   time, 
-  personType, 
+  dentistId, 
+  assistantId,    
+  appointmentLastUpdatedOnDateTime,         
+  clientsFromReduxToolkit, 
+  dentistsFromReduxToolkit, 
+  assistantsFromReduxToolkit, 
   clientDayTimesFromReduxToolkit, 
   dentistDayTimesFromReduxToolkit, 
-  assistantDayTimesFromReduxToolkit) {
-  // I only call this fn from within fn createAppointment.
-  // 2do at the end (if time left): improve performance. Check useMemo( ). 
+  assistantDayTimesFromReduxToolkit, 
+  dispatch
+  ) {
+  log(`fn createAppointment: start: `)
+  let personType;
   
-  log(`fn isCombiOfPersonAndDayAndTimeAvailableToCreateAppointmentViaUI: start: `)
-  // log(personId)
-  // log(day)
-  // log(time)
-  // log(personType)  
-  // log(clientDayTimes.clientDayTimes)
-  // log(dentistDayTimes.dentistDayTimes)
-  // log(assistantDayTimes.assistantDayTimes)
-  let isUniqueValue = false;
-  let PersonIdAndDayAndTimeCombi = personId +"_" + day + "_" + time;
-  switch (personType) {
-      case 'client':
-        isUniqueValue = !clientDayTimesFromReduxToolkit.clientDayTimes.includes(PersonIdAndDayAndTimeCombi) 
-        break;
-      case 'dentist':
-        isUniqueValue = !dentistDayTimesFromReduxToolkit.dentistDayTimes.includes(PersonIdAndDayAndTimeCombi) 
-        break;
-      case 'assistant':
-        // log(assistantDayTimesFromReduxToolkit.assistantDayTimes)
-        isUniqueValue = !assistantDayTimesFromReduxToolkit.assistantDayTimes.includes(PersonIdAndDayAndTimeCombi) 
-        break;
-      default:
-        console.error(`this ${personType} does not exist`)
-        break;  
-  }
-  return isUniqueValue
-}
+  let getDentist = dentist => dentist.dentistId === dentistId
+  let dentistForWhomAnAppointmentIsBeingMade = selectObjectsByArrayObjectKey(dentistsFromReduxToolkit.dentists, getDentist)  
+  let skillsOfDentistForWhomAnAppointmentIsBeingMade = (dentistForWhomAnAppointmentIsBeingMade[0].treatmentTypes)
+  log(`skillsOfDentistForWhomAnAppointmentIsBeingMade: `)
+  log(skillsOfDentistForWhomAnAppointmentIsBeingMade)
+  if(skillsOfDentistForWhomAnAppointmentIsBeingMade.includes(treatmentType)) {
+    log(`Dentist ${dentistId} has the required skill to treat client ${clientId} `) // 
+  } else {
+    log(`Dentist ${dentistId} does not have the required skill to treat client ${clientId} `)
+    alert(`Dentist ${dentistId} does not have the required skill to treat client ${clientId} `);
+    return; // abort creating appointment. 
+  } 
+
+  // log(`isAssistantNeededForAppointment: ${isAssistantNeededForAppointment}`)
+  if (assistantId !== "") {
+      log(`data to create updated appointment:`)
+      log(clientId, dentistId, treatmentType, assistantId, day, time, clientDayTimesFromReduxToolkit, dentistDayTimesFromReduxToolkit, assistantDayTimesFromReduxToolkit )     
+
+      if (
+          isCombiOfPersonAndDayAndTimeAvailableToCreateAppointmentViaUI(
+            clientId, 
+            day, 
+            time, 
+            personType="client",  
+            clientDayTimesFromReduxToolkit, 
+            dentistDayTimesFromReduxToolkit, 
+            assistantDayTimesFromReduxToolkit) &&
+          isCombiOfPersonAndDayAndTimeAvailableToCreateAppointmentViaUI(
+            dentistId, 
+            day, 
+            time, 
+            personType = "dentist",  
+            clientDayTimesFromReduxToolkit, 
+            dentistDayTimesFromReduxToolkit, 
+            assistantDayTimesFromReduxToolkit) &&
+          isCombiOfPersonAndDayAndTimeAvailableToCreateAppointmentViaUI(
+            assistantId, 
+            day, 
+            time, 
+            personType = "assistant",  
+            clientDayTimesFromReduxToolkit, 
+            dentistDayTimesFromReduxToolkit, 
+            assistantDayTimesFromReduxToolkit)
+          )
+      {
+        log(`fn createAppointment: after 'isCombiOfPersonAndDayAndTimeAvailableToCreateAppointmentViaUI: `)
+     
+          let clientDayTimes = createCombiOfPersonAndDayAndTime(clientId, day, time)
+          dispatch(addDayTimeClient(clientDayTimes));
+
+          let dentistDayTimes = createCombiOfPersonAndDayAndTime(dentistId, day, time)
+          dispatch(addDayTimeDentist(dentistDayTimes));
+
+          let assistantDayTimes = createCombiOfPersonAndDayAndTime(assistantId, day, time)
+          dispatch(addDayTimeAssistant(assistantDayTimes));
+
+          let getClient = client => client.clientId === clientId
+          let clientForWhomAnAppointmentIsBeingMade = selectObjectsByArrayObjectKey(clientsFromReduxToolkit.clients, getClient)
+          
+          // variable client inside obj appointment is derived data from  the object client.                       
+          let client = (`${(clientForWhomAnAppointmentIsBeingMade[0].firstName)} ${(clientForWhomAnAppointmentIsBeingMade[0].lastName)}`)
+
+          let getDentist = dentist => dentist.dentistId === dentistId
+          let dentistForWhomAnAppointmentIsBeingMade = selectObjectsByArrayObjectKey(dentistsFromReduxToolkit.dentists, getDentist)
+          
+          // variable dentist inside obj appointment is derived data from  the object dentist.
+          let dentist = (`${(dentistForWhomAnAppointmentIsBeingMade[0].firstName)} ${(dentistForWhomAnAppointmentIsBeingMade[0].lastName)}`)
+
+          let assistant;  
+          if (assistantId !== null) {
+            let getAssistant = assistant => assistant.assistantId === assistantId
+            let assistantForWhomAnAppointmentIsBeingMade = selectObjectsByArrayObjectKey(assistantsFromReduxToolkit.assistants, getAssistant)
+
+            // variable assistant inside obj appointment is derived data from  the object assistant.
+            assistant = (`${(assistantForWhomAnAppointmentIsBeingMade[0].firstName)} ${(assistantForWhomAnAppointmentIsBeingMade[0].lastName)}`)
+          }
 
 
-export const addTreatmentTypesToDentist = (arrayWithDentistObjects, arrayWithDentalTreatments, dispatch) => {
-  for (let i = 0; i < arrayWithDentistObjects.length; i++) {
-    dispatch(addDentalTreatmentsAsSkillSetToDentist({"skillSetOfDentist": getRandomTreatmentTypes(arrayWithDentalTreatments), "indexOfDentistInArray": i}))
-  }
-}
+          // let appointmentId = generateRandomAppointmentId();
+          let appointmentId = generateAppointmentId(clientId, day, time);
+          let newAppointmentObject = {
+            appointmentId, 
+            appointmentLastUpdatedOnDateTime,
+            appointmentPriority,
+            assistant,
+            assistantId, 
+            client, 
+            clientId, 
+            day, 
+            dentist, 
+            dentistId, 
+            time, 
+            treatmentType, 
+          }; 
+          dispatch(addAppointment(newAppointmentObject));
+      } 
+      else {            
+          alert('please check if client, dentist and/or assistant have an appointment on this day and time');
+          return;
+      }
+  } else {
+      log('the else way')
+      log(clientId, dentistId, assistantId, day, time, clientDayTimesFromReduxToolkit, dentistDayTimesFromReduxToolkit, assistantDayTimesFromReduxToolkit )
+      if (isCombiOfPersonAndDayAndTimeAvailableToCreateAppointmentViaUI(
+        clientId, 
+        day, 
+        time, 
+        personType = "client",  
+        clientDayTimesFromReduxToolkit, 
+        dentistDayTimesFromReduxToolkit, 
+        assistantDayTimesFromReduxToolkit) &&
+          isCombiOfPersonAndDayAndTimeAvailableToCreateAppointmentViaUI(
+            dentistId, 
+            day, 
+            time, 
+            personType = "dentist",  
+            clientDayTimesFromReduxToolkit, 
+            dentistDayTimesFromReduxToolkit, 
+            assistantDayTimesFromReduxToolkit))
+      {
+
+        let clientDayTimes = createCombiOfPersonAndDayAndTime(clientId, day, time)
+        dispatch(addDayTimeClient(clientDayTimes));
+
+        let dentistDayTimes = createCombiOfPersonAndDayAndTime(dentistId, day, time)
+        dispatch(addDayTimeDentist(dentistDayTimes));
 
 
+        let getClient = client => client.clientId === clientId
+        let clientForWhomAnAppointmentIsBeingMade = selectObjectsByArrayObjectKey(clientsFromReduxToolkit.clients, getClient)
+        
+        // variable client inside obj appointment is derived data from  the object client.
+        let client = (`${(clientForWhomAnAppointmentIsBeingMade[0].firstName)} ${(clientForWhomAnAppointmentIsBeingMade[0].lastName)}`)
 
-
+        let getDentist = dentist => dentist.dentistId === dentistId
+        let dentistForWhomAnAppointmentIsBeingMade = selectObjectsByArrayObjectKey(dentistsFromReduxToolkit.dentists, getDentist)
+        
+        // variable dentist inside obj appointment is derived data from  the object dentist.
+        let dentist = (`${(dentistForWhomAnAppointmentIsBeingMade[0].firstName)} ${(dentistForWhomAnAppointmentIsBeingMade[0].lastName)}`)
+       
+        // let appointmentId = generateRandomAppointmentId();
+        let appointmentId = generateAppointmentId(clientId, day, time);
+        let newAppointmentObject = {
+          appointmentId, 
+          appointmentLastUpdatedOnDateTime,
+          appointmentPriority,
+          assistant:null,
+          assistantId:null, 
+          client, 
+          clientId, 
+          day, 
+          dentist, 
+          dentistId, 
+          time, 
+          treatmentType, 
+        };
+        dispatch(addAppointment(newAppointmentObject));   
+      }
+      else {            
+          alert('please check if client and/or dentist have an appointment on this day and time');
+          return;
+      }
+  } 
+} 
 
 export const createCombiOfPersonAndDayAndTime = (personId, day, time) => personId + "_" + day + "_" + time;
 
-// export const generateRandomAppointmentId = () => Math.floor(10000000 + Math.random() *  9000000); // 7 digits
+
+
+
+
+
+
+
+export const deleteAllAppointmentsOfPerson = (
+  typeOfPersonId, //3 flavors: 'assistantId', 'clientId' or 'dentistId'.
+  idOfPerson, // is a "foreign key" in array with appointments.
+  appointmentsfromReduxToolkit, 
+  deleteAppointmentInReduxToolkit, 
+  deleteDayTimeClient, 
+  deleteDayTimeDentist, 
+  deleteDayTimeAssistant, 
+  dispatch) => {
+    log(`idOfPerson (client, dentist or asssistant): ${idOfPerson}`)
+    let getAppointment = appointment => appointment[typeOfPersonId] === idOfPerson
+    let appointmentsToDelete = selectObjectsByArrayObjectKey(appointmentsfromReduxToolkit, getAppointment)
+    log(`appointmentsToDelete: ${appointmentsToDelete}`)
+    log(appointmentsToDelete)
+    let appointmentsToDeleteCopy = [...appointmentsToDelete];
+    appointmentsToDeleteCopy.forEach(appointmentToDelete => {
+        let appointmentId = appointmentToDelete.appointmentId;
+        if (appointmentsToDelete.length !== 0){
+            deleteDentalAppointment(
+                appointmentId, // is "primary key" in array with appointments.
+                appointmentsfromReduxToolkit, 
+                deleteAppointmentInReduxToolkit,
+                deleteDayTimeClient, 
+                deleteDayTimeDentist, 
+                deleteDayTimeAssistant, 
+                dispatch)  
+        }
+    })            
+} 
+
+
+
+export const deleteDentalAppointment = (
+  appointmentId, 
+  appointmentsfromReduxToolkit, 
+  deleteAppointmentInReduxToolkit, 
+  deleteDayTimeClient, 
+  deleteDayTimeDentist, 
+  deleteDayTimeAssistant, 
+  dispatch) => {
+  log('fn deleteDentalAppointment start: ')
+
+  // 2 lines below also work, instead of using my fn getArrayObjectWithObjectKeyValuePair.
+  log(`appointmentId: ${appointmentId}`)
+  // let getAppointment = appointment => appointment.appointmentId === appointmentId
+  // let appointmentThatIsAboutToBeDeleted = selectObjectsByArrayObjectKey(appointmentsfromReduxToolkit, getAppointment)
+  log(appointmentsfromReduxToolkit)
+  let appointmentThatIsAboutToBeDeleted = getArrayObjectWithObjectKeyValuePair("appointmentId", appointmentId, appointmentsfromReduxToolkit)
+
+  console.log('---appointmentThatWillBeDeleted:')
+  console.log(appointmentThatIsAboutToBeDeleted)
+  console.log(appointmentThatIsAboutToBeDeleted[0])
+
+ 
+  let {clientId, day, time, dentistId, assistantId} = appointmentThatIsAboutToBeDeleted[0];
+
+  let clientDayTimes  = createCombiOfPersonAndDayAndTime(clientId, day, time)
+  log(`clientDayTimes: ${clientDayTimes} `)
+  dispatch(deleteDayTimeClient(clientDayTimes));
+  
+  let dentistDayTimes = createCombiOfPersonAndDayAndTime(dentistId, day, time)
+  dispatch(deleteDayTimeDentist(dentistDayTimes));
+
+  if (assistantId !== null) {
+      let assistantDayTimes = createCombiOfPersonAndDayAndTime(assistantId, day, time)
+      dispatch(deleteDayTimeAssistant(assistantDayTimes));
+  }
+
+  dispatch(deleteAppointmentInReduxToolkit(appointmentId))
+  log('fn deleteAppointment end: ')
+}
+
+
+export const formatTime = time => (time < 10 ? `${time}:00u` : `${time}:00u`);
+
 export const generateAppointmentId = (clientId, day, time) => ( `${clientId}_${day}_${time}`);
 
 
@@ -146,6 +358,8 @@ export function getAppointmentObject(appointmentsfromReduxToolkit, indexOfAppoin
   return appointmentObject
 }
 
+
+
 export function getAppointmentId(appointmentsfromReduxToolkit, indexOfAppointment) {
   const appointment = appointmentsfromReduxToolkit.appointments[indexOfAppointment]
   log('fn getAppointmentId: start:')
@@ -175,7 +389,6 @@ export function getClientId(clientsfromReduxToolkit, indexOfClient) {
 }
 
 
-
 export function getDentistId(dentistsfromReduxToolkit, indexOfDentist) {
   const dentist = dentistsfromReduxToolkit.dentists[indexOfDentist]
   log('fn getDentistId: start:')
@@ -184,6 +397,18 @@ export function getDentistId(dentistsfromReduxToolkit, indexOfDentist) {
   log('fn getDentistId: end.')
   return dentistId
 }
+
+
+
+export const getArrayObjectWithObjectKeyValuePair = (arrayObjectPropertyKeyToFilterWith, arrayObjectPropertyValueToFilterWith, array) => {
+  // sample fn call: let objectFromArray = getArrayObjectWithObjectKeyValuePair("lastName", "Witting", clients);
+  let filterFn = item => item[arrayObjectPropertyKeyToFilterWith] === arrayObjectPropertyValueToFilterWith ;
+  let object = array.filter(filterFn)
+  return object;
+}
+
+
+
 
 export const getRandomDay = () => {
   /*
@@ -203,23 +428,10 @@ export const getRandomDay = () => {
   return randomDay
 }
  
-// export const getRandomDay2 = () => {
-//   /*
-//       winc-requirement: The practice is closed on the weekend.
-//       // status: I have updated fn getRandomDay, so now it complies with this requirement.
-//   */
-//   let randomDay = 6;
-//   while ([6, 7, 13, 14, 20, 21, 27, 28].includes(randomDay)){
-//     randomDay = Math.floor(Math.random() * 28) + 1;
-//     if (![6, 7, 13, 14, 20, 21, 27, 28].includes(randomDay)){
-//       if (randomDay < 10){
-//         randomDay = "0" + randomDay;
-//       }
-//       return randomDay.toString();
-//     } 
-//   }
-//   return randomDay
-// }
+
+
+
+
 
 
 export const getNrOfRandomElementsFromArray = (array, nrOfArrayElements = 8) => {
@@ -423,6 +635,43 @@ export const getSystemDatePlusTime = () => {
   return dateTime;
 }
 
+export function isCombiOfPersonAndDayAndTimeAvailableToCreateAppointmentViaUI (
+  personId, 
+  day, 
+  time, 
+  personType, 
+  clientDayTimesFromReduxToolkit, 
+  dentistDayTimesFromReduxToolkit, 
+  assistantDayTimesFromReduxToolkit) {
+  // I only call this fn from within fn createAppointment.
+  
+  log(`fn isCombiOfPersonAndDayAndTimeAvailableToCreateAppointmentViaUI: start: `)
+  // log(personId)
+  // log(day)
+  // log(time)
+  // log(personType)  
+  // log(clientDayTimes.clientDayTimes)
+  // log(dentistDayTimes.dentistDayTimes)
+  // log(assistantDayTimes.assistantDayTimes)
+  let isUniqueValue = false;
+  let PersonIdAndDayAndTimeCombi = personId +"_" + day + "_" + time;
+  switch (personType) {
+      case 'client':
+        isUniqueValue = !clientDayTimesFromReduxToolkit.clientDayTimes.includes(PersonIdAndDayAndTimeCombi) 
+        break;
+      case 'dentist':
+        isUniqueValue = !dentistDayTimesFromReduxToolkit.dentistDayTimes.includes(PersonIdAndDayAndTimeCombi) 
+        break;
+      case 'assistant':
+        // log(assistantDayTimesFromReduxToolkit.assistantDayTimes)
+        isUniqueValue = !assistantDayTimesFromReduxToolkit.assistantDayTimes.includes(PersonIdAndDayAndTimeCombi) 
+        break;
+      default:
+        console.error(`this ${personType} does not exist`)
+        break;  
+  }
+  return isUniqueValue
+}
 
 export const isValidWorkingDay = (dayNumber) => (![6, 7, 13, 14, 20, 21, 27, 28].includes(dayNumber) ? true : false)
 
@@ -468,14 +717,14 @@ export const loadSelectboxWithListOf = (arrayObjectKey, array) => {
 
   export const sortArrayWithObjects = (arrayObjectKey, array) => {
     let arrayCopy = [...array];
-    arrayCopy.sort((a, b) => {
-      let fa = a[arrayObjectKey].toLowerCase(),
-          fb = b[arrayObjectKey].toLowerCase();
+    arrayCopy.sort((ArrayObjectOne, ArrayObjectTwo) => {
+      let stringOne = ArrayObjectOne[arrayObjectKey].toLowerCase(),
+          stringTwo = ArrayObjectTwo[arrayObjectKey].toLowerCase();
   
-      if (fa < fb) {
+      if (stringOne < stringTwo) {
           return -1;
       }
-      if (fa > fb) {
+      if (stringOne > stringTwo) {
           return 1;
       }
       return 0;
@@ -484,196 +733,49 @@ export const loadSelectboxWithListOf = (arrayObjectKey, array) => {
   }
 
 
-  export function createAppointment (
-    clientId, 
-    treatmentType,
-    appointmentPriority,
-    day, 
-    time, 
-    dentistId, 
-    assistantId,    
-    appointmentLastUpdatedOnDateTime,
-    isNowUpdatingAppointment,             
-    clientsFromReduxToolkit, 
-    dentistsFromReduxToolkit, 
-    assistantsFromReduxToolkit, 
-    clientDayTimesFromReduxToolkit, 
-    dentistDayTimesFromReduxToolkit, 
-    assistantDayTimesFromReduxToolkit, 
+  
+
+
+
+  export const updateAppointment_Phase1of2_DisplayComponentUpdateAppointment = (
+    appointment,
+    appointmentId, 
+    showComponentUpdateAppointmentReduxToolkit, 
+    appointmentsfromReduxToolkit, 
+    deleteAppointmentInReduxToolkit, 
+    saveAppointmentToReduxToolkit, 
+    disableUiControlsDuringAppointmentUpdate,
+    deleteDayTimeClient, 
+    deleteDayTimeDentist, 
+    deleteDayTimeAssistant, 
     dispatch
-    ) {
-    log(`fn createAppointment: start: `)
-    let personType;
+  ) => {
     
-    let getDentist = dentist => dentist.dentistId === dentistId
-    let dentistForWhomAnAppointmentIsBeingMade = selectObjectsByArrayObjectKey(dentistsFromReduxToolkit.dentists, getDentist)  
-    let skillsOfDentistForWhomAnAppointmentIsBeingMade = (dentistForWhomAnAppointmentIsBeingMade[0].treatmentTypes)
-    log(`skillsOfDentistForWhomAnAppointmentIsBeingMade: `)
-    log(skillsOfDentistForWhomAnAppointmentIsBeingMade)
-    if(skillsOfDentistForWhomAnAppointmentIsBeingMade.includes(treatmentType)) {
-      log(`Dentist ${dentistId} has the required skill to treat client ${clientId} `) // 
-    } else {
-      log(`Dentist ${dentistId} does not have the required skill to treat client ${clientId} `)
-      alert(`Dentist ${dentistId} does not have the required skill to treat client ${clientId} `);
-      return; // abort creating appointment. 
-    } 
+    dispatch(disableUiControlsDuringAppointmentUpdate());
 
-    // log(`isAssistantNeededForAppointment: ${isAssistantNeededForAppointment}`)
-    if (assistantId !== "") {
-        log(`data to create updated appointment:`)
-        log(clientId, dentistId, treatmentType, assistantId, day, time, clientDayTimesFromReduxToolkit, dentistDayTimesFromReduxToolkit, assistantDayTimesFromReduxToolkit )     
-
-        if (
-            isCombiOfPersonAndDayAndTimeAvailableToCreateAppointmentViaUI(
-              clientId, 
-              day, 
-              time, 
-              personType="client",  
-              clientDayTimesFromReduxToolkit, 
-              dentistDayTimesFromReduxToolkit, 
-              assistantDayTimesFromReduxToolkit) &&
-            isCombiOfPersonAndDayAndTimeAvailableToCreateAppointmentViaUI(
-              dentistId, 
-              day, 
-              time, 
-              personType = "dentist",  
-              clientDayTimesFromReduxToolkit, 
-              dentistDayTimesFromReduxToolkit, 
-              assistantDayTimesFromReduxToolkit) &&
-            isCombiOfPersonAndDayAndTimeAvailableToCreateAppointmentViaUI(
-              assistantId, 
-              day, 
-              time, 
-              personType = "assistant",  
-              clientDayTimesFromReduxToolkit, 
-              dentistDayTimesFromReduxToolkit, 
-              assistantDayTimesFromReduxToolkit)
-            )
-        {
-          log(`fn createAppointment: after 'isCombiOfPersonAndDayAndTimeAvailableToCreateAppointmentViaUI: `)
-       
-            let clientDayTimes = createCombiOfPersonAndDayAndTime(clientId, day, time)
-            dispatch(addDayTimeClient(clientDayTimes));
-  
-            let dentistDayTimes = createCombiOfPersonAndDayAndTime(dentistId, day, time)
-            dispatch(addDayTimeDentist(dentistDayTimes));
-  
-            let assistantDayTimes = createCombiOfPersonAndDayAndTime(assistantId, day, time)
-            dispatch(addDayTimeAssistant(assistantDayTimes));
-  
-            let getClient = client => client.clientId === clientId
-            let clientForWhomAnAppointmentIsBeingMade = selectObjectsByArrayObjectKey(clientsFromReduxToolkit.clients, getClient)
-            
-            // variable client inside obj appointment is derived data from  the object client.                       
-            let client = (`${(clientForWhomAnAppointmentIsBeingMade[0].firstName)} ${(clientForWhomAnAppointmentIsBeingMade[0].lastName)}`)
-  
-            let getDentist = dentist => dentist.dentistId === dentistId
-            let dentistForWhomAnAppointmentIsBeingMade = selectObjectsByArrayObjectKey(dentistsFromReduxToolkit.dentists, getDentist)
-            
-            // variable dentist inside obj appointment is derived data from  the object dentist.
-            let dentist = (`${(dentistForWhomAnAppointmentIsBeingMade[0].firstName)} ${(dentistForWhomAnAppointmentIsBeingMade[0].lastName)}`)
-  
-            let assistant;  
-            if (assistantId !== null) {
-              let getAssistant = assistant => assistant.assistantId === assistantId
-              let assistantForWhomAnAppointmentIsBeingMade = selectObjectsByArrayObjectKey(assistantsFromReduxToolkit.assistants, getAssistant)
-
-              // variable assistant inside obj appointment is derived data from  the object assistant.
-              assistant = (`${(assistantForWhomAnAppointmentIsBeingMade[0].firstName)} ${(assistantForWhomAnAppointmentIsBeingMade[0].lastName)}`)
-            }
-
-  
-            // let appointmentId = generateRandomAppointmentId();
-            let appointmentId = generateAppointmentId(clientId, day, time);
-            let newAppointmentObject = {
-              appointmentId, 
-              appointmentLastUpdatedOnDateTime,
-              appointmentPriority,
-              assistant,
-              assistantId, 
-              client, 
-              clientId, 
-              day, 
-              dentist, 
-              dentistId, 
-              isNowUpdatingAppointment,
-              time, 
-              treatmentType, 
-            }; 
-            dispatch(addAppointment(newAppointmentObject));
-        } 
-        else {            
-            alert('please check if client, dentist and/or assistant have an appointment on this day and time');
-            return;
-        }
-    } else {
-        log('the else way')
-        log(clientId, dentistId, assistantId, day, time, clientDayTimesFromReduxToolkit, dentistDayTimesFromReduxToolkit, assistantDayTimesFromReduxToolkit )
-        if (isCombiOfPersonAndDayAndTimeAvailableToCreateAppointmentViaUI(
-          clientId, 
-          day, 
-          time, 
-          personType = "client",  
-          clientDayTimesFromReduxToolkit, 
-          dentistDayTimesFromReduxToolkit, 
-          assistantDayTimesFromReduxToolkit) &&
-            isCombiOfPersonAndDayAndTimeAvailableToCreateAppointmentViaUI(
-              dentistId, 
-              day, 
-              time, 
-              personType = "dentist",  
-              clientDayTimesFromReduxToolkit, 
-              dentistDayTimesFromReduxToolkit, 
-              assistantDayTimesFromReduxToolkit))
-        {
-  
-          let clientDayTimes = createCombiOfPersonAndDayAndTime(clientId, day, time)
-          dispatch(addDayTimeClient(clientDayTimes));
-
-          let dentistDayTimes = createCombiOfPersonAndDayAndTime(dentistId, day, time)
-          dispatch(addDayTimeDentist(dentistDayTimes));
-  
-
-          let getClient = client => client.clientId === clientId
-          let clientForWhomAnAppointmentIsBeingMade = selectObjectsByArrayObjectKey(clientsFromReduxToolkit.clients, getClient)
-          
-          // variable client inside obj appointment is derived data from  the object client.
-          let client = (`${(clientForWhomAnAppointmentIsBeingMade[0].firstName)} ${(clientForWhomAnAppointmentIsBeingMade[0].lastName)}`)
-
-          let getDentist = dentist => dentist.dentistId === dentistId
-          let dentistForWhomAnAppointmentIsBeingMade = selectObjectsByArrayObjectKey(dentistsFromReduxToolkit.dentists, getDentist)
-          
-          // variable dentist inside obj appointment is derived data from  the object dentist.
-          let dentist = (`${(dentistForWhomAnAppointmentIsBeingMade[0].firstName)} ${(dentistForWhomAnAppointmentIsBeingMade[0].lastName)}`)
-         
-          // let appointmentId = generateRandomAppointmentId();
-          let appointmentId = generateAppointmentId(clientId, day, time);
-          let newAppointmentObject = {
-            appointmentId, 
-            appointmentLastUpdatedOnDateTime,
-            appointmentPriority,
-            assistant:null,
-            assistantId:null, 
-            client, 
-            clientId, 
-            day, 
-            dentist, 
-            dentistId, 
-            isNowUpdatingAppointment,
-            time, 
-            treatmentType, 
-          };
-          dispatch(addAppointment(newAppointmentObject));   
-        }
-        else {            
-            alert('please check if client and/or dentist have an appointment on this day and time');
-            return;
-        }
-    } 
-  } 
+    dispatch(saveAppointmentToReduxToolkit(appointment));
 
 
-  export function updateAppointmentRecursivelyUntilUpdateSucceeds (
+                      
+    deleteDentalAppointment(
+      appointmentId, 
+      appointmentsfromReduxToolkit, 
+      deleteAppointmentInReduxToolkit, 
+      deleteDayTimeClient, 
+      deleteDayTimeDentist, 
+      deleteDayTimeAssistant, 
+      dispatch
+    );
+
+   
+    
+    dispatch(showComponentUpdateAppointmentReduxToolkit());
+
+  }
+
+
+
+  export function updateAppointment_Phase2of2_updateAppointmentRecursivelyUntilUpdateSucceeds (
     clientId, 
     treatmentType,
     appointmentPriority,
@@ -681,25 +783,25 @@ export const loadSelectboxWithListOf = (arrayObjectKey, array) => {
     time, 
     dentistId, 
     assistantId,    
-    appointmentLastUpdatedOnDateTime,
-    isNowUpdatingAppointment,             
+    appointmentLastUpdatedOnDateTime,        
     clientsFromReduxToolkit, 
     dentistsFromReduxToolkit, 
     assistantsFromReduxToolkit, 
     clientDayTimesFromReduxToolkit, 
     dentistDayTimesFromReduxToolkit, 
     assistantDayTimesFromReduxToolkit, 
-    toggleVisibilityOfComponentUpdateAppointment,  // this parameter is not in fn createAppointment!
+    hideComponentUpdateAppointmentReduxToolkit,  // this parameter is not in fn createAppointment!
+    enableUiControlsDuringAppointmentUpdate, // this parameter is not in fn createAppointment!
     dispatch
     ) {
-    log(`fn createAppointment: start: `)
+    log(`fn updateAppointment: start: `)
     
    
     // this fn is not in fn createAppointment !
     const makeComponentUpdateAppointmentInvisible = () => {
       // log("inside fn toggleVisibilityOfComponentUpdateAppointment: ");
       // log(`isShowingComponentUpdateAppointment: ${isShowingComponentUpdateAppointment} `)
-      dispatch(toggleVisibilityOfComponentUpdateAppointment(false))
+      dispatch(hideComponentUpdateAppointmentReduxToolkit())
   }
     
     
@@ -795,12 +897,12 @@ export const loadSelectboxWithListOf = (arrayObjectKey, array) => {
               day, 
               dentist, 
               dentistId, 
-              isNowUpdatingAppointment,
               time, 
               treatmentType, 
             }; 
             dispatch(addAppointment(newAppointmentObject));
             makeComponentUpdateAppointmentInvisible();  // this line is not in fn createAppointment.
+            dispatch(enableUiControlsDuringAppointmentUpdate());
 
         } 
         else {            
@@ -862,12 +964,12 @@ export const loadSelectboxWithListOf = (arrayObjectKey, array) => {
             day, 
             dentist, 
             dentistId, 
-            isNowUpdatingAppointment,
             time, 
             treatmentType, 
           };
           dispatch(addAppointment(newAppointmentObject));   
           makeComponentUpdateAppointmentInvisible();  // this line is not in fn createAppointment.
+          dispatch(enableUiControlsDuringAppointmentUpdate());  // this line is not in fn createAppointment.
         }
         else {            
             alert('please check if client and/or dentist have an appointment on this day and time');
@@ -875,125 +977,3 @@ export const loadSelectboxWithListOf = (arrayObjectKey, array) => {
         }
     } 
   } 
-
-  export function deleteDentalAppointment_not_in_use (appointmentsfromReduxToolkit, appointmentId, appointmentIndexInAppointmentsArray, deleteAppointment, deleteDayTimeClient, deleteDayTimeDentist, deleteDayTimeAssistant, dispatch) {
-    log('fn deleteAppointment start: ')
-    // log(`appointmentsfromReduxToolkit: ${appointmentsfromReduxToolkit}`)
-    // log(`appointmentId: ${appointmentId}`)
-    // log(`appointmentIndexInAppointmentsArray: ${appointmentIndexInAppointmentsArray}`)
-    // log(`deleteDayTimeClient${deleteDayTimeClient}`)
-    // log(deleteDayTimeClient)
-    // log(`deleteDayTimeDentistClient${deleteDayTimeDentist}`)
-    // log(`deleteDayTimeAssistant${deleteDayTimeAssistant}`)
-    // log(`dispatch${deleteDayTimeClient}`)
-    // log(`appointmentIndexInAppointmentsArray (of appointment that will be deleted: )`)
-    // log(appointmentIndexInAppointmentsArray)
-    // log(typeof((appointmentIndexInAppointmentsArray)))
-
-    let getAppointment = appointment => appointment.appointmentId === appointmentId
-    let appointmentThatIsAboutToBeDeleted = selectObjectsByArrayObjectKey(appointmentsfromReduxToolkit.appointments, getAppointment)
-    
-    console.log('---appointmentThatWillBeDeleted:')
-    console.log(appointmentThatIsAboutToBeDeleted[0])
-  
-    let {clientId, day, time, dentistId, assistantId} = appointmentThatIsAboutToBeDeleted[0];
-  
-    let clientDayTimes  = createCombiOfPersonAndDayAndTime(clientId, day, time)
-    dispatch(deleteDayTimeClient(clientDayTimes));
-    
-    let dentistDayTimes = createCombiOfPersonAndDayAndTime(dentistId, day, time)
-    dispatch(deleteDayTimeDentist(dentistDayTimes));
-  
-
-    if (assistantId !== null) {
-        let assistantDayTimes = createCombiOfPersonAndDayAndTime(assistantId, day, time)
-        dispatch(deleteDayTimeAssistant(assistantDayTimes));
-    }
-  
-
-    dispatch(deleteAppointmentInReduxToolkit(appointmentIndexInAppointmentsArray))
-    log('fn deleteAppointment end: ')
-  }
-
-
-
-  export const deleteAllAppointmentsOfClient_not_in_use = (clientId, appointmentsfromReduxToolkit, dispatch, deleteAppointmentVersionTwo, deleteDayTimeClient, deleteDayTimeDentist, deleteDayTimeAssistant ) => {
-    // this fn uses the index to  delete an item in redux-toolkit.
-    
-    log(`clientId: ${clientId}`)
-    let getAppointment = appointment => appointment.clientId === clientId
-    let appointmentsToDelete = selectObjectsByArrayObjectKey(appointmentsfromReduxToolkit.appointments, getAppointment)
-  
-    log(`appointmentsToDelete: ${appointmentsToDelete}`)
-    log(appointmentsToDelete)
-  
-  let appointmentsToDeleteCopy = [...appointmentsToDelete];
-  
-  appointmentsToDelete.forEach(appointmentToDelete => {
-        // console.log(appointmentToDelete);
-        let appointmentIndexInAppointmentsArray = appointmentsfromReduxToolkit.appointments.indexOf(appointmentToDelete) 
-        // log(appointmentIndexInAppointmentsArray)
-        let appointmentId = appointmentToDelete.appointmentId;
-        if (appointmentsToDelete.length !== 0){
-            deleteDentalAppointment(
-                appointmentsfromReduxToolkit, 
-                appointmentId,
-                appointmentIndexInAppointmentsArray, 
-                deleteAppointmentVersionTwo,
-                deleteDayTimeClient, 
-                deleteDayTimeDentist, 
-                deleteDayTimeAssistant, 
-                dispatch)  
-        }
-    })            
-  } 
-
-
-  export function deleteDentalAppointment (
-    appointmentsfromReduxToolkit, 
-    appointmentId, 
-    deleteAppointmentInReduxToolkit, 
-    deleteDayTimeClient, 
-    deleteDayTimeDentist, 
-    deleteDayTimeAssistant, 
-    dispatch) {
-    log('fn deleteAppointment start: ')
-    // log(`appointmentsfromReduxToolkit: ${appointmentsfromReduxToolkit}`)
-    // log(`appointmentId: ${appointmentId}`)
-    // log(`appointmentIndexInAppointmentsArray: ${appointmentIndexInAppointmentsArray}`)
-    // log(`deleteDayTimeClient${deleteDayTimeClient}`)
-    // log(deleteDayTimeClient)
-    // log(`deleteDayTimeDentistClient${deleteDayTimeDentist}`)
-    // log(`deleteDayTimeAssistant${deleteDayTimeAssistant}`)
-    // log(`dispatch${deleteDayTimeClient}`)
-    // log(`appointmentIndexInAppointmentsArray (of appointment that will be deleted: )`)
-    // log(appointmentIndexInAppointmentsArray)
-    // log(typeof((appointmentIndexInAppointmentsArray)))
-
-    let getAppointment = appointment => appointment.appointmentId === appointmentId
-    let appointmentThatIsAboutToBeDeleted = selectObjectsByArrayObjectKey(appointmentsfromReduxToolkit.appointments, getAppointment)
-    
-    console.log('---appointmentThatWillBeDeleted:')
-    log(appointmentsfromReduxToolkit.appointments)
-    console.log(appointmentThatIsAboutToBeDeleted)
-    console.log(appointmentThatIsAboutToBeDeleted[0])
-  
-   
-    let {clientId, day, time, dentistId, assistantId} = appointmentThatIsAboutToBeDeleted[0];
-  
-    let clientDayTimes  = createCombiOfPersonAndDayAndTime(clientId, day, time)
-    dispatch(deleteDayTimeClient(clientDayTimes));
-    
-    let dentistDayTimes = createCombiOfPersonAndDayAndTime(dentistId, day, time)
-    dispatch(deleteDayTimeDentist(dentistDayTimes));
-  
-    if (assistantId !== null) {
-        let assistantDayTimes = createCombiOfPersonAndDayAndTime(assistantId, day, time)
-        dispatch(deleteDayTimeAssistant(assistantDayTimes));
-    }
-
-    dispatch(deleteAppointmentInReduxToolkit(appointmentId))
-    log('fn deleteAppointment end: ')
-  }
-
-

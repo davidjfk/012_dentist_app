@@ -1,16 +1,16 @@
 import styled from "styled-components";
 
-export const ClientAddStyled = styled.div`
+export const AppointmentAddStyled = styled.div`
   display: grid;
-  color: white;
+  color: ${({ theme}) => theme.font01 };
   grid-template-areas:
       "intro intro intro intro"
       "form form form form"
       ;
   text-align: center;
   grid-gap: 0.25rem;
-  font-family: ${({ theme}) => theme.font };
-  font-size: ${({ theme}) => theme.fontSize.default }
+  // font-family: ${({ theme}) => theme.colors.fontColor01 };
+  font-size: ${({ theme}) => theme.fontSize.default };
 `;
 
 export const Column = styled.div`
@@ -24,10 +24,10 @@ export const Form = styled.form`
   justify-content: flex-start;
   align-items: center;  
   gap: 1rem;
-  background: ${({ theme}) => theme.colors.bluegrey };
-  color: white;
+  background: ${({ theme}) => theme.colors.blackground02};
+  // color: white;
   padding: 0.25rem;
-
+  
   @media (max-width: 700px) {
     flex-direction: column;
     gap: 1rem;
@@ -38,8 +38,9 @@ export const Form = styled.form`
 
 export const Intro = styled.div`
   grid-area: intro;
-  background: ${({ theme}) => theme.colors.nearlyblack };
+  background: ${({ theme}) => theme.colors.header01 };
   padding: 0.25rem;
+  font-weight: bold;
 `;
 
 

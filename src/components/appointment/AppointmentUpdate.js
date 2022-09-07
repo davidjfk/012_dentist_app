@@ -3,7 +3,7 @@ import {useState } from 'react';
 import {useDispatch, useSelector } from "react-redux";
 import {addAppointment } from "../../redux/appointmentSlice";
 
-import {toggleVisibilityOfComponentUpdateAppointment } from '../../redux/updateAppointmentSlice';
+import {enableUiControlsDuringAppointmentUpdate, hideComponentUpdateAppointmentReduxToolkit } from '../../redux/updateAppointmentSlice';
 
 import dentalSkillsToAddToNewDentistCreatedViaUI from '../../dataInDentistAppWhenDentistAppStarts/dentalSkillsToAddToNewDentistCreatedViaUI';
 import appointmentPriorityLevelsInSelectbox from '../../dataInDentistAppWhenDentistAppStarts/appointmentPriorityLevelsInSelectbox';
@@ -11,10 +11,10 @@ import listOfValidWorkingDayNumbersInNextMonth from '../../dataInDentistAppWhenD
 import listOfValidWorkingHours from '../../dataInDentistAppWhenDentistAppStarts/listOfValidWorkingHours';
 
 import {Container} from '../styles/Container.styled';
-import {ClientAddStyled, Column, Form, Intro} from './ClientAdd.styled';
-import {StyledButtonAroundText} from '../styles/ButtonAroundText.styled';
+import {AppointmentAddStyled, Column, Form, Intro} from './AppointmentAdd.styled';
+import {StyledButtonInsideAddOrUpdateComponent} from '../styles/ButtonInsideAddOrUpdateComponent.styled';
 import {StyledSelectbox} from '../styles/Selectbox.styled';
-import {createAppointment, generateAppointmentId, getSystemDatePlusTime, loadSelectboxWithListOf, selectObjectsByArrayObjectKey, sortArrayWithObjects, updateAppointmentRecursivelyUntilUpdateSucceeds} from '../../utils';
+import {createAppointment, generateAppointmentId, getSystemDatePlusTime, loadSelectboxWithListOf, selectObjectsByArrayObjectKey, sortArrayWithObjects, updateAppointment_Phase2of2_updateAppointmentRecursivelyUntilUpdateSucceeds} from '../../utils';
 
 const log = console.log;
 
@@ -52,7 +52,8 @@ const UpdateAppointment = () => {
 
 
     let {appointmentSavedInReduxToolkit}  = useSelector((state) => state.updateAppointment);
-    log(appointmentSavedInReduxToolkit);
+    // log('02')
+    // log(appointmentSavedInReduxToolkit);
 
     //2do: load initial data from redux-toolkit updateAppointmentSlice.
     let [clientId, setClientId] = useState(appointmentSavedInReduxToolkit.clientId);
@@ -92,63 +93,26 @@ const UpdateAppointment = () => {
             return
         } 
         
+
+        
+
         // alternative with same result: load appointmentId from redux-toolkit updateAppointmentSlice.
         const appointmentId = generateAppointmentId(clientId, day, time);
         let appointmentIdFromReduxToolkitSlice = appointmentSavedInReduxToolkit.appointmentId;
         if (appointmentId !== appointmentIdFromReduxToolkitSlice){
-            console.error(`There is a problem with the appointmentId that is used to update an appointment. Please investigate.`)
+            log(`So the new appointmentId ${appointmentId} differs from the old appointmentId ${appointmentIdFromReduxToolkitSlice}.
+            Reason:  Appointment has format clientId_day_time, and the appointment client and/or day and/or time have changed. 
+            This is not a problem.`)
         }
-
-        // skip this part until (...)
-        // let getClient = client => client.clientId === clientId
-        // let clientForWhomAnAppointmentIsBeingMade = selectObjectsByArrayObjectKey(clients, getClient)
-        // // variable client inside obj appointment is derived data from  the object client.
-        // let client = (`${(clientForWhomAnAppointmentIsBeingMade[0].firstName)} ${(clientForWhomAnAppointmentIsBeingMade[0].lastName)}`)
-
-        // let getDentist = dentist => dentist.dentistId === dentistId
-        // let dentistForWhomAnAppointmentIsBeingMade = selectObjectsByArrayObjectKey(dentists, getDentist)
-        // // variable dentist inside obj appointment is derived data from  the object dentist.
-        // let dentist = (`${(dentistForWhomAnAppointmentIsBeingMade[0].firstName)} ${(dentistForWhomAnAppointmentIsBeingMade[0].lastName)}`)
-
-        
-        // if (assistantId !== "") {
-        // let getAssistant = assistant => assistant.assistantId === assistantId
-        // let assistantForWhomAnAppointmentIsBeingMade = selectObjectsByArrayObjectKey(assistants, getAssistant)
-        // // variable assistant inside obj appointment is derived data from  the object assistant.
-        // let assistant = (`${(assistantForWhomAnAppointmentIsBeingMade[0].firstName)} ${(assistantForWhomAnAppointmentIsBeingMade[0].lastName)}`)
-        // }
-
-
-        // dispatch(addAppointment({
-        //     UIMade, 
-        //     appointmentId, 
-        //     appointmentLastUpdatedOnDateTime, 
-        //     appointmentPriority, 
-        //     assistant, 
-        //     assistantId, 
-        //     client, 
-        //     clientId, 
-        //     day, 
-        //     dentist, 
-        //     dentistId, 
-        //     isNowUpdatingAppointment, 
-        //     time, 
-        //     treatmentType 
-        // }));   
-
-        /*
-           (...) skip until here. Reason: instead of doing a dispatch, call fn createAppointment. This fn validates the business rules. Then as its final step it will do a dispatch. This dispatch looks exactly like the 
-           dispatch below.
-        */
         
         // q: delete this key from obj appointment?    
-        let isNowUpdatingAppointment = true;
-
         let systemDateTime = getSystemDatePlusTime();
         let appointmentLastUpdatedOnDateTime = systemDateTime;
 
+
         
-        updateAppointmentRecursivelyUntilUpdateSucceeds (
+        
+        updateAppointment_Phase2of2_updateAppointmentRecursivelyUntilUpdateSucceeds (
             clientId, 
             treatmentType,
             appointmentPriority,
@@ -156,20 +120,19 @@ const UpdateAppointment = () => {
             time, 
             dentistId, 
             assistantId, 
-            appointmentLastUpdatedOnDateTime,  
-            isNowUpdatingAppointment,       
+            appointmentLastUpdatedOnDateTime,        
             clientsFromReduxToolkit, 
             dentistsFromReduxToolkit, 
             assistantsFromReduxToolkit, 
             clientDayTimesFromReduxToolkit, 
             dentistDayTimesFromReduxToolkit, 
             assistantDayTimesFromReduxToolkit, 
-            toggleVisibilityOfComponentUpdateAppointment,
+            hideComponentUpdateAppointmentReduxToolkit,
+            enableUiControlsDuringAppointmentUpdate,
             dispatch
         )
 
            
-
         // Do not reset the form! So do not:  
         // setClientId('');
         // setTreatmentType('');
@@ -182,7 +145,7 @@ const UpdateAppointment = () => {
 
   return (
     <Container> 
-        <ClientAddStyled>
+        <AppointmentAddStyled>
             <Intro>Update Appointment</Intro>
             <Form>
                 <Column>
@@ -288,12 +251,12 @@ const UpdateAppointment = () => {
                     </StyledSelectbox>
                 </Column>
                 <Column>
-                    <StyledButtonAroundText onClick={onSubmit}>
+                    <StyledButtonInsideAddOrUpdateComponent onClick={onSubmit}>
                         Update appointment 
-                    </StyledButtonAroundText>                  
+                    </StyledButtonInsideAddOrUpdateComponent>                  
                 </Column>
             </Form>
-        </ClientAddStyled>  
+        </AppointmentAddStyled>  
     </Container>
   )
 }

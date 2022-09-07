@@ -1,31 +1,21 @@
 import React from 'react';
-import { useState, useRef } from 'react';
-import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
-import { deleteAssistant } from "../../redux/assistantSlice";
-import { deleteClient } from "../../redux/clientSlice";
 
-import {setDateAndTimeOfDeletionOfClientsAppointmentsInReduxToolkit, toggleHealthStatusOfClient } from "../../redux/clientSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { deleteClient } from "../../redux/clientSlice";
+import {deleteAppointmentInReduxToolkit} from "../../redux/appointmentSlice";
+import {deleteDayTimeClient} from "../../redux/clientDayTimeSlice";
+import {deleteDayTimeDentist} from "../../redux/dentistDayTimeSlice";
+import {deleteDayTimeAssistant} from "../../redux/assistantDayTimeSlice";
+import {setDateAndTimeOfDeletionOfAppointmentsOfClientInReduxToolkit, toggleHealthStatusOfClient } from "../../redux/clientSlice";
+
+import {deleteAllAppointmentsOfPerson, getSystemDatePlusTime} from '../../utils';
+
 import {Row, Column} from './ClientList.styled'
 import { ClientInClientListStyled } from './ClientInList.styled';
 import {StyledCheckbox} from '../styles/Checkbox.styled';
 import { StyledFaTimes } from '../styles/FaTimes.styled'
 import { FaTimes } from 'react-icons/fa'
 import {StyledButtonAroundSymbol} from '../styles/ButtonAroundSymbol.styled';
-
-
-
-//start
-// imports for fn: deleteAllAppointments:
-// import React from "react";
-import { useEffect } from "react";
-// import { useSelector } from "react-redux";
-// import { useDispatch } from "react-redux";
-import {deleteAppointmentInReduxToolkit} from "../../redux/appointmentSlice";
-import {deleteDayTimeClient} from "../../redux/clientDayTimeSlice";
-import {deleteDayTimeDentist} from "../../redux/dentistDayTimeSlice";
-import {deleteDayTimeAssistant} from "../../redux/assistantDayTimeSlice";
-import {deleteDentalAppointment, getSystemDatePlusTime, selectObjectsByArrayObjectKey} from '../../utils';
 import "../../App.css";
 
 // end
@@ -33,38 +23,9 @@ import "../../App.css";
 const log = console.log;
 
 
-//2do: move fn to folder utils and make more generic, so this fn can be used to delete appointments of each dentist and assistant (one per fn call) as well. 
-const deleteAllAppointmentsOfClient = (
-  clientId, 
-  appointmentsfromReduxToolkit, 
-  deleteAppointmentInReduxToolkit, 
-  deleteDayTimeClient, 
-  deleteDayTimeDentist, 
-  deleteDayTimeAssistant, 
-  dispatch) => {
-  log(`clientId: ${clientId}`)
-  let getAppointment = appointment => appointment.clientId === clientId
-  let appointmentsToDelete = selectObjectsByArrayObjectKey(appointmentsfromReduxToolkit.appointments, getAppointment)
-  log(`appointmentsToDelete: ${appointmentsToDelete}`)
-  log(appointmentsToDelete)
-  let appointmentsToDeleteCopy = [...appointmentsToDelete];
-  appointmentsToDeleteCopy.forEach(appointmentToDelete => {
-      let appointmentId = appointmentToDelete.appointmentId;
-      if (appointmentsToDelete.length !== 0){
-          deleteDentalAppointment(
-              appointmentsfromReduxToolkit, 
-              appointmentId,
-              deleteAppointmentInReduxToolkit,
-              deleteDayTimeClient, 
-              deleteDayTimeDentist, 
-              deleteDayTimeAssistant, 
-              dispatch)  
-      }
-  })            
-} 
 
-const ClientInClientList = ({clients, item}) => {
-  // const dispatch = useDispatch();
+const ClientInClientList = ({clients, item, index}) => {
+  const dispatch = useDispatch();
   // const [personIsSick, setPersonIsSick] = useState(false);
   // let checkBoxStatus = useRef(false);
 
@@ -73,8 +34,8 @@ const ClientInClientList = ({clients, item}) => {
   let appointmentLastUpdatedOnDateTime = (item.appointmentsDeletedOnDateTime === "null") ? "Not happened yet." : item.appointmentsDeletedOnDateTime ;
 
   // let clientsfromReduxToolkit = useSelector((state) => state.client)
-  let appointmentsfromReduxToolkit = useSelector((state) => state.appointment)
-  let dispatch = useDispatch();
+  let appointmentsfromReduxToolkit = useSelector((state) => state.appointment.appointments)
+
 
  
   // class Test extends React.Component {
@@ -88,7 +49,8 @@ const ClientInClientList = ({clients, item}) => {
     <Row>
         <Column>
           <ClientInClientListStyled>
-            {clients.indexOf(item) + 1 }
+            {/* {clients.indexOf(item) + 1 } */}
+            {index}
           </ClientInClientListStyled>
         </Column>
         <Column>
@@ -136,15 +98,11 @@ const ClientInClientList = ({clients, item}) => {
             </div>
             </ClientInClientListStyled>
         </Column>
-
-
         <Column>
           <ClientInClientListStyled>
             {appointmentLastUpdatedOnDateTime}
           </ClientInClientListStyled>
         </Column>
-
-
         <Column>
           <ClientInClientListStyled>
               {/* use case: delete all appointments of a client. pitfall: do not use this code for dentist, assistant, nor appointment !!   */}
@@ -153,11 +111,11 @@ const ClientInClientList = ({clients, item}) => {
                   {/* <FaTimes onClick={() => deleteAllAppointmentsOfClient(item.clientId)} /> */}
                   <FaTimes 
                     onClick={() => {
-                      deleteAllAppointmentsOfClient(item.clientId, appointmentsfromReduxToolkit, deleteAppointmentInReduxToolkit,   deleteDayTimeClient, 
+                      deleteAllAppointmentsOfPerson("clientId", item.clientId, appointmentsfromReduxToolkit, deleteAppointmentInReduxToolkit,   deleteDayTimeClient, 
                           deleteDayTimeDentist, deleteDayTimeAssistant,  dispatch);
                       let systemDateTime = getSystemDatePlusTime();
                       let clientId = item.clientId;
-                      dispatch(setDateAndTimeOfDeletionOfClientsAppointmentsInReduxToolkit({clientId, systemDateTime}));
+                      dispatch(setDateAndTimeOfDeletionOfAppointmentsOfClientInReduxToolkit({clientId, systemDateTime}));
                     }} 
                   />
                 </StyledFaTimes>
@@ -171,7 +129,7 @@ const ClientInClientList = ({clients, item}) => {
                 <StyledFaTimes>
                   <FaTimes 
                       onClick={() => {
-                        deleteAllAppointmentsOfClient(item.clientId, appointmentsfromReduxToolkit, deleteAppointmentInReduxToolkit, deleteDayTimeClient, 
+                        deleteAllAppointmentsOfPerson("clientId", item.clientId, appointmentsfromReduxToolkit, deleteAppointmentInReduxToolkit, deleteDayTimeClient, 
                           deleteDayTimeDentist, deleteDayTimeAssistant,  dispatch);   
                         let clientId = item.clientId;                     
                         dispatch(deleteClient({clientId}))
