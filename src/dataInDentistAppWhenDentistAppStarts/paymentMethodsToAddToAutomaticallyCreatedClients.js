@@ -5,7 +5,7 @@ const paymentMethodsToAddToAutomaticallyCreatedClients = [
     "dollar",
     "euro",
     "gold",
-    "5insurance", 
+    "insurance", 
     "pound",
     "yen",
     "yuan"

@@ -108,7 +108,7 @@ const ClientList = () => {
             for (let ratingcriterium of paymentMethodToFilterWith) {
                 arrayFilteredOnOneCriterium = copyOfFilteredData.filter(
                     (personObject) =>           
-                    parseInt(personObject.paymentMethod) === parseInt(ratingcriterium)
+                    personObject.paymentMethod === ratingcriterium
                 );
                 arrayFilteredOnAllCriteria.push(...arrayFilteredOnOneCriterium)
             }

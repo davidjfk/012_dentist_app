@@ -111,7 +111,7 @@ const AppointmentList = () => {
             for (let ratingcriterium of priorityLevelToFilterWith) {
                 arrayFilteredOnOneCriterium = copyOfFilteredData.filter(
                     (personObject) =>           
-                    parseInt(personObject.paymentMethod) === parseInt(ratingcriterium)
+                    parseInt(personObject.appointmentPriority) === parseInt(ratingcriterium)
                 );
                 arrayFilteredOnAllCriteria.push(...arrayFilteredOnOneCriterium)
             }
@@ -146,9 +146,9 @@ const AppointmentList = () => {
     //     setCount(prevCount => prevCount + 1)
     // }
 
-    let count = useRef(0);
+    let counterOfAppointmentsInList = useRef(0);
     function increment() {
-        count.current +=1;
+        counterOfAppointmentsInList.current +=1;
     }
 
     return (
@@ -242,7 +242,7 @@ const AppointmentList = () => {
                         // count.current = 0;
                         increment()                                          
                         return ( 
-                        <AppointmentInAppointmentList index={count.current} key={id} item={item} appointments={appointments} />
+                        <AppointmentInAppointmentList index={counterOfAppointmentsInList.current} key={id} item={item} appointments={appointments} />
                        )})
                        : 
                         <>Please create appointments.</>
@@ -250,7 +250,7 @@ const AppointmentList = () => {
             </AppointmentListAreaStyled>
         </AppointmentListStyled>  
     </Container>
-    <div disabled={true}>{count.current = 0}</div>
+    <div disabled={true}>{counterOfAppointmentsInList.current = 0}</div>
     </>
   )
 }
