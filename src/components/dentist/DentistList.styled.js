@@ -1,6 +1,5 @@
 import styled from "styled-components";
 
-
 export const DentistListAreaStyled = styled.div`
   grid-area: dentistList;  
   background: ${({ theme}) => theme.colors.background02};
@@ -32,7 +31,7 @@ export const FormControlArea = styled.nav`
   grid-area: formcontrol;
   display: flex;
   justify-content: center;
-  align-items: start;
+  align-items: center;
   gap: 0.25rem;
   padding: 0.1rem;
   
@@ -58,12 +57,11 @@ export const Intro = styled.div`
   background: ${({ theme}) => theme.colors.header01 };
   font-weight: bold;
   padding: 0.25rem;
-
 `;
 
 export const Row = styled.div`
   display: flex;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
 `
 
 export const Section1 = styled.section`

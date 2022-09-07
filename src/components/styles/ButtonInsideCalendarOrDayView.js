@@ -1,8 +1,9 @@
 import styled from 'styled-components'
 
-export const StyledButtonWithWordDelete = styled.button`
+export const StyledButtonInsideCalendarOrDayView = styled.button`
+  pointer-events ${({ theme}) => theme.pointerEvents};   
   float: right;
-  background: ${({ theme}) => theme.colors.button01};;
+  background: ${({ theme}) => theme.colors.button01};
   margin-right: 20px; 
   margin-top: 20px; 
   padding: 6px;

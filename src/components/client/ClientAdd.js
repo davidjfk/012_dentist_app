@@ -7,7 +7,7 @@ import paymentMethodsToAddToNewClientCreatedViaUI from '../../dataInDentistAppWh
 import healthStatusOptions from '../../dataInDentistAppWhenDentistAppStarts/healthStatusOptions';
 import {Container} from '../styles/Container.styled';
 import {ClientAddStyled, Column, Form, Intro} from './ClientAdd.styled';
-import {StyledButtonAroundText} from '../styles/ButtonAroundText.styled';
+import {StyledButtonInsideAddOrUpdateComponent} from '../styles/ButtonInsideAddOrUpdateComponent.styled';
 import {StyledInputfield} from '../styles/Inputfield.styled';
 import {StyledSelectbox} from '../styles/Selectbox.styled';
 
@@ -145,9 +145,9 @@ const AddClient = () => {
                     />
                 </Column>
                 <Column>
-                    <StyledButtonAroundText onClick={onSubmit}>
+                    <StyledButtonInsideAddOrUpdateComponent onClick={onSubmit}>
                         Add client 
-                    </StyledButtonAroundText>                  
+                    </StyledButtonInsideAddOrUpdateComponent>                  
                 </Column>
             </Form>
         </ClientAddStyled>  

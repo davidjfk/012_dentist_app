@@ -43,6 +43,7 @@ isValidWorkingDay
 isValidWorkingTime
 loadSelectboxWithListOf
 selectObjectsByArrayObjectKey
+sortArrayWithObjects
 updateAppointment_Phase1of2_DisplayComponentUpdateAppointment
 updateAppointment_Phase2of2_updateAppointmentRecursivelyUntilUpdateSucceeds
 */
@@ -743,14 +744,17 @@ export const loadSelectboxWithListOf = (arrayObjectKey, array) => {
     appointmentsfromReduxToolkit, 
     deleteAppointmentInReduxToolkit, 
     saveAppointmentToReduxToolkit, 
+    disableUiControlsDuringAppointmentUpdate,
     deleteDayTimeClient, 
     deleteDayTimeDentist, 
     deleteDayTimeAssistant, 
     dispatch
   ) => {
     
+    dispatch(disableUiControlsDuringAppointmentUpdate());
 
     dispatch(saveAppointmentToReduxToolkit(appointment));
+
 
                       
     deleteDentalAppointment(
@@ -762,6 +766,8 @@ export const loadSelectboxWithListOf = (arrayObjectKey, array) => {
       deleteDayTimeAssistant, 
       dispatch
     );
+
+   
     
     dispatch(showComponentUpdateAppointmentReduxToolkit());
 
@@ -785,6 +791,7 @@ export const loadSelectboxWithListOf = (arrayObjectKey, array) => {
     dentistDayTimesFromReduxToolkit, 
     assistantDayTimesFromReduxToolkit, 
     hideComponentUpdateAppointmentReduxToolkit,  // this parameter is not in fn createAppointment!
+    enableUiControlsDuringAppointmentUpdate, // this parameter is not in fn createAppointment!
     dispatch
     ) {
     log(`fn updateAppointment: start: `)
@@ -895,6 +902,7 @@ export const loadSelectboxWithListOf = (arrayObjectKey, array) => {
             }; 
             dispatch(addAppointment(newAppointmentObject));
             makeComponentUpdateAppointmentInvisible();  // this line is not in fn createAppointment.
+            dispatch(enableUiControlsDuringAppointmentUpdate());
 
         } 
         else {            
@@ -961,6 +969,7 @@ export const loadSelectboxWithListOf = (arrayObjectKey, array) => {
           };
           dispatch(addAppointment(newAppointmentObject));   
           makeComponentUpdateAppointmentInvisible();  // this line is not in fn createAppointment.
+          dispatch(enableUiControlsDuringAppointmentUpdate());  // this line is not in fn createAppointment.
         }
         else {            
             alert('please check if client and/or dentist have an appointment on this day and time');

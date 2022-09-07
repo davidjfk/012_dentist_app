@@ -1,8 +1,9 @@
 import styled from 'styled-components'
 
-export const StyledButtonWithWordUpdate = styled.button`
+export const StyledButtonWithWordUpdate____redundant_2do_throw_away = styled.button`
+  pointer-events ${({ theme}) => theme.pointerEvents};   
   float: right;
-  background-color: aquamarine;
+  background-color:  ${({ theme}) => theme.colors.button01};
   margin-right: 20px; 
   margin-top: 20px; 
   padding: 6px;

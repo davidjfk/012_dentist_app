@@ -1,6 +1,5 @@
 import styled from "styled-components";
 
-
 export const ClientListAreaStyled = styled.div`
   grid-area: assistantList;  
   background: ${({ theme}) => theme.colors.background02};
@@ -62,7 +61,7 @@ padding: 0.25rem;
 
 export const Row = styled.div`
   display: flex;
-  margin-bottom: 0.3rem;
+  margin-bottom: 1rem;
 `
 
 export const Section1 = styled.section`

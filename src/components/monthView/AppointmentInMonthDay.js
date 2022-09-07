@@ -5,14 +5,14 @@ import {deleteAppointmentInReduxToolkit} from "../../redux/appointmentSlice";
 import {deleteDayTimeClient} from "../../redux/clientDayTimeSlice";
 import {deleteDayTimeDentist} from "../../redux/dentistDayTimeSlice";
 import {deleteDayTimeAssistant} from "../../redux/assistantDayTimeSlice";
-import {saveAppointmentToReduxToolkit, showComponentUpdateAppointmentReduxToolkit} from '../../redux/updateAppointmentSlice';
+import {disableUiControlsDuringAppointmentUpdate, saveAppointmentToReduxToolkit, showComponentUpdateAppointmentReduxToolkit} from '../../redux/updateAppointmentSlice';
 
 import {deleteDentalAppointment, formatTime, generateAppointmentId, log, selectObjectsByArrayObjectKey, updateAppointment_Phase1of2_DisplayComponentUpdateAppointment } from "../../utils";
 
 // import "./Calendar.css";
 import {AppointmentInMonthDayStyled, AssistantInMonthDayAppointmentStyled, ClientInMonthDayAppointment, DentistInMonthDayAppointment, TimeInMonthViewStyled  } from './AppointmentInMonthDay.styled';
-import {StyledButtonWithWordDelete} from '../styles/ButtonWithWordDelete';
-import {StyledButtonWithWordUpdate} from '../styles/ButtonWithWordUpdate';
+import {StyledButtonInsideCalendarOrDayView} from '../styles/ButtonInsideCalendarOrDayView';
+// import {StyledButtonWithWordUpdate} from '../styles/ButtonWithWordUpdate';
 
 
 export const AppointmentInMonthDay = ({day, time, client, clientId, dentistId, assistantId }) => {
@@ -65,7 +65,7 @@ export const AppointmentInMonthDay = ({day, time, client, clientId, dentistId, a
           {/* <span className="dayAsNumber">day: {day} </span>     */}
           <TimeInMonthViewStyled>{formatTime(time)}</TimeInMonthViewStyled>
         </span>
-        <StyledButtonWithWordDelete 
+        <StyledButtonInsideCalendarOrDayView 
           onClick={() => { deleteDentalAppointment(
                               appointmentId, 
                               appointmentsfromReduxToolkit, 
@@ -77,8 +77,8 @@ export const AppointmentInMonthDay = ({day, time, client, clientId, dentistId, a
                             );  
                           }}>
           delete appointment
-        </StyledButtonWithWordDelete> 
-        <StyledButtonWithWordUpdate
+        </StyledButtonInsideCalendarOrDayView> 
+        <StyledButtonInsideCalendarOrDayView
           onClick={() => { updateAppointment_Phase1of2_DisplayComponentUpdateAppointment(
                               appointment,
                               appointmentId, 
@@ -86,6 +86,7 @@ export const AppointmentInMonthDay = ({day, time, client, clientId, dentistId, a
                               appointmentsfromReduxToolkit, 
                               deleteAppointmentInReduxToolkit, 
                               saveAppointmentToReduxToolkit,
+                              disableUiControlsDuringAppointmentUpdate,
                               deleteDayTimeClient, 
                               deleteDayTimeDentist, 
                               deleteDayTimeAssistant,  
@@ -93,7 +94,7 @@ export const AppointmentInMonthDay = ({day, time, client, clientId, dentistId, a
                             );  
                           }}>
           update appointment
-        </StyledButtonWithWordUpdate>
+        </StyledButtonInsideCalendarOrDayView>
         <ClientInMonthDayAppointment> client: {client} </ClientInMonthDayAppointment>
         <DentistInMonthDayAppointment>dentist: {dentistId}</DentistInMonthDayAppointment> 
         <AssistantInMonthDayAppointmentStyled>assistant: {assistantId}</AssistantInMonthDayAppointmentStyled> 

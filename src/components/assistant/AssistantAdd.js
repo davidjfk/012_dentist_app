@@ -11,7 +11,7 @@ import {generateRandomPersonId} from '../../utils';
 
 import {Container} from '../styles/Container.styled';
 import {AssistantAddStyled, Column, Form, Intro} from './AssistantAdd.styled';
-import {StyledButtonAroundText} from '../styles/ButtonAroundText.styled';
+import {StyledButtonInsideAddOrUpdateComponent} from '../styles/ButtonInsideAddOrUpdateComponent.styled';
 import {StyledInputfield} from '../styles/Inputfield.styled';
 import {StyledSelectbox} from '../styles/Selectbox.styled';
 
@@ -134,9 +134,9 @@ const AddAssistant = () => {
                     </StyledSelectbox>
                 </Column>
                 <Column>
-                    <StyledButtonAroundText onClick={onSubmit}>
+                    <StyledButtonInsideAddOrUpdateComponent onClick={onSubmit}>
                         Add assistant 
-                    </StyledButtonAroundText>                  
+                    </StyledButtonInsideAddOrUpdateComponent>                  
                 </Column>
             </Form>
         </AssistantAddStyled>  

@@ -9,7 +9,7 @@ export const ClientAddStyled = styled.div`
       ;
   text-align: center;
   grid-gap: 0.25rem;
-  font-family: ${({ theme}) => theme.font };
+  // font-family: ${({ theme}) => theme.font };
   font-size: ${({ theme}) => theme.fontSize.default }
 `;
 
@@ -40,6 +40,7 @@ export const Intro = styled.div`
   grid-area: intro;
   background: ${({ theme}) => theme.colors.header01 };
   padding: 0.25rem;
+  font-weight: bold;
 `;
 
 

@@ -11,8 +11,6 @@ export const DentistAddStyled = styled.div`
   grid-gap: 0.25rem;
   // font-family: ${({ theme}) => theme.font };
   font-size: ${({ theme}) => theme.fontSize.default }
- 
-
 `;
 
 export const Column = styled.div`

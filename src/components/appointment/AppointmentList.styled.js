@@ -1,6 +1,5 @@
 import styled from "styled-components";
 
-
 export const AppointmentListAreaStyled = styled.div`
   grid-area: appointmentList;  
   background: ${({ theme}) => theme.colors.background02};
@@ -62,7 +61,7 @@ export const Intro = styled.div`
 
 export const Row = styled.div`
   display: flex;
-  margin-bottom: 0.3rem;
+  margin-bottom: 1rem;
 `
 
 export const Section1 = styled.section`

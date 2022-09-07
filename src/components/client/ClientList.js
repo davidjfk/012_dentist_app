@@ -30,6 +30,7 @@ const ClientList = () => {
         let JsxSelectBoxAttributeValueAsArray = JsxSelectBoxAttributeValue.split(' ');
         let personObjectKey = JsxSelectBoxAttributeValueAsArray[0];
         let isAscending = JsxSelectBoxAttributeValueAsArray[1] === "ascending" ? true : false;
+        log(`isAscending: ${isAscending}`)
 
         const clientObjectSortCriteriaToSortInUISelectBox = {
             clientId: 'clientId',
@@ -50,11 +51,12 @@ const ClientList = () => {
             return sortedPersons;
         } else if (isAscending && (sortProperty === "clientId" || sortProperty === "firstName" || sortProperty === "isSick")) {
             sortedPersons = [...clients].sort((person1, person2) => person1[sortProperty].localeCompare(person2[sortProperty], 'en', { ignorePunctuation: true }));
+            return sortedPersons;
         } else if (!isAscending && (sortProperty === "clientId" || sortProperty === "firstName" || sortProperty === "isSick")) {
                 sortedPersons = [...clients].sort((person1, person2) => person1[sortProperty].localeCompare(person2[sortProperty], 'en', { ignorePunctuation: true }));
                 return sortedPersons.reverse();
         } else {
-            console.error(`component assistantList: not possible to sort with datatype ${typeof(sortProperty)}. Please investigate. `)
+            console.error(`component clientList: not possible to sort with datatype ${typeof(sortProperty)}. Please investigate. `)
         }
     };
     
@@ -135,6 +137,8 @@ const ClientList = () => {
       setIsHovering(false);
     };
 
+    log(`comp ClientList: data to  render:`)
+    log(dataToRenderFromUseEffectPipeline)
 
     return (
     <>

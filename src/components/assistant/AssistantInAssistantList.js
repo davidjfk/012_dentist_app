@@ -104,7 +104,7 @@ const AssistantInAssistantList = ({assistants, item}) => {
         <Column>
           <AssistantInAssistantListStyled>
               {/* use case: delete all appointments of a client. pitfall: do not use this code for dentist, assistant, nor appointment !!   */}
-              <StyledButtonAroundSymbol>
+              <StyledButtonAroundSymbol disabled={true}>
                 <StyledFaTimes>
                   {/* <FaTimes onClick={() => deleteAllAppointmentsOfClient(item.clientId)} /> */}
                   <FaTimes 
@@ -123,17 +123,18 @@ const AssistantInAssistantList = ({assistants, item}) => {
         <Column>
           <AssistantInAssistantListStyled>
               {/* use case: delete all appointments of a client. pitfall: do not use this code for dentist, assistant, nor appointment !!   */}
-              <StyledButtonAroundSymbol>
+              <StyledButtonAroundSymbol >      
                 <StyledFaTimes>
-                  <FaTimes 
+                    <FaTimes 
                       onClick={() => {
                         deleteAllAppointmentsOfPerson("assistantid", item.assistantId, appointmentsfromReduxToolkit, deleteAppointmentInReduxToolkit, deleteDayTimeClient, 
                           deleteDayTimeDentist, deleteDayTimeAssistant,  dispatch);   
                         let assistantId = item.assistantId;                     
                         dispatch(deleteAssistant({assistantId}))
-                      }}                         
-                    />                
+                      }}  
+                      />                                     
                 </StyledFaTimes>
+        
               </StyledButtonAroundSymbol>
             </AssistantInAssistantListStyled>
         </Column>

@@ -12,7 +12,7 @@ import {createAppointment, generateAppointmentId, loadSelectboxWithListOf, selec
 
 import {Container} from '../styles/Container.styled';
 import {AppointmentAddStyled, Column, Form, Intro} from './AppointmentAdd.styled';
-import {StyledButtonAroundText} from '../styles/ButtonAroundText.styled';
+import {StyledButtonInsideAddOrUpdateComponent} from '../styles/ButtonInsideAddOrUpdateComponent.styled';
 import {StyledSelectbox} from '../styles/Selectbox.styled';
 
 const log = console.log;
@@ -218,9 +218,9 @@ const AddAppointment = () => {
                     </StyledSelectbox>
                 </Column>
                 <Column>
-                    <StyledButtonAroundText onClick={onSubmit}>
+                    <StyledButtonInsideAddOrUpdateComponent onClick={onSubmit}>
                         Add appointment
-                    </StyledButtonAroundText>                  
+                    </StyledButtonInsideAddOrUpdateComponent>                  
                 </Column>
             </Form>
         </AppointmentAddStyled>  

@@ -5,9 +5,9 @@ import {deleteAppointmentInReduxToolkit} from "../../redux/appointmentSlice";
 import {deleteDayTimeClient} from "../../redux/clientDayTimeSlice";
 import {deleteDayTimeDentist} from "../../redux/dentistDayTimeSlice";
 import {deleteDayTimeAssistant} from "../../redux/assistantDayTimeSlice";
-import {saveAppointmentToReduxToolkit, showComponentUpdateAppointmentReduxToolkit} from '../../redux/updateAppointmentSlice';
+import {disableUiControlsDuringAppointmentUpdate, saveAppointmentToReduxToolkit, showComponentUpdateAppointmentReduxToolkit} from '../../redux/updateAppointmentSlice';
 
-import {deleteDentalAppointment, updateAppointment_Phase1of2_DisplayComponentUpdateAppointment} from '../../utils';
+import {deleteDentalAppointment, sortArrayWithObjects, updateAppointment_Phase1of2_DisplayComponentUpdateAppointment} from '../../utils';
 
 import {Row, Column} from './AppointmentList.styled'
 import { AppointmentInAppointmentListStyled } from './AppointmentInAppointmentList.styled';
@@ -19,17 +19,22 @@ import "../../App.css";
 
 const log = console.log;
 
-const AppointmentInAppointmentList = ({appointments, item}) => {
+const AppointmentInAppointmentList = ({appointments, item, index}) => {
   let dispatch = useDispatch();
   let appointmentsfromReduxToolkit = useSelector((state) => state.appointment.appointments)
   
   let appointmentLastUpdatedOnDateTime = (item.appointmentLastUpdatedOnDateTime === null) ? "Not happened yet." : item.appointmentLastUpdatedOnDateTime ;
+  
+  let appointmentsCopy = [...appointments];
+  let appointmentsToShow = sortArrayWithObjects("appointmentId", appointmentsCopy  )
+  log(appointmentsToShow)
 
   return (
     <Row>
         <Column>
           <AppointmentInAppointmentListStyled>
-            {appointments.indexOf(item) + 1 }
+            {/* {appointments.indexOf(item) + 1 } */}
+            {index}
           </AppointmentInAppointmentListStyled>
         </Column>
         <Column>
@@ -65,8 +70,8 @@ const AppointmentInAppointmentList = ({appointments, item}) => {
         <Column>
           <AppointmentInAppointmentListStyled>
               <StyledButtonAroundSymbol>
-                <StyledFaTimes>
-                  <GrUpdate 
+                <StyledFaTimes >
+                  <GrUpdate
                     onClick={() => {
                       updateAppointment_Phase1of2_DisplayComponentUpdateAppointment(
                         item,
@@ -75,6 +80,7 @@ const AppointmentInAppointmentList = ({appointments, item}) => {
                         appointmentsfromReduxToolkit, 
                         deleteAppointmentInReduxToolkit, 
                         saveAppointmentToReduxToolkit, 
+                        disableUiControlsDuringAppointmentUpdate,
                         deleteDayTimeClient, 
                         deleteDayTimeDentist, 
                         deleteDayTimeAssistant, 

@@ -1,6 +1,6 @@
 import React from 'react'
 import { useSelector } from "react-redux";
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import skillLevelOptions from '../../dataInDentistAppWhenDentistAppStarts/skillLevelOptions';
 import paymentMethodsToAddToNewClientCreatedViaUI from '../../dataInDentistAppWhenDentistAppStarts/paymentMethodsToAddToNewClientCreatedViaUI';
 import dentalSkillsToAddToNewDentistCreatedViaUI from '../../dataInDentistAppWhenDentistAppStarts/dentalSkillsToAddToNewDentistCreatedViaUI';
@@ -141,6 +141,16 @@ const AppointmentList = () => {
     };
 
 
+    // const [count, setCount] = useState(0)
+    // function increment() {
+    //     setCount(prevCount => prevCount + 1)
+    // }
+
+    let count = useRef(0);
+    function increment() {
+        count.current +=1;
+    }
+
     return (
     <>
     <Container> 
@@ -190,6 +200,7 @@ const AppointmentList = () => {
                         <option value="" >priority level:</option>
                         <option value="" >do not filter</option>  
                         {appointmentPriorityLevelsInSelectbox.map(item => {
+
                             return (<option key={item.value} value={item.value}>{item.text}</option>);
                         })}
                     </StyledSelectbox>
@@ -227,12 +238,19 @@ const AppointmentList = () => {
                 </Column>
             </Headers>
             <AppointmentListAreaStyled>
-                { dataToRenderFromUseEffectPipeline.length !== 0 ? dataToRenderFromUseEffectPipeline.map((item, id) => (
-                        <AppointmentInAppointmentList key={id} item={item} appointments={appointments} />
-                )): <>Please create appointments.</>}
+                { dataToRenderFromUseEffectPipeline.length !== 0 ? dataToRenderFromUseEffectPipeline.map((item, id) => {
+                        // count.current = 0;
+                        increment()                                          
+                        return ( 
+                        <AppointmentInAppointmentList index={count.current} key={id} item={item} appointments={appointments} />
+                       )})
+                       : 
+                        <>Please create appointments.</>
+                }
             </AppointmentListAreaStyled>
         </AppointmentListStyled>  
     </Container>
+    <div disabled={true}>{count.current = 0}</div>
     </>
   )
 }

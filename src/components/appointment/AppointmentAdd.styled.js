@@ -11,7 +11,6 @@ export const AppointmentAddStyled = styled.div`
   grid-gap: 0.25rem;
   // font-family: ${({ theme}) => theme.colors.fontColor01 };
   font-size: ${({ theme}) => theme.fontSize.default };
-  font-weight: bold;
 `;
 
 export const Column = styled.div`
@@ -26,10 +25,9 @@ export const Form = styled.form`
   align-items: center;  
   gap: 1rem;
   background: ${({ theme}) => theme.colors.blackground02};
-  color: white;
+  // color: white;
   padding: 0.25rem;
   
-
   @media (max-width: 700px) {
     flex-direction: column;
     gap: 1rem;
@@ -42,6 +40,7 @@ export const Intro = styled.div`
   grid-area: intro;
   background: ${({ theme}) => theme.colors.header01 };
   padding: 0.25rem;
+  font-weight: bold;
 `;
 
 

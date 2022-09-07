@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-export const StyledButtonAroundText = styled.button`
+export const StyledButtonInsideAddOrUpdateComponent = styled.button`
   background-color: white;  
   border-radius: 50px;
   border: none;

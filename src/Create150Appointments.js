@@ -35,9 +35,9 @@ const Create150Appointments = () => {
     */
     const CONFIGNROFASSISTANTS = 4; 
     const CONFIGNROFRANDOMLYGENERATEDAPPOINTMENTS = 150;
-    const CONFIGNROFCLIENTS = 5;
+    const CONFIGNROFCLIENTS = 50;
     const CONFIGNROFDENTISTS = 4; 
-    const CONFIGNROFDIFFERENTTREATMENTSASTHESKILLSOFADENTIST = 7;
+    const CONFIGNROFDIFFERENTTREATMENTSASTHESKILLSOFADENTIST = 12;
 
     const dispatch = useDispatch();
     // helper variables (only accessible inside the useEffect hook below)

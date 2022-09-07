@@ -3,7 +3,7 @@ import {useState } from 'react';
 import {useDispatch, useSelector } from "react-redux";
 import {addAppointment } from "../../redux/appointmentSlice";
 
-import {hideComponentUpdateAppointmentReduxToolkit } from '../../redux/updateAppointmentSlice';
+import {enableUiControlsDuringAppointmentUpdate, hideComponentUpdateAppointmentReduxToolkit } from '../../redux/updateAppointmentSlice';
 
 import dentalSkillsToAddToNewDentistCreatedViaUI from '../../dataInDentistAppWhenDentistAppStarts/dentalSkillsToAddToNewDentistCreatedViaUI';
 import appointmentPriorityLevelsInSelectbox from '../../dataInDentistAppWhenDentistAppStarts/appointmentPriorityLevelsInSelectbox';
@@ -12,7 +12,7 @@ import listOfValidWorkingHours from '../../dataInDentistAppWhenDentistAppStarts/
 
 import {Container} from '../styles/Container.styled';
 import {AppointmentAddStyled, Column, Form, Intro} from './AppointmentAdd.styled';
-import {StyledButtonAroundText} from '../styles/ButtonAroundText.styled';
+import {StyledButtonInsideAddOrUpdateComponent} from '../styles/ButtonInsideAddOrUpdateComponent.styled';
 import {StyledSelectbox} from '../styles/Selectbox.styled';
 import {createAppointment, generateAppointmentId, getSystemDatePlusTime, loadSelectboxWithListOf, selectObjectsByArrayObjectKey, sortArrayWithObjects, updateAppointment_Phase2of2_updateAppointmentRecursivelyUntilUpdateSucceeds} from '../../utils';
 
@@ -128,6 +128,7 @@ const UpdateAppointment = () => {
             dentistDayTimesFromReduxToolkit, 
             assistantDayTimesFromReduxToolkit, 
             hideComponentUpdateAppointmentReduxToolkit,
+            enableUiControlsDuringAppointmentUpdate,
             dispatch
         )
 
@@ -250,9 +251,9 @@ const UpdateAppointment = () => {
                     </StyledSelectbox>
                 </Column>
                 <Column>
-                    <StyledButtonAroundText onClick={onSubmit}>
+                    <StyledButtonInsideAddOrUpdateComponent onClick={onSubmit}>
                         Update appointment 
-                    </StyledButtonAroundText>                  
+                    </StyledButtonInsideAddOrUpdateComponent>                  
                 </Column>
             </Form>
         </AppointmentAddStyled>  
