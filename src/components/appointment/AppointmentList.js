@@ -141,10 +141,6 @@ const AppointmentList = () => {
     };
 
 
-    // const [count, setCount] = useState(0)
-    // function increment() {
-    //     setCount(prevCount => prevCount + 1)
-    // }
 
     let counterOfAppointmentsInList = useRef(0);
     function increment() {

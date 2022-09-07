@@ -21,7 +21,7 @@ import "../../App.css";
 
 const log = console.log;
 
-const AssistantInAssistantList = ({assistants, item}) => {
+const AssistantInAssistantList = ({assistants, item, index}) => {
   const dispatch = useDispatch();
   // const [personIsSick, setPersonIsSick] = useState(false);
   // let checkBoxStatus = useRef(false);
@@ -33,7 +33,8 @@ const AssistantInAssistantList = ({assistants, item}) => {
     <Row>
         <Column>
           <AssistantInAssistantListStyled>
-            {assistants.indexOf(item) + 1 }
+            {/* {assistants.indexOf(item) + 1 } */}
+            {index}
           </AssistantInAssistantListStyled>
         </Column>
         <Column>

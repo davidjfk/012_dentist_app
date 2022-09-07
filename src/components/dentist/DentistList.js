@@ -1,6 +1,6 @@
 import React from 'react'
 import { useSelector } from "react-redux";
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import skillLevelOptions from '../../dataInDentistAppWhenDentistAppStarts/skillLevelOptions';
 import healthStatusOptions from '../../dataInDentistAppWhenDentistAppStarts/healthStatusOptions';
 import {Container} from '../styles/Container.styled'
@@ -135,6 +135,10 @@ const DentistList = () => {
       setIsHovering(false);
     };
 
+    let counterOfDentistInList = useRef(0);
+    function increment() {
+        counterOfDentistInList.current +=1;
+    }
 
     return (
     <>
@@ -233,12 +237,23 @@ const DentistList = () => {
                 </Column>
             </Headers>
             <DentistListAreaStyled>
-                { dataToRenderFromUseEffectPipeline.length !== 0 ? dataToRenderFromUseEffectPipeline.map((item, id) => (
+
+                {/* { dataToRenderFromUseEffectPipeline.length !== 0 ? dataToRenderFromUseEffectPipeline.map((item, id) => (
                         <DentistInDentistList key={id} item={item} dentists={dentists} />
-                )): <>Please hire dentists.</>}
+                )): <>Please hire dentists.</>} */}
+
+                { dataToRenderFromUseEffectPipeline.length !== 0 ? dataToRenderFromUseEffectPipeline.map((item, id) => {
+                    increment()                                          
+                    return ( 
+                    <DentistInDentistList index={counterOfDentistInList.current} key={id} item={item} dentists={dentists} />
+                    )})
+                    : 
+                    <>Please hire dentists.</>
+                }
             </DentistListAreaStyled>
         </DentistListStyled>  
     </Container>
+    <div disabled={true}>{counterOfDentistInList.current = 0}</div>
     </>
   )
 }

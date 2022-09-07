@@ -25,9 +25,9 @@ const AppointmentInAppointmentList = ({appointments, item, index}) => {
   
   let appointmentLastUpdatedOnDateTime = (item.appointmentLastUpdatedOnDateTime === null) ? "Not happened yet." : item.appointmentLastUpdatedOnDateTime ;
   
-  let appointmentsCopy = [...appointments];
-  let appointmentsToShow = sortArrayWithObjects("appointmentId", appointmentsCopy  )
-  log(appointmentsToShow)
+  // let appointmentsCopy = [...appointments];
+  // let appointmentsToShow = sortArrayWithObjects("appointmentId", appointmentsCopy  )
+  // log(appointmentsToShow)
 
   return (
     <Row>

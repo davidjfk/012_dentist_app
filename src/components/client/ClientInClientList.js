@@ -24,7 +24,7 @@ const log = console.log;
 
 
 
-const ClientInClientList = ({clients, item}) => {
+const ClientInClientList = ({clients, item, index}) => {
   const dispatch = useDispatch();
   // const [personIsSick, setPersonIsSick] = useState(false);
   // let checkBoxStatus = useRef(false);
@@ -49,7 +49,8 @@ const ClientInClientList = ({clients, item}) => {
     <Row>
         <Column>
           <ClientInClientListStyled>
-            {clients.indexOf(item) + 1 }
+            {/* {clients.indexOf(item) + 1 } */}
+            {index}
           </ClientInClientListStyled>
         </Column>
         <Column>

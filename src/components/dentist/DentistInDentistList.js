@@ -22,7 +22,7 @@ import "../../App.css";
 
 const log = console.log;
 
-const DentistInDentistList = ({dentists, item}) => {
+const DentistInDentistList = ({dentists, item, index}) => {
   const dispatch = useDispatch();
   // const [personIsSick, setPersonIsSick] = useState(false);
   // let checkBoxStatus = useRef(false);
@@ -36,7 +36,8 @@ const DentistInDentistList = ({dentists, item}) => {
         <Column>
           <DentistInDentistListStyled>
           {/* <SkillsInListStyled> */}
-            {dentists.indexOf(item) + 1 }
+            {/* {dentists.indexOf(item) + 1 } */}
+            {index}
             {/* </SkillsInListStyled> */}
           </DentistInDentistListStyled>
         </Column>

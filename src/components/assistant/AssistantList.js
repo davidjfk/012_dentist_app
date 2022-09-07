@@ -1,6 +1,6 @@
 import React from 'react'
 import { useSelector } from "react-redux";
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef} from 'react';
 
 import skillLevelOptions from '../../dataInDentistAppWhenDentistAppStarts/skillLevelOptions';
 import healthStatusOptions from '../../dataInDentistAppWhenDentistAppStarts/healthStatusOptions';
@@ -137,6 +137,11 @@ const AssistantList = () => {
       setIsHovering(false);
     };
 
+    let counterOfAssistantInList = useRef(0);
+    function increment() {
+        counterOfAssistantInList.current +=1;
+    }
+
 
     return (
     <>
@@ -224,12 +229,22 @@ const AssistantList = () => {
                 </Column>
             </Headers>
             <AssistantListAreaStyled>
-                { dataToRenderFromUseEffectPipeline.length !== 0 ? dataToRenderFromUseEffectPipeline.map((item, id) => (
+                {/* { dataToRenderFromUseEffectPipeline.length !== 0 ? dataToRenderFromUseEffectPipeline.map((item, id) => (
                         <AssistantInAssistantList key={id} item={item} assistants={assistants} />
-                )): <>Please hire dental assistants.</>}
+                )): <>Please hire dental assistants.</>} */}
+
+                { dataToRenderFromUseEffectPipeline.length !== 0 ? dataToRenderFromUseEffectPipeline.map((item, id) => {
+                    increment()                                          
+                    return ( 
+                    <AssistantInAssistantList index={counterOfAssistantInList.current} key={id} item={item} assistants={assistants} />
+                    )})
+                    : 
+                    <>Please hire dental assistants.</>
+                }
             </AssistantListAreaStyled>
         </AssistantListStyled>  
     </Container>
+    <div disabled={true}>{counterOfAssistantInList.current = 0}</div>
     </>
   )
 }

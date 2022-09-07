@@ -1,5 +1,5 @@
 import React from 'react'
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useSelector } from "react-redux";
 
 import paymentMethodsToAddToNewClientCreatedViaUI from '../../dataInDentistAppWhenDentistAppStarts/paymentMethodsToAddToNewClientCreatedViaUI';
@@ -60,6 +60,7 @@ const ClientList = () => {
         }
     };
     
+
 
 
 
@@ -139,6 +140,11 @@ const ClientList = () => {
 
     log(`comp ClientList: data to  render:`)
     log(dataToRenderFromUseEffectPipeline)
+
+    let counterOfClientInList = useRef(0);
+    function increment() {
+        counterOfClientInList.current +=1;
+    }
 
     return (
     <>
@@ -226,12 +232,22 @@ const ClientList = () => {
                 </Column>
             </Headers>
             <ClientListAreaStyled>
-                { dataToRenderFromUseEffectPipeline.length !== 0 ? dataToRenderFromUseEffectPipeline.map((item, id) => (
+                {/* { dataToRenderFromUseEffectPipeline.length !== 0 ? dataToRenderFromUseEffectPipeline.map((item, id) => (
                         <ClientInClientList key={id} item={item} clients={clients} />
-                )): <>Please attract clients.</>}
+                )): <>Please attract clients.</>} */}
+
+                { dataToRenderFromUseEffectPipeline.length !== 0 ? dataToRenderFromUseEffectPipeline.map((item, id) => {
+                    increment()                                          
+                    return ( 
+                    <ClientInClientList index={counterOfClientInList.current} key={id} item={item} clients={clients} />
+                    )})
+                    : 
+                    <>Please attract clients.</>
+                }
             </ClientListAreaStyled>
         </ClientListStyled>  
     </Container>
+    <div disabled={true}>{counterOfClientInList.current = 0}</div>
     </>
   )
 }
