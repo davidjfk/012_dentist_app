@@ -15,7 +15,7 @@ import { StyledFaTimes } from '../styles/FaTimes.styled'
 import { FaTimes } from 'react-icons/fa';
 import { GrUpdate } from "react-icons/gr";
 import {StyledButtonAroundSymbol} from '../styles/ButtonAroundSymbol.styled';
-import "../../App.css";
+// import "../../App.css";
 
 const log = console.log;
 

@@ -751,6 +751,8 @@ export const loadSelectboxWithListOf = (arrayObjectKey, array) => {
     dispatch
   ) => {
     
+    window.scrollTo(0, 0);
+
     dispatch(disableUiControlsDuringAppointmentUpdate());
 
     dispatch(saveAppointmentToReduxToolkit(appointment));

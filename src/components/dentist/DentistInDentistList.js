@@ -18,7 +18,7 @@ import {StyledCheckbox} from '../styles/Checkbox.styled';
 import { StyledFaTimes } from '../styles/FaTimes.styled'
 import { FaTimes } from 'react-icons/fa'
 import {StyledButtonAroundSymbol} from '../styles/ButtonAroundSymbol.styled';
-import "../../App.css";
+// import "../../App.css";
 
 const log = console.log;
 

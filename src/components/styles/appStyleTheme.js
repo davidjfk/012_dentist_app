@@ -18,15 +18,6 @@ export const theme = {
   
       onHoverFontColor01: "greenyellow"
     },
-
-    /*
-      status: buttons (delete) on Appointment-page can be disabled with 
-      pointerEvents.no  below.
-      2do next: 
-      1. disable these buttons from Redux-toolkit during update appointment process.
-      2. after completion of this process, enable these buttons again.
-      access pointerEvents from Redux-toolkit. 
-    */
     pointerEvents: "auto",
     font: {
         font01: "Helvetica"

@@ -1,22 +1,21 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import "./index.css";
-import App from "./App";
 import store from './redux/store'
 import { Provider } from 'react-redux'
+import App from "./components/app/App";
 
 // import { ThemeProvider } from 'styled-components';
-import "./App.css";
-import { AppStyled } from "./App.styled";
+// import "./app.css";
+import { AppStyled } from "./components/app/App.styled";
+// import "./index.css";
 
-
+import GlobalStyle from "./components/styles/GlobalCss.styled";
 
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      {/* <AppStyled> */}
+        <GlobalStyle/>
         <App />
-      {/* </AppStyled> */}
     </Provider>
   </React.StrictMode>,
   document.getElementById("root")

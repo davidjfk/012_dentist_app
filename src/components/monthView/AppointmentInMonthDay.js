@@ -79,7 +79,8 @@ export const AppointmentInMonthDay = ({day, time, client, clientId, dentistId, a
           delete appointment
         </StyledButtonInsideCalendarOrDayView> 
         <StyledButtonInsideCalendarOrDayView
-          onClick={() => { updateAppointment_Phase1of2_DisplayComponentUpdateAppointment(
+          onClick={() => {  window.scrollTo(0, 0);
+                            updateAppointment_Phase1of2_DisplayComponentUpdateAppointment(
                               appointment,
                               appointmentId, 
                               showComponentUpdateAppointmentReduxToolkit, 

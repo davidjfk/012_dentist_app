@@ -96,7 +96,6 @@ export const AppointmentInDay = ({appointmentId, time, day, client, clientId, de
       update appointment
     </StyledButtonInsideCalendarOrDayView>
     <DentistInDayViewStyled >Dentist: {dentist}</DentistInDayViewStyled>
-  
     <AssistantInDayViewStyled>Assistant: {assistant}</AssistantInDayViewStyled>
   </AppointmentInDayStyled>
   )
