@@ -25,3 +25,5 @@ export default configureStore({
   }
 });
 
+//retainAppointmentDetailsInAddAppointmentForm
+//retainLastSelectedDayInDayView

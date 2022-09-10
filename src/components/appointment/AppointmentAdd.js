@@ -1,21 +1,19 @@
 import React from 'react';
 import {useState } from 'react';
 import {useDispatch, useSelector } from "react-redux";
-import {addAppointment } from "../../redux/appointmentSlice";
+
 import dentalSkillsToAddToNewDentistCreatedViaUI from '../../dataInDentistAppWhenDentistAppStarts/dentalSkillsToAddToNewDentistCreatedViaUI';
 import appointmentPriorityLevelsInSelectbox from '../../dataInDentistAppWhenDentistAppStarts/appointmentPriorityLevelsInSelectbox';
 import listOfValidWorkingDayNumbersInNextMonth from '../../dataInDentistAppWhenDentistAppStarts/listOfValidWorkingDayNumbersInNextMonth';
 import listOfValidWorkingHours from '../../dataInDentistAppWhenDentistAppStarts/listOfValidWorkingHours';
 
 
-import {createAppointment, generateAppointmentId, loadSelectboxWithListOf, selectObjectsByArrayObjectKey, sortArrayWithObjects} from '../../utils';
+import {createAppointment, loadSelectboxWithListOf, sortArrayWithObjects} from '../../utils';
 
 import {Container} from '../styles/Container.styled';
 import {AppointmentAddStyled, Column, Form, Intro} from './AppointmentAdd.styled';
 import {StyledButtonInsideAddOrUpdateComponent} from '../styles/ButtonInsideAddOrUpdateComponent.styled';
 import {StyledSelectbox} from '../styles/Selectbox.styled';
-
-const log = console.log;
 
 const AddAppointment = () => {
     let clientsFromReduxToolkit  = useSelector((state) => state.client);
@@ -37,10 +35,6 @@ const AddAppointment = () => {
     let {assistants}  = useSelector((state) => state.assistant);
     let selectboxWithListOfAssistantIds = loadSelectboxWithListOf("assistantId", assistants);
     let selectboxWithListOfAssistantsSorted = sortArrayWithObjects("text", selectboxWithListOfAssistantIds);
-
-
-
-    
 
     let [clientId, setClientId] = useState("");
     let [treatmentType, setTreatmentType] = useState("");
@@ -100,13 +94,12 @@ const AddAppointment = () => {
             dispatch
         )
 
-        // now reset the form for the next use:
-        // setClientId('');
-        // setTreatmentType('');
-        // setAppointmentPriority('');
-        // setDay('');
-        // setTime('');
-        // setDentistId('');
+        setClientId('');
+        setTreatmentType('');
+        setAppointmentPriority('');
+        setDay('');
+        setTime('');
+        setDentistId('');
         setAssistantId('');
     }
 
@@ -122,9 +115,6 @@ const AddAppointment = () => {
                         name="clientId"
                     > 
                         <option value="" >clientId:</option>
-                        {/* <option value="default" disabled hidden>
-                            Add skill level
-                        </option> */}
                         {selectboxWithListOfClientIdsSorted.map(item => {
                             return (<option key={item.value} value={item.value}>{item.text}</option>);
                         })}
@@ -149,9 +139,6 @@ const AddAppointment = () => {
                         name="priorityLevel"
                     > 
                         <option value="" >priority:</option>
-                        {/* <option value="default" disabled hidden>
-                            Add skill level
-                        </option> */}
                         {appointmentPriorityLevelsInSelectbox.map(item => {
                             return (<option key={item.value} value={item.value}>{item.text}</option>);
                         })}
@@ -164,9 +151,6 @@ const AddAppointment = () => {
                         name="day"
                     > 
                         <option value="" >day:</option>
-                        {/* <option value="default" disabled hidden>
-                            Add skill level
-                        </option> */}
                         {listOfValidWorkingDayNumbersInNextMonth.map(item => {
                             return (<option key={item.value} value={item.value}>{item.text}</option>);
                         })}
@@ -179,9 +163,6 @@ const AddAppointment = () => {
                         name="time"
                     > 
                         <option value="" >time:</option>
-                        {/* <option value="default" disabled hidden>
-                            Add skill level
-                        </option> */}
                         {listOfValidWorkingHours.map(item => {
                             return (<option key={item.value} value={item.value}>{item.text}</option>);
                         })}
@@ -194,9 +175,6 @@ const AddAppointment = () => {
                         name="dentistId"
                     > 
                         <option value="" >dentistId:</option>
-                        {/* <option value="default" disabled hidden>
-                            Add skill level
-                        </option> */}
                         {selectboxWithListOfDentistsSorted.map(item => {
                             return (<option key={item.value} value={item.value}>{item.text}</option>);
                         })}
@@ -209,9 +187,6 @@ const AddAppointment = () => {
                         name="assistantId"
                     > 
                         <option value="" >assistantId:</option>
-                        {/* <option value="default" disabled hidden>
-                            Add skill level
-                        </option> */}
                         {selectboxWithListOfAssistantsSorted.map(item => {
                             return (<option key={item.value} value={item.value}>{item.text}</option>);
                         })}

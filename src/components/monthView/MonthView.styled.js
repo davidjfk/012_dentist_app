@@ -8,11 +8,10 @@ export const ColorLegendaStyled = styled.ul`
   padding: 0.5rem;
   background: ${({ theme}) => theme.colors.background02 };
   margin-left: 0.5rem;
-
   list-style: none;
   padding-left: 1rem;
   font-size: 1.4rem;
-  width: 15rem;
+  width: 18rem;
   font-weight: 500;
 `;
 
@@ -25,7 +24,6 @@ export const MonthViewStyled = styled.div`
   background: ${({ theme}) => theme.colors.background02 };
   margin-left: 0.5rem;
 `;
-
 
 export const HeaderInMonthStyled = styled.div`
   display: grid;

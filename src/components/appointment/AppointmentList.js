@@ -1,27 +1,20 @@
 import React from 'react'
 import { useSelector } from "react-redux";
 import { useState, useEffect, useRef } from 'react';
-import skillLevelOptions from '../../dataInDentistAppWhenDentistAppStarts/skillLevelOptions';
-import paymentMethodsToAddToNewClientCreatedViaUI from '../../dataInDentistAppWhenDentistAppStarts/paymentMethodsToAddToNewClientCreatedViaUI';
 import dentalSkillsToAddToNewDentistCreatedViaUI from '../../dataInDentistAppWhenDentistAppStarts/dentalSkillsToAddToNewDentistCreatedViaUI';
 import appointmentPriorityLevelsInSelectbox from '../../dataInDentistAppWhenDentistAppStarts/appointmentPriorityLevelsInSelectbox';
-import healthStatusOptions from '../../dataInDentistAppWhenDentistAppStarts/healthStatusOptions';
 
 import AppointmentInAppointmentList from './AppointmentInAppointmentList.js'
 
 import {Container} from '../styles/Container.styled'
-
 import {AppointmentListAreaStyled, AppointmentListStyled, Column, FormControlArea, Headers, Intro, Section1, Section2, Section3} from './AppointmentList.styled'
 import {StyledSelectbox} from '../styles/Selectbox.styled';
 
 
-
-const log = console.log;
-
 const AppointmentList = () => {
     const { appointments } = useSelector((state) => state.appointment);
     
-    const [appointmentObjectKeyToSortArrayWithAppointments, setSongObjectKeyToSortArrayWithSongs] = useState('');
+    const [appointmentObjectKeyToSortArrayWithAppointments, setAppointmentObjectKeyToSortArrayWithAppointments] = useState('');
     const [dataToRenderFromUseEffectPipeline, setDataToRenderFromUseEffectPipeline] = useState([]);
     const [treatmentTypesToFilterWith, setTreatmentTypesToFilterWith] = useState([""]);
     const [priorityLevelToFilterWith, setPriorityLevelToFilterWith] = useState([""]);
@@ -62,9 +55,6 @@ const AppointmentList = () => {
             console.error(`component AppointmentInAppointmentList: not possible to sort with datatype ${typeof(sortProperty)}. Please investigate. `)
         }
     };
-    
-
-
 
     const handleFilterTreatmentTypeChange = (event) => {    
         let value = Array.from(
@@ -100,7 +90,6 @@ const AppointmentList = () => {
         } 
     };
 
-
     const filterByPriorityLevel = (filteredData, priorityLevelToFilterWith) => {
         let arrayFilteredOnAllCriteria = [];  
         if (priorityLevelToFilterWith[0] === "") {
@@ -118,7 +107,6 @@ const AppointmentList = () => {
             return arrayFilteredOnAllCriteria;
         }
     };
-
 
     useEffect(() => {
             let pipelineData = filterByPriorityLevel(appointments, priorityLevelToFilterWith);
@@ -140,8 +128,6 @@ const AppointmentList = () => {
       setIsHovering(false);
     };
 
-
-
     let counterOfAppointmentsInList = useRef(0);
     function increment() {
         counterOfAppointmentsInList.current +=1;
@@ -155,7 +141,7 @@ const AppointmentList = () => {
             <FormControlArea>
                 <Section1>
                     <StyledSelectbox                  
-                        onChange={(e) => setSongObjectKeyToSortArrayWithSongs(e.target.value) }                 
+                        onChange={(e) => setAppointmentObjectKeyToSortArrayWithAppointments(e.target.value) }                 
                     >                        
                         <option value="" >Sort by:</option>
                         <option value="" >do not sort</option>
@@ -200,7 +186,7 @@ const AppointmentList = () => {
                             return (<option key={item.value} value={item.value}>{item.text}</option>);
                         })}
                     </StyledSelectbox>
-                    {isHovering && <h3>Press Ctrl to select multiple skill levels</h3>}
+                    {isHovering && <h3>Press Ctrl or Shift to select multiple skill levels</h3>}
                     </div>
                 </Section3>
             </FormControlArea>
@@ -235,7 +221,6 @@ const AppointmentList = () => {
             </Headers>
             <AppointmentListAreaStyled>
                 { dataToRenderFromUseEffectPipeline.length !== 0 ? dataToRenderFromUseEffectPipeline.map((item, id) => {
-                        // count.current = 0;
                         increment()                                          
                         return ( 
                         <AppointmentInAppointmentList index={counterOfAppointmentsInList.current} key={id} item={item} appointments={appointments} />

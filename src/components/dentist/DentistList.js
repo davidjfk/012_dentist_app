@@ -1,26 +1,24 @@
 import React from 'react'
 import { useSelector } from "react-redux";
 import { useState, useEffect, useRef } from 'react';
+
 import skillLevelOptions from '../../dataInDentistAppWhenDentistAppStarts/skillLevelOptions';
 import healthStatusOptions from '../../dataInDentistAppWhenDentistAppStarts/healthStatusOptions';
-import {Container} from '../styles/Container.styled'
+
 import DentistInDentistList from './DentistInDentistList.js'
+
+import {Container} from '../styles/Container.styled'
 import {DentistListAreaStyled, DentistListStyled, Column, FormControlArea, Headers, Intro, Section1, Section2, Section3} from './DentistList.styled'
-import { SkillsInListStyled } from './SkillsInList.styled';
 import {StyledSelectbox} from '../styles/Selectbox.styled';
 
-
-
-const log = console.log;
 
 const DentistList = () => {
     const { dentists } = useSelector((state) => state.dentist);
     
-    const [personObjectKeyToSortArrayWithPersons, setSongObjectKeyToSortArrayWithSongs] = useState('');
+    const [personObjectKeyToSortArrayWithPersons, setPersonObjectKeyToSortArrayWithPersons] = useState('');
     const [dataToRenderFromUseEffectPipeline, setDataToRenderFromUseEffectPipeline] = useState([]);
     const [healthStatusToFilterWith, setHealthStatusToFilterWith] = useState([""]);
     const [skillLevelToFilterWith, setSkillLevelToFilterWith] = useState([""]);
-
 
     const sortAssistantList = (dentists, JsxSelectBoxAttributeValue) => {
         if (!JsxSelectBoxAttributeValue) {
@@ -48,8 +46,6 @@ const DentistList = () => {
         } else if (isAscending && (sortProperty === "dentistId" || sortProperty === "firstName" || sortProperty === "isSick")) {
             sortedPersons = [...dentists].sort((person1, person2) => person1[sortProperty].localeCompare(person2[sortProperty], 'en', { ignorePunctuation: true }));
             return sortedPersons;
-            // I choose 'en' as  the unicodeLanguage.
-            // unicode allows user to enter any kind of character.
         } else if (!isAscending && (sortProperty === "dentistId" || sortProperty === "firstName" || sortProperty === "isSick")) {
                 sortedPersons = [...dentists].sort((person1, person2) => person1[sortProperty].localeCompare(person2[sortProperty], 'en', { ignorePunctuation: true }));
                 return sortedPersons.reverse();
@@ -58,9 +54,6 @@ const DentistList = () => {
         }
     };
     
-
-
-
     const handleFilterHealthStatusChange = (event) => {    
         let value = Array.from(
             event.target.selectedOptions, (option) => option.value
@@ -95,7 +88,6 @@ const DentistList = () => {
         } 
     };
 
-
     const filterBySkillLevel = (filteredData, skillLevelToFilterWith) => {
         let arrayFilteredOnAllCriteria = [];  
         if (skillLevelToFilterWith[0] === "") {
@@ -113,7 +105,6 @@ const DentistList = () => {
             return arrayFilteredOnAllCriteria;
         }
     };
-
 
     useEffect(() => {
             let pipelineData = filterBySkillLevel(dentists, skillLevelToFilterWith);
@@ -148,7 +139,7 @@ const DentistList = () => {
             <FormControlArea>
                 <Section1>
                     <StyledSelectbox                  
-                        onChange={(e) => setSongObjectKeyToSortArrayWithSongs(e.target.value) }                 
+                        onChange={(e) => setPersonObjectKeyToSortArrayWithPersons(e.target.value) }                 
                     >                        
                         <option value="" >Sort by:</option>
                         <option value="" >do not sort</option>
@@ -192,30 +183,22 @@ const DentistList = () => {
                             return (<option key={item.value} value={item.value}>{item.text}</option>);
                         })}
                     </StyledSelectbox>
-                    {isHovering && <h3>Press Ctrl to select multiple skill levels</h3>}
+                    {isHovering && <h3>Press Ctrl or Shift to select multiple skill levels</h3>}
                     </div>
                 </Section3>
             </FormControlArea>
             <Headers>
                 <Column>
-                    {/* <SkillsInListStyled> */}
-                        <span>Nr</span>
-                    {/* </SkillsInListStyled> */}
+                    <span>Nr</span>
                 </Column>
                 <Column>
-                    {/* <SkillsInListStyled> */}
-                        <span>Dentist Id</span>
-                    {/* </SkillsInListStyled> */}
+                    <span>Dentist Id</span>
                 </Column>
                 <Column>
-                    {/* <SkillsInListStyled> */}
-                        <span>First name</span>
-                    {/* </SkillsInListStyled> */}
+                    <span>First name</span>
                 </Column>
                 <Column>
-                    {/* <SkillsInListStyled> */}
-                        <span>Skills</span>
-                    {/* </SkillsInListStyled> */}
+                    <span>Skills</span>
                 </Column>
                 <Column>
                     <span>Skill level</span>
@@ -237,11 +220,6 @@ const DentistList = () => {
                 </Column>
             </Headers>
             <DentistListAreaStyled>
-
-                {/* { dataToRenderFromUseEffectPipeline.length !== 0 ? dataToRenderFromUseEffectPipeline.map((item, id) => (
-                        <DentistInDentistList key={id} item={item} dentists={dentists} />
-                )): <>Please hire dentists.</>} */}
-
                 { dataToRenderFromUseEffectPipeline.length !== 0 ? dataToRenderFromUseEffectPipeline.map((item, id) => {
                     increment()                                          
                     return ( 

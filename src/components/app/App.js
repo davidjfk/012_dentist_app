@@ -3,36 +3,23 @@ import { ThemeProvider } from 'styled-components';
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 
-
-
 import Create150Appointments from "../../Create150Appointments";
-// import {UseEffectHookCalls} from "./components/obsolete_fnCalls_winc_operations_witout_UI/UseEffectHookCalls";
 import Appointment from "../appointment/Appointment";
 import Assistant from "../assistant/Assistant";
+import {Calendar} from "../monthView/Calendar";
 import Client from "../client/Client";
 import Dentist from "../dentist/Dentist";
-import {Calendar} from "../monthView/Calendar";
+
 import {SelectDayNrToDisplay} from "../dayView/SelectDayNrToDisplay";
 
-import {log} from '../../utils';
-
-import {theme} from "../styles/appStyleTheme"
-// import "./App.css";
-import { AppStyled } from "./App.styled";
+import {AppStyled} from "./App.styled";
 import {NavigationStyled} from "./Navigation.styled";
 import {StyledNavLink} from "./NavLink.styled";
+import {theme} from "../styles/appStyleTheme";
 
 const App = ()  => {
-
   let uiControlBehaviorDuringAppointmentUpdate = useSelector((state) => state.updateAppointment)
-  log('hierzoho')
-  log(uiControlBehaviorDuringAppointmentUpdate)
-  log(uiControlBehaviorDuringAppointmentUpdate.pointerEvents)
-  log(uiControlBehaviorDuringAppointmentUpdate)
-
-  theme.pointerEvents = "none"; // works
   theme.pointerEvents = uiControlBehaviorDuringAppointmentUpdate.pointerEvents
-
   let appointmentsfromReduxToolkit = useSelector((state) => state.appointment)
   return(
     <>
@@ -41,8 +28,7 @@ const App = ()  => {
         <Create150Appointments/>
         <Router>
           <NavigationStyled>
-            <nav className="navBar">
-              <ul>  
+              <ul className="navBar">  
                 <StyledNavLink>
                   <Link to="/">Calendar view</Link>
                 </StyledNavLink>
@@ -62,8 +48,6 @@ const App = ()  => {
                   <Link to="/dentist">Dentist</Link>
                 </StyledNavLink>
               </ul>
-            </nav>
-            <main>
               <Switch>
                 <Route path="/client">  
                   <Client  />
@@ -84,7 +68,6 @@ const App = ()  => {
                   <Calendar appointments={appointmentsfromReduxToolkit.appointments}  />
                 </Route>
               </Switch>
-            </main>
           </NavigationStyled>
         </Router>
       </AppStyled>

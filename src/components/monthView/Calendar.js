@@ -3,14 +3,9 @@ import { useSelector } from "react-redux";
 import AppointmentUpdate from '../appointment/AppointmentUpdate';
 import {DayInMonth} from "./DayInMonth";
 
-import {CalendarMonthStyled, ColorLegendaStyled, HeaderInMonthStyled, MonthViewStyled, OrangeStyled, PurpleStyled, RedStyled,  TableInMonthStyled} from './MonthView.styled';
-// import "./Calendar.css";
-
-const log = console.log;
+import {ColorLegendaStyled, HeaderInMonthStyled, MonthViewStyled, OrangeStyled, PurpleStyled, RedStyled,  TableInMonthStyled} from './MonthView.styled';
 
 const divideByDay = appointments => {
-  // console.log('hier')
-  // console.log(appointments)
   const appointmentsByDay = {};
   appointments.forEach(appointment => {
     const day = appointment.day;
@@ -24,71 +19,62 @@ const divideByDay = appointments => {
 
 export const Calendar = ( {appointments} ) => {
   const { isNowUpdatingAppointment } = useSelector((state) => state.updateAppointment);
-  // log(appointments)
 
   const appointmentsByDay = divideByDay(appointments);
-  
-  // log(`output of fn appointmentsByDay: `)
-  // log(appointmentsByDay)
 
-  // pitfall: days have not been sorted yet !! 
+  /* 
+    below: notes to self for future reference:
 
-  /* appointmentsByDay is an obj with each key signifiying a working day in next month (e.g. day 2) 
-    number and its corresponding value being an array with appointments on that day.
+    appointmentsByDay is an obj with each key signifiying a working day in next month (e.g. day 2) 
+    This key is a number and its corresponding value is an array with appointments on that day.
     The keys are sorted ascending from 1 to 26 (the weekend days do not have a nr)
-{
-  1: [appointment 1, appointment 2, etc.],
-  2: [appointment 1, appointment 2, etc.],
-      (...)
-  20: [appointment 1, appointment 2, etc.]
-}
+  {
+    1: [appointment 1, appointment 2, etc.],
+    2: [appointment 1, appointment 2, etc.],
+        (...)
+    20: [appointment 1, appointment 2, etc.]
+  }
 
+    days have not been sorted yet. 
   */
 
+  let daysInMonthJSXUnsorted = Object.entries(appointmentsByDay)
+  let daysInMonthJSXSorted = [...daysInMonthJSXUnsorted]
+    .sort((daysInMonthJSXsorted1, daysInMonthJSXsorted2) => daysInMonthJSXsorted2[0] - daysInMonthJSXsorted1[0]).reverse();
 
-let daysInMonthJSXUnsorted = Object.entries(appointmentsByDay)
-// log(`daysInMonthJSX Unsorted:`)
-// log(daysInMonthJSXUnsorted)
+  /*
+    data structure with sorted days:
 
-
-// log(`appointments per day sorted, with day nr::`)
-let daysInMonthJSXSorted = [...daysInMonthJSXUnsorted]
-   .sort((daysInMonthJSXsorted1, daysInMonthJSXsorted2) => daysInMonthJSXsorted2[0] - daysInMonthJSXsorted1[0]).reverse()
-// log(daysInMonthJSXSorted)
-
-/*
-  data structure:
-  Array(20)
-0: (2) ['01', Array(10)]   --> '01' is the dayNr
-1: (2) ['02', Array(11)]
-2: (2) ['03', Array(5)]
-3: (2) ['04', Array(8)]
-4: (2) ['05', Array(4)]
-5: (2) ['08', Array(10)]
-6: (2) ['09', Array(5)]
-7: (2) ['10', Array(6)]
-8: (2) ['11', Array(10)]
-9: (2) ['12', Array(7)]
-10: (2) ['15', Array(9)]
-11: (2) ['16', Array(9)]
-12: (2) ['17', Array(8)]
-13: (2) ['18', Array(5)]
-14: (2) ['19', Array(7)]
-15: (2) ['22', Array(5)]
-16: (2) ['23', Array(6)]
-17: (2) ['24', Array(8)]
-18: (2) ['25', Array(8)]
-19: (2) ['26', Array(9)]
-
-*/
-
-// log(`appointments per day sorted, but without day nr:`)
-let daysInMonthJSXSortedWithoutDayNr = daysInMonthJSXSorted.map(element => element[1])  // status: variable not being used at the moment.
-
-   /*
-    structure of the data at this point:
     Array(20)
-    0: (10) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}]          --> no dayNr in the array.
+  0: (2) ['01', Array(10)]   --> '01' is the dayNr
+  1: (2) ['02', Array(11)]
+  2: (2) ['03', Array(5)]
+  3: (2) ['04', Array(8)]
+  4: (2) ['05', Array(4)]
+  5: (2) ['08', Array(10)]
+  6: (2) ['09', Array(5)]
+  7: (2) ['10', Array(6)]
+  8: (2) ['11', Array(10)]
+  9: (2) ['12', Array(7)]
+  10: (2) ['15', Array(9)]
+  11: (2) ['16', Array(9)]
+  12: (2) ['17', Array(8)]
+  13: (2) ['18', Array(5)]
+  14: (2) ['19', Array(7)]
+  15: (2) ['22', Array(5)]
+  16: (2) ['23', Array(6)]
+  17: (2) ['24', Array(8)]
+  18: (2) ['25', Array(8)]
+  19: (2) ['26', Array(9)]
+  */
+
+  
+  /*
+    let appointmentsPerDaySortedButWithoutDayNr = daysInMonthJSXSorted.map(element => element[1]) 
+    console.log(appointmentsPerDaySortedButWithoutDayNr) would result in:
+
+    Array(20)
+    0: (10) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}]          --> problem: no dayNr in the array.
     1: (11) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}]
     2: (5) [{…}, {…}, {…}, {…}, {…}]
     3: (8) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}]
@@ -108,34 +94,29 @@ let daysInMonthJSXSortedWithoutDayNr = daysInMonthJSXSorted.map(element => eleme
     17: (8) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}]
     18: (8) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}]
     19: (9) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}]
-   */
+  */
 
-  let daysInMonthJSX = Object.values(daysInMonthJSXSorted)
-    // .sort((appointmentsByDay1, appointmentsByDay2) => appointmentsByDay2.day - appointmentsByDay1.day).reverse()
+  let daysInMonthJSX = daysInMonthJSXSorted
     .map((appointmentsInDay, index) => (
-  
+      <DayInMonth appointments={appointmentsInDay[1]} dayNrInMonth={appointmentsInDay[0]} key={index}  />
     /*
-      2do: result is already an array, so skip Object.values 
-      note-to-self: for each day in the month there is a separate array. Each appointment is an object inside a "day-array".
-    */
-    /* 
+      daysInMonthJSXSorted is already an array, so do not do this:
+      let daysInMonthJSX = Object.values(daysInMonthJSXSorted)  
+
+      For each day in the month there is a separate array. Each appointment is an object inside a "day-array".
+      So e.g. day '01' contains 10 appointment-objects.
+
       about: " .map((appointmentsInDay, day, index) => ( "
       in a vanilla-js map fn, index is the second argument. So I skip day={day}.
       Furthermore, 'day' does not have access to the  scope of  divideByDay above. So I skip day={day} 
+
+      day={appointmentsInDay[index].day} 
     */ 
-  
-      // day={appointmentsInDay[index].day} 
-      
-    <DayInMonth appointments={appointmentsInDay[1]} dayNrInMonth={appointmentsInDay[0]} key={index}  />
-    
   ));
 
-
-  // you are mapping all days of the month.
   return (
     <>
         {isNowUpdatingAppointment ? 
-
         <>
           <AppointmentUpdate/>
           <ColorLegendaStyled>
@@ -152,8 +133,6 @@ let daysInMonthJSXSortedWithoutDayNr = daysInMonthJSXSorted.map(element => eleme
               <div>Friday</div>
             </HeaderInMonthStyled>
             { daysInMonthJSX.length !== 0 ? <TableInMonthStyled>{daysInMonthJSX}</TableInMonthStyled> : <>No appointments upcoming month.</>}
-            {/* <div className="table">{daysInMonthJSX}</div> */}
-            {/* <div>{appointmentsInDay[0]}</div> */}
           </MonthViewStyled>
         </>
         :
@@ -172,8 +151,6 @@ let daysInMonthJSXSortedWithoutDayNr = daysInMonthJSXSorted.map(element => eleme
               <div>Friday</div>
             </HeaderInMonthStyled>
             { daysInMonthJSX.length !== 0 ? <TableInMonthStyled>{daysInMonthJSX}</TableInMonthStyled> : <>No appointments upcoming month.</>}
-            {/* <div className="table">{daysInMonthJSX}</div> */}
-            {/* <div>{appointmentsInDay[0]}</div> */}
           </MonthViewStyled>
             
         </>

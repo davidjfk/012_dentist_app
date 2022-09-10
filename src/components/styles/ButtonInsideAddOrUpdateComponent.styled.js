@@ -7,7 +7,6 @@ export const StyledButtonInsideAddOrUpdateComponent = styled.button`
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.15);
   color: ${({ theme}) => theme.colors.fontColor01};
   cursor: pointer;
-  // font-family: ${({ theme}) => theme.font };
   font-size: ${({ theme}) => theme.fontSize.default };
   background: ${({ theme}) => theme.colors.button01};
   font-weight: 550;

@@ -13,7 +13,6 @@ export const StyledButtonAroundSymbol = styled.button`
   font-weight: 550;
   padding-top: 0.2rem;
   padding-bottom: 0.1rem;
-  // padding-left: 1rem;
   padding-right: 1.2rem;
   
   &:hover {

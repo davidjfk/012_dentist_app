@@ -16,40 +16,18 @@ import {StyledCheckbox} from '../styles/Checkbox.styled';
 import { StyledFaTimes } from '../styles/FaTimes.styled'
 import { FaTimes } from 'react-icons/fa'
 import {StyledButtonAroundSymbol} from '../styles/ButtonAroundSymbol.styled';
-// import "../../App.css";
-
-// end
-
-const log = console.log;
 
 
-
-const ClientInClientList = ({clients, item, index}) => {
+const ClientInClientList = ({item, index}) => {
   const dispatch = useDispatch();
-  // const [personIsSick, setPersonIsSick] = useState(false);
-  // let checkBoxStatus = useRef(false);
-
-
   let healthStatus = (item.isSick === "true") ? "sick" : "healthy";
   let appointmentLastUpdatedOnDateTime = (item.appointmentsDeletedOnDateTime === "null") ? "Not happened yet." : item.appointmentsDeletedOnDateTime ;
-
-  // let clientsfromReduxToolkit = useSelector((state) => state.client)
   let appointmentsfromReduxToolkit = useSelector((state) => state.appointment.appointments)
-
-
- 
-  // class Test extends React.Component {
-  //   onClick(event) {
-  //     deleteAllAppointmentsOfClient(item.clientId, appointmentsfromReduxToolkit, dispatch);
-  //     dispatch(deleteClient(item.clientId)); 
-  //   }
-  // }
 
   return (
     <Row>
         <Column>
           <ClientInClientListStyled>
-            {/* {clients.indexOf(item) + 1 } */}
             {index}
           </ClientInClientListStyled>
         </Column>
@@ -78,20 +56,9 @@ const ClientInClientList = ({clients, item, index}) => {
             <div>
               <StyledCheckbox
                 type="checkbox"
-                checked={((item.isSick === "true" ? true: false))}     
-                /*
-                  note to self: because of component AssistantAdd, this checkbox belongs to a just-added-appointment! So the initial state of this checkbox   
-                  resides in Redux-toolkit, just like the other values of an appoinment, that are all shown here in component AssistantInAssistantList as props. 
-                  So do not put this state inside e.g. a useState nor useRef inside this component AssistantInAssistantList itself.
-                */
-                // checked={personIsSick}          
-                // checked={checkBoxStatus.current}               
+                checked={((item.isSick === "true" ? true: false))}                
                 onChange={(e) => {
-                  // setPersonIsSick(e.target.checked)
-                  // checkBoxStatus.current = e.target.checked
-                  console.log(`in the event: ${e.target.checked}`)
                   dispatch(toggleHealthStatusOfClient({clientId: item.clientId, isSick: e.target.checked ? "true": "false"}))
-                  console.log(`end of the event: ${e.target.checked}`)
                   }
                 }
               />
@@ -105,10 +72,8 @@ const ClientInClientList = ({clients, item, index}) => {
         </Column>
         <Column>
           <ClientInClientListStyled>
-              {/* use case: delete all appointments of a client. pitfall: do not use this code for dentist, assistant, nor appointment !!   */}
               <StyledButtonAroundSymbol>
                 <StyledFaTimes>
-                  {/* <FaTimes onClick={() => deleteAllAppointmentsOfClient(item.clientId)} /> */}
                   <FaTimes 
                     onClick={() => {
                       deleteAllAppointmentsOfPerson("clientId", item.clientId, appointmentsfromReduxToolkit, deleteAppointmentInReduxToolkit,   deleteDayTimeClient, 
@@ -124,14 +89,14 @@ const ClientInClientList = ({clients, item, index}) => {
         </Column>
         <Column>
           <ClientInClientListStyled>
-              {/* use case: delete all appointments of a client. pitfall: do not use this code for dentist, assistant, nor appointment !!   */}
               <StyledButtonAroundSymbol>
                 <StyledFaTimes>
                   <FaTimes 
                       onClick={() => {
                         deleteAllAppointmentsOfPerson("clientId", item.clientId, appointmentsfromReduxToolkit, deleteAppointmentInReduxToolkit, deleteDayTimeClient, 
                           deleteDayTimeDentist, deleteDayTimeAssistant,  dispatch);   
-                        let clientId = item.clientId;                     
+                        let clientId = item.clientId;  
+                        console.log(`bye-bye client ${clientId}, zwaai-zwaai.`);                    
                         dispatch(deleteClient({clientId}))
                       }}                         
                     />                

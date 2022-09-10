@@ -2,18 +2,17 @@ import React from 'react';
 import {useState } from 'react';
 import {useDispatch } from "react-redux";
 import {addClient } from "../../redux/clientSlice";
-import skillLevelOptions from '../../dataInDentistAppWhenDentistAppStarts/skillLevelOptions';
+
+import {generateRandomPersonId} from '../../utils';
+
 import paymentMethodsToAddToNewClientCreatedViaUI from '../../dataInDentistAppWhenDentistAppStarts/paymentMethodsToAddToNewClientCreatedViaUI';
 import healthStatusOptions from '../../dataInDentistAppWhenDentistAppStarts/healthStatusOptions';
+
 import {Container} from '../styles/Container.styled';
 import {ClientAddStyled, Column, Form, Intro} from './ClientAdd.styled';
 import {StyledButtonInsideAddOrUpdateComponent} from '../styles/ButtonInsideAddOrUpdateComponent.styled';
 import {StyledInputfield} from '../styles/Inputfield.styled';
 import {StyledSelectbox} from '../styles/Selectbox.styled';
-
-import {generateRandomPersonId} from '../../utils';
-
-const log = console.log;
 
 const AddClient = () => {
     let [lastName, setLastName] = useState('')
@@ -21,7 +20,6 @@ const AddClient = () => {
     let [phone, setPhone] = useState('')
     let [email, setEmail] = useState('')
     let [isSick, setIsSick] = useState('default')
-    // let [skillLevel, setSkillLevel] = useState("default")
     let [paymentMethod, setPaymentMethod] = useState("default")
     let [birthYear, setBirthYear] = useState('');
 
@@ -61,12 +59,13 @@ const AddClient = () => {
         dispatch(addClient({clientId, appointmentsLastDeletedOnDateTime, birthYear, email, firstName, isSick, lastName, phone, paymentMethod }));   
         
         // now reset the form for the next use:
-        // setLastName('')
-        // setFirstName('')
-        // setPhone('')
-        // setEmail('')
-        // setIsSick('')
-        // setRating('')
+        setLastName('');
+        setFirstName('');
+        setPhone('');
+        setEmail('');
+        setIsSick('');
+        setPaymentMethod('');
+        setBirthYear('');
     }
 
   return (
@@ -119,7 +118,6 @@ const AddClient = () => {
                             return (<option key={item.value} value={item.value}>{item.text}</option>);
                         })}                   
                     </StyledSelectbox>
-
                 </Column>
                 <Column>
                     <StyledSelectbox 
@@ -128,9 +126,6 @@ const AddClient = () => {
                         name="paymentMethod"
                     > 
                         <option value="" >payment method:</option>
-                        {/* <option value="default" disabled hidden>
-                            Add skill level
-                        </option> */}
                         {paymentMethodsToAddToNewClientCreatedViaUI.map(item => {
                             return (<option key={item.value} value={item.value}>{item.text}</option>);
                         })}

@@ -1,6 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const log = console.log;
 export const daySlice = createSlice({
   name: "dayToSaveInDayView",
   initialState: {

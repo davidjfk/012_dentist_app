@@ -8,21 +8,15 @@ import healthStatusOptions from '../../dataInDentistAppWhenDentistAppStarts/heal
 import {Container} from '../styles/Container.styled'
 import AssistantInAssistantList from './AssistantInAssistantList.js'
 import {AssistantListAreaStyled, AssistantListStyled, Column, FormControlArea, Headers, Intro, Section1, Section2, Section3} from './AssistantList.styled'
-
 import {StyledSelectbox} from '../styles/Selectbox.styled';
-
-
-
-const log = console.log;
 
 const AssistantList = () => {
     const { assistants } = useSelector((state) => state.assistant);
     
-    const [personObjectKeyToSortArrayWithPersons, setSongObjectKeyToSortArrayWithSongs] = useState('');
+    const [personObjectKeyToSortArrayWithPersons, setPersonObjectKeyToSortArrayWithPersons] = useState('');
     const [dataToRenderFromUseEffectPipeline, setDataToRenderFromUseEffectPipeline] = useState([]);
     const [healthStatusToFilterWith, setHealthStatusToFilterWith] = useState([""]);
     const [skillLevelToFilterWith, setSkillLevelToFilterWith] = useState([""]);
-
 
     const sortAssistantList = (assistants, JsxSelectBoxAttributeValue) => {
         if (!JsxSelectBoxAttributeValue) {
@@ -60,9 +54,6 @@ const AssistantList = () => {
         }
     };
     
-
-
-
     const handleFilterHealthStatusChange = (event) => {    
         let value = Array.from(
             event.target.selectedOptions, (option) => option.value
@@ -77,7 +68,6 @@ const AssistantList = () => {
         setSkillLevelToFilterWith(value);
     };
     
-
     const filterByHealthStatus = (filteredData, healthStatusToFilterWith) => {
         let arrayFilteredOnAllCriteria = [];              
         if (healthStatusToFilterWith[0] === "" ) {
@@ -97,7 +87,6 @@ const AssistantList = () => {
         } 
     };
 
-
     const filterBySkillLevel = (filteredData, skillLevelToFilterWith) => {
         let arrayFilteredOnAllCriteria = [];  
         if (skillLevelToFilterWith[0] === "") {
@@ -115,7 +104,6 @@ const AssistantList = () => {
             return arrayFilteredOnAllCriteria;
         }
     };
-
 
     useEffect(() => {
             let pipelineData = filterBySkillLevel(assistants, skillLevelToFilterWith);
@@ -142,7 +130,6 @@ const AssistantList = () => {
         counterOfAssistantInList.current +=1;
     }
 
-
     return (
     <>
     <Container> 
@@ -151,7 +138,7 @@ const AssistantList = () => {
             <FormControlArea>
                 <Section1>
                     <StyledSelectbox                  
-                        onChange={(e) => setSongObjectKeyToSortArrayWithSongs(e.target.value) }                 
+                        onChange={(e) => setPersonObjectKeyToSortArrayWithPersons(e.target.value) }                 
                     >                        
                         <option value="" >Sort by:</option>
                         <option value="" >do not sort</option>
@@ -195,7 +182,7 @@ const AssistantList = () => {
                             return (<option key={item.value} value={item.value}>{item.text}</option>);
                         })}
                     </StyledSelectbox>
-                    {isHovering && <h3>Press Ctrl to select multiple skill levels</h3>}
+                    {isHovering && <h3>Press Ctrl or Shift to select multiple skill levels</h3>}
                     </div>
                 </Section3>
             </FormControlArea>
@@ -229,10 +216,6 @@ const AssistantList = () => {
                 </Column>
             </Headers>
             <AssistantListAreaStyled>
-                {/* { dataToRenderFromUseEffectPipeline.length !== 0 ? dataToRenderFromUseEffectPipeline.map((item, id) => (
-                        <AssistantInAssistantList key={id} item={item} assistants={assistants} />
-                )): <>Please hire dental assistants.</>} */}
-
                 { dataToRenderFromUseEffectPipeline.length !== 0 ? dataToRenderFromUseEffectPipeline.map((item, id) => {
                     increment()                                          
                     return ( 

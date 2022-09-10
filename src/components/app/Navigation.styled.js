@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const NavigationStyled = styled.div`
+export const NavigationStyled = styled.nav`
   .navBar {
     margin-bottom: 4rem;
     font-size: 2rem;

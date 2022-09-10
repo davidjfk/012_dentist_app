@@ -12,9 +12,7 @@ export const StyledButtonInsideCalendarOrDayView = styled.button`
   border-radius: 50px;
   border: none;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.15);
-  // color: #333;
   
-  // font-family: ${({ theme}) => theme.font };
   font-size: ${({ theme}) => theme.fontSize.medium };
   font-weight: 550;
 

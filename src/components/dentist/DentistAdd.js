@@ -2,18 +2,19 @@ import React from 'react';
 import {useState } from 'react';
 import {useDispatch } from "react-redux";
 import {addDentist } from "../../redux/dentistSlice";
+
 import skillLevelOptions from '../../dataInDentistAppWhenDentistAppStarts/skillLevelOptions';
 import dentalSkillsToAddToNewDentistCreatedViaUI from '../../dataInDentistAppWhenDentistAppStarts/dentalSkillsToAddToNewDentistCreatedViaUI';
 import healthStatusOptions from '../../dataInDentistAppWhenDentistAppStarts/healthStatusOptions';
+
+import {generateRandomPersonId} from '../../utils';
+
 import {Container} from '../styles/Container.styled';
 import {DentistAddStyled, Column, Form, Intro} from './DentistAdd.styled';
 import {StyledButtonInsideAddOrUpdateComponent} from '../styles/ButtonInsideAddOrUpdateComponent.styled';
 import {StyledInputfield} from '../styles/Inputfield.styled';
 import {StyledSelectbox} from '../styles/Selectbox.styled';
 
-import {generateRandomPersonId} from '../../utils';
-
-const log = console.log;
 
 const AddDentist = () => {
     let [lastName, setLastName] = useState('')
@@ -27,19 +28,15 @@ const AddDentist = () => {
     const dispatch = useDispatch();
 
     const onSubmit = (e) => {
-        e.preventDefault()
-    
+        e.preventDefault();
         if (!lastName || !firstName) {
           alert('Please add a song lastName and firstName')
           return
         }   
-
         if (skillsOfDentist.length === 0) {
             alert('Please add a skill')
             return
         }   
-
-
         if (phone === 'default') {
             setPhone(phone = 'unknown') 
         } 
@@ -56,24 +53,18 @@ const AddDentist = () => {
             setSkillLevel(skillLevel = 'unknown') 
         } 
 
-        // replace with code from winc-react-assistant: 
         const dentistId = `${lastName}-${generateRandomPersonId()}`;
-
         let treatmentTypes = skillsOfDentist;
         let appointmentsDeletedOnDateTime = "null";
         dispatch(addDentist({dentistId, email, isSick, firstName, lastName, phone,  skillLevel, treatmentTypes, appointmentsDeletedOnDateTime}));   
         
-        // now reset the form for the next use:
-        // setLastName('')
-        // setFirstName('')
-        // setPhone('')
-        // setEmail('')
-        // setIsSick('')
-        // setRating('')
-        // setSkillLevel('');
+        setLastName('');
+        setFirstName('');
+        setPhone('');
+        setEmail('');
+        setIsSick('');
+        setSkillLevel('');
         setSkillsOfDentist("");
-
-
     }
 
     const handleAddSkillsToDentist = (event) => {
@@ -152,15 +143,11 @@ const AddDentist = () => {
                         name="skillLevel"
                     > 
                         <option value="">skill level:</option>
-                        {/* <option value="default" disabled hidden>
-                            Add skill level
-                        </option> */}
                         {skillLevelOptions.map(item => {
                             return (<option key={item.value} value={item.value}>{item.text}</option>);
                         })}
                     </StyledSelectbox>
                 </Column>
-
                 <Column>        
                     <div>
                     <StyledSelectbox 
@@ -171,7 +158,6 @@ const AddDentist = () => {
                         onMouseOut={handleMouseOut}                 
                     >    
                         <option value="" >skills:</option>
-                        {/* <option value="" >do not filter</option>   */}
                         {dentalSkillsToAddToNewDentistCreatedViaUI.map(item => {
                             return (<option key={item.value} value={item.value}>{item.text}</option>);
                         })}
@@ -179,7 +165,6 @@ const AddDentist = () => {
                     {isHovering && <h5>Press Ctrl to select multiple skills</h5>}
                     </div>
                 </Column>
-
                 <Column>
                     <StyledButtonInsideAddOrUpdateComponent onClick={onSubmit}>
                         Add dentist 

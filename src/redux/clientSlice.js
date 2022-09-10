@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-const log = console.log;
 
 export const clientListSlice = createSlice({
   name: "clients",
@@ -19,39 +18,24 @@ export const clientListSlice = createSlice({
     },
     // not a winc requirement: 
     deleteClient: (state, action) => {
-      log('in the redux-toolkit: action deleteClient: ')
-      log(action.payload.clientId)
       const indexOfClientToDelete = state.clients.findIndex(clientToDelete => {
         return clientToDelete.clientId === action.payload.clientId;
       });
-      log(`indexOfClientToDelete: ${indexOfClientToDelete}`)
       state.clients.splice(indexOfClientToDelete, 1)
     },
     // not a winc requirement
     setDateAndTimeOfDeletionOfAppointmentsOfClientInReduxToolkit: (state, action) => {
-      log('in the redux-toolkit: action setDeleteDateAndTimeInReduxToolkit: ')
-      log(`systemDateTime:`)
-      log(action.payload.systemDateTime)
-      log(`clientId:`)
-      log(action.payload.clientId)
       const indexOfClientToDelete = state.clients.findIndex(clientForWhomToSetDateAndTime => {
         return clientForWhomToSetDateAndTime.clientId === action.payload.clientId;
       });
-      log(`indexOfClientToDelete: `)
-      log(indexOfClientToDelete)
-      log(typeof(indexOfClientToDelete))
       state.clients[indexOfClientToDelete].appointmentsDeletedOnDateTime = action.payload.systemDateTime;
     },
     // not a winc requirement
     toggleHealthStatusOfClient: (state, action) => {
-      // console.log('in the redux-toolkit:')
-      // console.log(action.payload)
       const indexOfClient = state.clients.findIndex(clientToToggleHealth => {
         return clientToToggleHealth.clientId === action.payload.clientId;
       });
-      log(`indexOfClient: ${indexOfClient}`)
-      log(state.clients[indexOfClient].isSick = (action.payload.isSick))
-      // log(state.assistants[indexOfClient].isSick = (!state.assistants[indexOfClient].isSick))
+      state.clients[indexOfClient].isSick = (action.payload.isSick)
     }}
 })
 export const { addClient, addClients, deleteClient, setDateAndTimeOfDeletionOfAppointmentsOfClientInReduxToolkit, toggleHealthStatusOfClient } = clientListSlice.actions;
