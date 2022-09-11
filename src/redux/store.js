@@ -24,6 +24,3 @@ export default configureStore({
     saveLastSelectedDayInDayView: saveLastSelectedDayInDayViewReducer
   }
 });
-
-//retainAppointmentDetailsInAddAppointmentForm
-//retainLastSelectedDayInDayView

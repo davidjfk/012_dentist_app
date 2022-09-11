@@ -23,10 +23,6 @@ export const updateAppointmentSlice = createSlice({
     // use_case_12_bonus_working_form_and_buttons_for_all_operations
     showComponentUpdateAppointmentReduxToolkit: (state, action) => {
       state.isNowUpdatingAppointment = true;
-    },
-    // use_case_12_bonus_working_form_and_buttons_for_all_operations
-    xxtoggleVisibilityOfComponentUpdateAppointment: (state, action) => {
-      state.isNowUpdatingAppointment = action.payload;
     }}
 })
 export const {disableUiControlsDuringAppointmentUpdate, 
@@ -34,7 +30,7 @@ export const {disableUiControlsDuringAppointmentUpdate,
               hideComponentUpdateAppointmentReduxToolkit, 
               saveAppointmentToReduxToolkit, 
               showComponentUpdateAppointmentReduxToolkit, 
-              xxtoggleVisibilityOfComponentUpdateAppointment} = updateAppointmentSlice.actions;
+              } = updateAppointmentSlice.actions;
 
 export default updateAppointmentSlice.reducer;    
 

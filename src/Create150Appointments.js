@@ -23,14 +23,13 @@ const Create150Appointments = () => {
     /*  value between 0 (included) and 1 (included). 
         The bigger the nr, the bigger the chance that the automatically generated appointment requires the precence of an assistant.
     */
-    const CONFIGNROFASSISTANTS = 4; 
-    const CONFIGNROFRANDOMLYGENERATEDAPPOINTMENTS = 6;
-    const CONFIGNROFCLIENTS = 50;
+    const CONFIGNROFASSISTANTS = 2; 
+    const CONFIGNROFRANDOMLYGENERATEDAPPOINTMENTS = 50;
+    const CONFIGNROFCLIENTS = 150;
     const CONFIGNROFDENTISTS = 4; 
     const CONFIGNROFDIFFERENTTREATMENTSASTHESKILLSOFADENTIST = 12;
 
     const dispatch = useDispatch();
-    // 1 helper variables (only accessible inside the useEffect hook below)
     let randomClients = useRef([]);
     let randomDentists = useRef([]);
     let randomAssistants = useRef([]);

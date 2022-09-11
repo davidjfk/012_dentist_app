@@ -51,9 +51,6 @@ const AddAppointment = () => {
     let clientId = useRef();
     clientId.current = NotYetSubmittedEnteredValuesInAddAppointmentForm.addAppoinmentDataThatHaveNotYetBeenSubmitted.clientIdFromAddForm;
     
-    // alternative: useState instead of useRef is working, but not using 'setClientId, so useRef seems to be a cleaner approach.
-    // let [clientId, setClientId] = useState(NotYetSubmittedEnteredValuesInAddAppointmentForm.addAppoinmentDataThatHaveNotYetBeenSubmitted?.clientIdFromAddForm);
-    
     let treatmentType = useRef();
     treatmentType.current = NotYetSubmittedEnteredValuesInAddAppointmentForm.addAppoinmentDataThatHaveNotYetBeenSubmitted.treatmentTypeFromAddForm;
 
