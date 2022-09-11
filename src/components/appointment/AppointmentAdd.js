@@ -2,7 +2,8 @@ import React from 'react';
 import {useRef } from 'react';
 import {useDispatch, useSelector } from "react-redux";
 
-import {saveFromNotYetSubmittedAddAppointmentFormTheClientId,
+import {emptyAddAppointmentForm,
+        saveFromNotYetSubmittedAddAppointmentFormTheClientId,
         saveFromNotYetSubmittedAddAppointmentFormTheTreatmentType,
         saveFromNotYetSubmittedAddAppointmentFormTheAppointmentPriority,
         saveFromNotYetSubmittedAddAppointmentFormTheDay,
@@ -122,7 +123,7 @@ const AddAppointment = () => {
             dispatch
         )
         /*
-            Scenario: as a dentist or assistant I want to be able to make multiple appointments in a row for the same client, because complex
+            Scenario: as a dentist or assistant I want to be able to quickly make multiple appointments for the same client, because complex
             treatments usually require more than 1 appointment. This is why I do not reset this form with the following lines of code:
 
             setClientId('');
@@ -132,6 +133,8 @@ const AddAppointment = () => {
             setTime('');
             setDentistId('');
             setAssistantId('');
+
+            Instead an empty-form button can be used to quickly empty the add-appointment form. 
         */
     }
 
@@ -140,6 +143,11 @@ const AddAppointment = () => {
         <AppointmentAddStyled>
             <Intro>Add Appointment</Intro>
             <Form>
+                <Column>
+                    <StyledButtonInsideAddOrUpdateComponent onClick={(e) =>{dispatch(emptyAddAppointmentForm())}}>
+                        empty form
+                    </StyledButtonInsideAddOrUpdateComponent>                  
+                </Column>
                 <Column>
                     <StyledSelectbox 
                         value={clientId.current}

@@ -25,6 +25,19 @@ export const appointmentSlice = createSlice({
       });
       state.appointments.splice(indexOfAppointmentToUpdate, 1)
     },
+    emptyAddAppointmentForm: (state, action) => {
+      state.addAppoinmentDataThatHaveNotYetBeenSubmitted = 
+      {
+        clientIdFromAddForm: '',
+        treatmentTypeFromAddForm: '',
+        appointmentPriorityFromAddForm:'',
+        dayFromAddForm:'',
+        timeFromAddForm:'',
+        dentistIdFromAddForm:'',
+        assistantIdFromAddForm:''
+        }
+      ; 
+    },    
     saveFromNotYetSubmittedAddAppointmentFormTheClientId: (state, action) => {
       const clientIdFromAddForm = action.payload; 
       console.log(clientIdFromAddForm)
@@ -64,6 +77,7 @@ export const appointmentSlice = createSlice({
 export const { 
   addAppointment, 
   deleteAppointmentInReduxToolkit, 
+  emptyAddAppointmentForm,
   saveFromNotYetSubmittedAddAppointmentFormTheClientId, 
   saveFromNotYetSubmittedAddAppointmentFormTheTreatmentType,
   saveFromNotYetSubmittedAddAppointmentFormTheAppointmentPriority,
