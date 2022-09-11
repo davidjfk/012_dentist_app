@@ -125,7 +125,7 @@ const AddAppointment = () => {
         /*
             Scenario: as a dentist or assistant I want to be able to quickly make multiple appointments for the same client, because complex
             treatments usually require more than 1 appointment. This is why I do not reset this form with the following lines of code:
-
+ 
             setClientId('');
             setTreatmentType('');
             setAppointmentPriority('');
