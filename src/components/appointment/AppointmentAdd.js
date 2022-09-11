@@ -49,27 +49,27 @@ const AddAppointment = () => {
         e.preventDefault()
     
         if (!clientId) {
-            alert('Please select a clientId')
+            alert('Please select a clientId.')
             return
         } 
         if (!treatmentType) {
-            alert('Please select a treatment type')
+            alert('Please select a treatment type.')
             return
         } 
         if (!appointmentPriority) {
-            alert('Please select a treatment type')
+            alert('Please select appointment priority.')
             return
         } 
         if (!day) {
-            alert('Please select a day')
+            alert('Please select a day.')
             return
         } 
         if (!time) {
-            alert('Please select a time')
+            alert('Please select a time.')
             return
         } 
         if (!dentistId) {
-            alert('Please select a dentistId')
+            alert('Please select a dentistId.')
             return
         } 
 
@@ -94,13 +94,13 @@ const AddAppointment = () => {
             dispatch
         )
 
-        setClientId('');
-        setTreatmentType('');
-        setAppointmentPriority('');
-        setDay('');
-        setTime('');
-        setDentistId('');
-        setAssistantId('');
+        // setClientId('');
+        // setTreatmentType('');
+        // setAppointmentPriority('');
+        // setDay('');
+        // setTime('');
+        // setDentistId('');
+        // setAssistantId('');
     }
 
   return (

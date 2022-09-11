@@ -153,8 +153,48 @@ export function createAppointment (
           dispatch(addAppointment(newAppointmentObject));
           console.log(`create: new (not updating an existing  one) appointment with id: ${appointmentId} (on day ${day} and time ${time} o'clock) has been added to redux-toolkit appointmentSlice.`)
       } 
-      else {            
-          alert('please check if client, dentist and/or assistant have an appointment on this day and time');
+      else {    
+        
+          let warning = `The following persons already have appointment on on day ${day} and ${time} o'clock: `;
+
+           if (!
+            isCombiOfPersonAndDayAndTimeAvailableToCreateAppointmentViaUI(
+              clientId, 
+              day, 
+              time, 
+              "client",  
+              clientDayTimesFromReduxToolkit, 
+              dentistDayTimesFromReduxToolkit, 
+              assistantDayTimesFromReduxToolkit)){
+                warning += ` client ${clientId}, `
+                log(warning)
+            }
+
+
+            if( !isCombiOfPersonAndDayAndTimeAvailableToCreateAppointmentViaUI(
+              dentistId, 
+              day, 
+              time, 
+              "dentist",  
+              clientDayTimesFromReduxToolkit, 
+              dentistDayTimesFromReduxToolkit, 
+              assistantDayTimesFromReduxToolkit)){
+                warning += ` dentist ${dentistId}, `
+            }
+              
+              
+            if(! isCombiOfPersonAndDayAndTimeAvailableToCreateAppointmentViaUI(
+              assistantId, 
+              day, 
+              time, 
+              "assistant",  
+              clientDayTimesFromReduxToolkit, 
+              dentistDayTimesFromReduxToolkit, 
+              assistantDayTimesFromReduxToolkit)){
+                warning += ` assistant ${assistantId}.`
+            }
+
+          alert(warning);
           return;
       }
   } else {
@@ -212,8 +252,35 @@ export function createAppointment (
         console.log(`create: new (not updating an existing  one) appointment with id: ${appointmentId} (on day ${day} and time ${time} o'clock) has been added to redux-toolkit appointmentSlice.`)
       }
       else {            
-          alert('please check if client and/or dentist have an appointment on this day and time');
-          return;
+        let warning = `The following persons already have appointment on on day ${day} and ${time} o'clock: `;
+
+        if (!
+         isCombiOfPersonAndDayAndTimeAvailableToCreateAppointmentViaUI(
+           clientId, 
+           day, 
+           time, 
+           "client",  
+           clientDayTimesFromReduxToolkit, 
+           dentistDayTimesFromReduxToolkit, 
+           assistantDayTimesFromReduxToolkit)){
+             warning += ` client ${clientId}, `
+             log(warning)
+         }
+
+
+         if( !isCombiOfPersonAndDayAndTimeAvailableToCreateAppointmentViaUI(
+           dentistId, 
+           day, 
+           time, 
+           "dentist",  
+           clientDayTimesFromReduxToolkit, 
+           dentistDayTimesFromReduxToolkit, 
+           assistantDayTimesFromReduxToolkit)){
+             warning += ` dentist ${dentistId}. `
+         }
+
+       alert(warning);
+       return;
       }
   } 
 } 
@@ -703,8 +770,47 @@ export const loadSelectboxWithListOf = (arrayObjectKey, array) => {
 
         } 
         else {            
-            alert('please check if client, dentist and/or assistant have an appointment on this day and time');
-            return;
+          let warning = `The following persons already have appointment on on day ${day} and ${time} o'clock: `;
+
+           if (!
+            isCombiOfPersonAndDayAndTimeAvailableToCreateAppointmentViaUI(
+              clientId, 
+              day, 
+              time, 
+              "client",  
+              clientDayTimesFromReduxToolkit, 
+              dentistDayTimesFromReduxToolkit, 
+              assistantDayTimesFromReduxToolkit)){
+                warning += ` client ${clientId}, `
+                log(warning)
+            }
+
+
+            if( !isCombiOfPersonAndDayAndTimeAvailableToCreateAppointmentViaUI(
+              dentistId, 
+              day, 
+              time, 
+              "dentist",  
+              clientDayTimesFromReduxToolkit, 
+              dentistDayTimesFromReduxToolkit, 
+              assistantDayTimesFromReduxToolkit)){
+                warning += ` dentist ${dentistId}, `
+            }
+              
+              
+            if(! isCombiOfPersonAndDayAndTimeAvailableToCreateAppointmentViaUI(
+              assistantId, 
+              day, 
+              time, 
+              "assistant",  
+              clientDayTimesFromReduxToolkit, 
+              dentistDayTimesFromReduxToolkit, 
+              assistantDayTimesFromReduxToolkit)){
+                warning += ` assistant ${assistantId}.`
+            }
+
+          alert(warning);
+          // return;
 
 
         }
@@ -765,8 +871,35 @@ export const loadSelectboxWithListOf = (arrayObjectKey, array) => {
           dispatch(enableUiControlsDuringAppointmentUpdate());  // this line is not in fn createAppointment.
         }
         else {            
-            alert('please check if client and/or dentist have an appointment on this day and time');
-            return;
+          let warning = `The following persons already have appointment on on day ${day} and ${time} o'clock: `;
+
+           if (!
+            isCombiOfPersonAndDayAndTimeAvailableToCreateAppointmentViaUI(
+              clientId, 
+              day, 
+              time, 
+              "client",  
+              clientDayTimesFromReduxToolkit, 
+              dentistDayTimesFromReduxToolkit, 
+              assistantDayTimesFromReduxToolkit)){
+                warning += ` client ${clientId}, `
+                log(warning)
+            }
+
+
+            if( !isCombiOfPersonAndDayAndTimeAvailableToCreateAppointmentViaUI(
+              dentistId, 
+              day, 
+              time, 
+              "dentist",  
+              clientDayTimesFromReduxToolkit, 
+              dentistDayTimesFromReduxToolkit, 
+              assistantDayTimesFromReduxToolkit)){
+                warning += ` dentist ${dentistId}. `
+            }
+
+          alert(warning);
+          // return;
         }
     } 
   } 

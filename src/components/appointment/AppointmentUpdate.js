@@ -116,14 +116,21 @@ const UpdateAppointment = () => {
             dispatch
         )
 
-        //backlog idea: save the update to a log, erasing the UIcontrol inputs below.    
-        setClientId('');
-        setTreatmentType('');
-        setAppointmentPriority('');
-        setDay('');
-        setTime('');
-        setDentistId('');
-        setAssistantId('');
+        //backlog idea: save the update to a log, erasing the UIcontrol inputs below.   
+        /*  
+            pitfall: do not reset the update-form (with the commented out code below), because of following scenario: if a person (client and/or dentist and/or assistant) 
+            already has appointment on certain day and time, then alertbox appears with warning. After clicking away the warning, the data in the update form must still be there, 
+            so a change can be made (e.g. select other day and or time), so the new appointment complies with the business rules.
+            But if you reset the form below, then the following (trouble) happens: after clicking away the alert with the warning, the appointment (that you are updating) has been deleted, 
+            and the udpate-form is empty. 
+        */  
+        // setClientId('');
+        // setTreatmentType('');
+        // setAppointmentPriority('');
+        // setDay('');
+        // setTime('');
+        // setDentistId('');
+        // setAssistantId('');
     }
 
   return (
