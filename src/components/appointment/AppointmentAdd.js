@@ -1,6 +1,15 @@
 import React from 'react';
-import {useState } from 'react';
+import {useRef } from 'react';
 import {useDispatch, useSelector } from "react-redux";
+
+import {saveFromNotYetSubmittedAddAppointmentFormTheClientId,
+        saveFromNotYetSubmittedAddAppointmentFormTheTreatmentType,
+        saveFromNotYetSubmittedAddAppointmentFormTheAppointmentPriority,
+        saveFromNotYetSubmittedAddAppointmentFormTheDay,
+        saveFromNotYetSubmittedAddAppointmentFormTheTime,
+        saveFromNotYetSubmittedAddAppointmentFormTheDentistId,
+        saveFromNotYetSubmittedAddAppointmentFormTheAssistantId
+} from '../../redux/appointmentSlice';
 
 import dentalSkillsToAddToNewDentistCreatedViaUI from '../../dataInDentistAppWhenDentistAppStarts/dentalSkillsToAddToNewDentistCreatedViaUI';
 import appointmentPriorityLevelsInSelectbox from '../../dataInDentistAppWhenDentistAppStarts/appointmentPriorityLevelsInSelectbox';
@@ -36,39 +45,58 @@ const AddAppointment = () => {
     let selectboxWithListOfAssistantIds = loadSelectboxWithListOf("assistantId", assistants);
     let selectboxWithListOfAssistantsSorted = sortArrayWithObjects("text", selectboxWithListOfAssistantIds);
 
-    let [clientId, setClientId] = useState("");
-    let [treatmentType, setTreatmentType] = useState("");
-    let [appointmentPriority, setAppointmentPriority] = useState("");
-    let [day, setDay] = useState("");
-    let [time, setTime] = useState("");
-    let [dentistId, setDentistId] = useState("");
-    let [assistantId, setAssistantId] = useState("");
+    let NotYetSubmittedEnteredValuesInAddAppointmentForm  = useSelector((state) => state.appointment);
+    
+    let clientId = useRef();
+    clientId.current = NotYetSubmittedEnteredValuesInAddAppointmentForm.addAppoinmentDataThatHaveNotYetBeenSubmitted.clientIdFromAddForm;
+    
+    // alternative: useState instead of useRef is working, but not using 'setClientId, so useRef seems to be a cleaner approach.
+    // let [clientId, setClientId] = useState(NotYetSubmittedEnteredValuesInAddAppointmentForm.addAppoinmentDataThatHaveNotYetBeenSubmitted?.clientIdFromAddForm);
+    
+    let treatmentType = useRef();
+    treatmentType.current = NotYetSubmittedEnteredValuesInAddAppointmentForm.addAppoinmentDataThatHaveNotYetBeenSubmitted.treatmentTypeFromAddForm;
+
+    let appointmentPriority = useRef();
+    appointmentPriority.current = NotYetSubmittedEnteredValuesInAddAppointmentForm.addAppoinmentDataThatHaveNotYetBeenSubmitted.appointmentPriorityFromAddForm;
+
+    let day = useRef();
+    day.current = NotYetSubmittedEnteredValuesInAddAppointmentForm.addAppoinmentDataThatHaveNotYetBeenSubmitted.dayFromAddForm;
+
+    let time = useRef();
+    time.current = NotYetSubmittedEnteredValuesInAddAppointmentForm.addAppoinmentDataThatHaveNotYetBeenSubmitted.timeFromAddForm;
+
+    let dentistId = useRef();
+    dentistId.current = NotYetSubmittedEnteredValuesInAddAppointmentForm.addAppoinmentDataThatHaveNotYetBeenSubmitted.dentistIdFromAddForm;
+
+    let assistantId = useRef();
+    assistantId.current = NotYetSubmittedEnteredValuesInAddAppointmentForm?.addAppoinmentDataThatHaveNotYetBeenSubmitted?.assistantIdFromAddForm;
+
     const dispatch = useDispatch();
 
     const onSubmit = (e) => {
         e.preventDefault()
     
-        if (!clientId) {
+        if (!clientId.current) {
             alert('Please select a clientId.')
             return
         } 
-        if (!treatmentType) {
+        if (!treatmentType.current) {
             alert('Please select a treatment type.')
             return
         } 
-        if (!appointmentPriority) {
+        if (!appointmentPriority.current) {
             alert('Please select appointment priority.')
             return
         } 
-        if (!day) {
+        if (!day.current) {
             alert('Please select a day.')
             return
         } 
-        if (!time) {
+        if (!time.current) {
             alert('Please select a time.')
             return
         } 
-        if (!dentistId) {
+        if (!dentistId.current) {
             alert('Please select a dentistId.')
             return
         } 
@@ -77,13 +105,13 @@ const AddAppointment = () => {
         let appointmentLastUpdatedOnDateTime = null;
 
         createAppointment (
-            clientId, 
-            treatmentType,
-            appointmentPriority,
-            day, 
-            time, 
-            dentistId, 
-            assistantId, 
+            clientId.current, 
+            treatmentType.current,
+            appointmentPriority.current,
+            day.current, 
+            time.current, 
+            dentistId.current, 
+            assistantId.current, 
             appointmentLastUpdatedOnDateTime,        
             clientsFromReduxToolkit, 
             dentistsFromReduxToolkit, 
@@ -93,14 +121,18 @@ const AddAppointment = () => {
             assistantDayTimesFromReduxToolkit, 
             dispatch
         )
+        /*
+            Scenario: as a dentist or assistant I want to be able to make multiple appointments in a row for the same client, because complex
+            treatments usually require more than 1 appointment. This is why I do not reset this form with the following lines of code:
 
-        // setClientId('');
-        // setTreatmentType('');
-        // setAppointmentPriority('');
-        // setDay('');
-        // setTime('');
-        // setDentistId('');
-        // setAssistantId('');
+            setClientId('');
+            setTreatmentType('');
+            setAppointmentPriority('');
+            setDay('');
+            setTime('');
+            setDentistId('');
+            setAssistantId('');
+        */
     }
 
   return (
@@ -110,8 +142,8 @@ const AddAppointment = () => {
             <Form>
                 <Column>
                     <StyledSelectbox 
-                        value={clientId}
-                        onChange={(e) => setClientId(e.target.value)}
+                        value={clientId.current}
+                        onChange={(e) => {dispatch(saveFromNotYetSubmittedAddAppointmentFormTheClientId(e.target.value))}}
                         name="clientId"
                     > 
                         <option value="" >clientId:</option>
@@ -122,8 +154,8 @@ const AddAppointment = () => {
                 </Column>
                 <Column>
                     <StyledSelectbox 
-                        value={treatmentType}
-                        onChange={(e) => setTreatmentType(e.target.value)}
+                        value={treatmentType.current}
+                        onChange={(e) =>{dispatch(saveFromNotYetSubmittedAddAppointmentFormTheTreatmentType(e.target.value))}}
                         name="treatmentType"
                     > 
                         <option value="" >treatmentType:</option>
@@ -134,8 +166,8 @@ const AddAppointment = () => {
                 </Column>
                 <Column>
                     <StyledSelectbox 
-                        value={appointmentPriority}
-                        onChange={(e) => setAppointmentPriority(e.target.value)}
+                        value={appointmentPriority.current}
+                        onChange={(e) =>{dispatch(saveFromNotYetSubmittedAddAppointmentFormTheAppointmentPriority(e.target.value))}}
                         name="priorityLevel"
                     > 
                         <option value="" >priority:</option>
@@ -146,8 +178,8 @@ const AddAppointment = () => {
                 </Column>
                 <Column>
                     <StyledSelectbox 
-                        value={day}
-                        onChange={(e) => setDay(e.target.value)}
+                        value={day.current}
+                        onChange={(e) =>{dispatch(saveFromNotYetSubmittedAddAppointmentFormTheDay(e.target.value))}}
                         name="day"
                     > 
                         <option value="" >day:</option>
@@ -158,8 +190,8 @@ const AddAppointment = () => {
                 </Column>
                 <Column>
                     <StyledSelectbox 
-                        value={time}
-                        onChange={(e) => setTime(e.target.value)}
+                        value={time.current}
+                        onChange={(e) =>{dispatch(saveFromNotYetSubmittedAddAppointmentFormTheTime(e.target.value))}}
                         name="time"
                     > 
                         <option value="" >time:</option>
@@ -170,8 +202,8 @@ const AddAppointment = () => {
                 </Column>
                 <Column>
                     <StyledSelectbox 
-                        value={dentistId}
-                        onChange={(e) => setDentistId(e.target.value)}
+                        value={dentistId.current}
+                        onChange={(e) =>{dispatch(saveFromNotYetSubmittedAddAppointmentFormTheDentistId(e.target.value))}}
                         name="dentistId"
                     > 
                         <option value="" >dentistId:</option>
@@ -182,8 +214,8 @@ const AddAppointment = () => {
                 </Column>
                 <Column>
                     <StyledSelectbox 
-                        value={assistantId}
-                        onChange={(e) => setAssistantId(e.target.value)}
+                        value={assistantId.current}
+                        onChange={(e) =>{dispatch(saveFromNotYetSubmittedAddAppointmentFormTheAssistantId(e.target.value))}}
                         name="assistantId"
                     > 
                         <option value="" >assistantId:</option>

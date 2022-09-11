@@ -127,6 +127,7 @@ export function createAppointment (
           let dentist = (`${(dentistForWhomAnAppointmentIsBeingMade[0].firstName)} ${(dentistForWhomAnAppointmentIsBeingMade[0].lastName)}`)
 
           let assistant;  
+          log(`assistantId: ${assistantId}`)
           if (assistantId !== null) {
             let getAssistant = assistant => assistant.assistantId === assistantId
             let assistantForWhomAnAppointmentIsBeingMade = selectObjectsByArrayObjectKey(assistantsFromReduxToolkit.assistants, getAssistant)
@@ -811,8 +812,6 @@ export const loadSelectboxWithListOf = (arrayObjectKey, array) => {
 
           alert(warning);
           // return;
-
-
         }
     } else {
         if (isCombiOfPersonAndDayAndTimeAvailableToCreateAppointmentViaUI(

@@ -29,7 +29,12 @@ export const updateAppointmentSlice = createSlice({
       state.isNowUpdatingAppointment = action.payload;
     }}
 })
-export const {disableUiControlsDuringAppointmentUpdate, enableUiControlsDuringAppointmentUpdate, hideComponentUpdateAppointmentReduxToolkit, saveAppointmentToReduxToolkit, showComponentUpdateAppointmentReduxToolkit, xxtoggleVisibilityOfComponentUpdateAppointment} = updateAppointmentSlice.actions;
+export const {disableUiControlsDuringAppointmentUpdate, 
+              enableUiControlsDuringAppointmentUpdate, 
+              hideComponentUpdateAppointmentReduxToolkit, 
+              saveAppointmentToReduxToolkit, 
+              showComponentUpdateAppointmentReduxToolkit, 
+              xxtoggleVisibilityOfComponentUpdateAppointment} = updateAppointmentSlice.actions;
 
 export default updateAppointmentSlice.reducer;    
 

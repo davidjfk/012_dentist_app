@@ -33,6 +33,7 @@ const UpdateAppointment = () => {
     let dentistDayTimesFromReduxToolkit = useSelector((state) => state.dentistDayTime);
     let assistantDayTimesFromReduxToolkit = useSelector((state) => state.assistantDayTime);
 
+
     let {clients}  = useSelector((state) => state.client);
     let selectboxWithListOfClientIds = loadSelectboxWithListOf("clientId", clients);
     let selectboxWithListOfClientIdsSorted = sortArrayWithObjects("text", selectboxWithListOfClientIds);
@@ -45,6 +46,12 @@ const UpdateAppointment = () => {
     let selectboxWithListOfAssistantIds = loadSelectboxWithListOf("assistantId", assistants);
     let selectboxWithListOfAssistantsSorted = sortArrayWithObjects("text", selectboxWithListOfAssistantIds);
 
+    /*
+        Reason to save appointment-update-data in redux-toolkit, instead of locally inside this component:
+        scenario: a user on page Appointment, clicks on button update to update and appointment, then clicks on e.g. the Dentist page and back to the Appointment page:
+        result: the appointment-update-form will still contain the data of the appointment-being-updated.
+        If the data were saved locally inside this component, then the appointment-update-form would be empty instead, in the same scenario.
+    */
     let {appointmentSavedInReduxToolkit}  = useSelector((state) => state.updateAppointment);
     let [clientId, setClientId] = useState(appointmentSavedInReduxToolkit.clientId);
     let [treatmentType, setTreatmentType] = useState(appointmentSavedInReduxToolkit.treatmentType);
