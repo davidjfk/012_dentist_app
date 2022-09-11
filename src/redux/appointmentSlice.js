@@ -1,48 +1,92 @@
 import { createSlice } from "@reduxjs/toolkit";
-const log = console.log;
-
 
 export const appointmentSlice = createSlice({
   name: "appointment",
   initialState: {
-    appointments: []
+    appointments: [],
+    addAppoinmentDataThatHaveNotYetBeenSubmitted: {
+        clientIdFromAddForm: '',
+        treatmentTypeFromAddForm: '',
+        appointmentPriorityFromAddForm:'',
+        dayFromAddForm:'',
+        timeFromAddForm:'',
+        dentistIdFromAddForm:'',
+        assistantIdFromAddForm:''
+        }
   },
   reducers: {
-    // addAppointments: (state, action) => {
-    //   const randomAssistantsFromMockaroo = action.payload;
-    //   state.appointments.push(...randomAssistantsFromMockaroo);
-    // },
     addAppointment: (state, action) => {
       const appointmentToSave = action.payload;
       state.appointments.push(appointmentToSave);
-
     },
     deleteAppointmentInReduxToolkit: (state, action) => {
-      // log(`appointmentSlice: action deleteAppointmentInReduxToolkit:`)
       const indexOfAppointmentToUpdate = state.appointments.findIndex(appointmentToDelete => {
         return appointmentToDelete.appointmentId === action.payload;
       });
-      // log(`appointmentIndex:`)
-      // log(indexOfAppointmentToUpdate)
       state.appointments.splice(indexOfAppointmentToUpdate, 1)
     },
-    // not a winc requirement
+    emptyAddAppointmentForm: (state, action) => {
+      state.addAppoinmentDataThatHaveNotYetBeenSubmitted = 
+      {
+        clientIdFromAddForm: '',
+        treatmentTypeFromAddForm: '',
+        appointmentPriorityFromAddForm:'',
+        dayFromAddForm:'',
+        timeFromAddForm:'',
+        dentistIdFromAddForm:'',
+        assistantIdFromAddForm:''
+        }
+      ; 
+    },    
+    saveFromNotYetSubmittedAddAppointmentFormTheClientId: (state, action) => {
+      const clientIdFromAddForm = action.payload; 
+      console.log(clientIdFromAddForm)
+      state.addAppoinmentDataThatHaveNotYetBeenSubmitted.clientIdFromAddForm = clientIdFromAddForm; 
+    },
+    saveFromNotYetSubmittedAddAppointmentFormTheTreatmentType: (state, action) => {
+      const treatmentTypeFromAddForm = action.payload; 
+      state.addAppoinmentDataThatHaveNotYetBeenSubmitted.treatmentTypeFromAddForm = treatmentTypeFromAddForm; 
+    },
+    saveFromNotYetSubmittedAddAppointmentFormTheAppointmentPriority: (state, action) => {
+      const appointmentPriorityFromAddForm = action.payload; 
+      state.addAppoinmentDataThatHaveNotYetBeenSubmitted.appointmentPriorityFromAddForm = appointmentPriorityFromAddForm; 
+    },
+    saveFromNotYetSubmittedAddAppointmentFormTheDay: (state, action) => {
+      const dayFromAddForm = action.payload; 
+      state.addAppoinmentDataThatHaveNotYetBeenSubmitted.dayFromAddForm = dayFromAddForm; 
+    },
+    saveFromNotYetSubmittedAddAppointmentFormTheTime: (state, action) => {
+      const timeFromAddForm = action.payload; 
+      state.addAppoinmentDataThatHaveNotYetBeenSubmitted.timeFromAddForm = timeFromAddForm; 
+    },
+    saveFromNotYetSubmittedAddAppointmentFormTheDentistId: (state, action) => {
+      const dentistIdFromAddForm = action.payload; 
+      state.addAppoinmentDataThatHaveNotYetBeenSubmitted.dentistIdFromAddForm = dentistIdFromAddForm; 
+    },
+    saveFromNotYetSubmittedAddAppointmentFormTheAssistantId: (state, action) => {
+      const assistantIdFromAddForm = action.payload; 
+      state.addAppoinmentDataThatHaveNotYetBeenSubmitted.assistantIdFromAddForm = assistantIdFromAddForm; 
+    },
     setDateAndTimeOfUpdateOfAppointmentInReduxToolkit: (state, action) => {
-      // log('in the redux-toolkit: action setDateAndTimeOfUpdateOfAppointmentInReduxToolkit: ')
-      // log(`systemDateTime:`)
-      // log(action.payload.systemDateTime)
-      // log(`appointmentId:`)
-      // log(action.payload.appointmentId)
       const indexOfAppointmentToUpdate = state.appointments.findIndex(appointmentForWhichToSetDateAndTime => {
         return appointmentForWhichToSetDateAndTime.appointmentId === action.payload.appointmentId;
       });
-      // log(`indexOfAppointmentToUpdate: `)
-      // log(indexOfAppointmentToUpdate)
-      // log(typeof(indexOfAppointmentToUpdate))
       state.appointments[indexOfAppointmentToUpdate].appointmentLastUpdatedOnDateTime = action.payload.systemDateTime;
     }}
 })
-export const { addAppointment, deleteAppointmentInReduxToolkit, setDateAndTimeOfUpdateOfAppointmentInReduxToolkit} = appointmentSlice.actions;
+export const { 
+  addAppointment, 
+  deleteAppointmentInReduxToolkit, 
+  emptyAddAppointmentForm,
+  saveFromNotYetSubmittedAddAppointmentFormTheClientId, 
+  saveFromNotYetSubmittedAddAppointmentFormTheTreatmentType,
+  saveFromNotYetSubmittedAddAppointmentFormTheAppointmentPriority,
+  saveFromNotYetSubmittedAddAppointmentFormTheDay,
+  saveFromNotYetSubmittedAddAppointmentFormTheTime,
+  saveFromNotYetSubmittedAddAppointmentFormTheDentistId,
+  saveFromNotYetSubmittedAddAppointmentFormTheAssistantId,
+  setDateAndTimeOfUpdateOfAppointmentInReduxToolkit
+} = appointmentSlice.actions;
 
 export default appointmentSlice.reducer;    
 

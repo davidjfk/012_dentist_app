@@ -15,10 +15,6 @@ import {StyledButtonInsideAddOrUpdateComponent} from '../styles/ButtonInsideAddO
 import {StyledInputfield} from '../styles/Inputfield.styled';
 import {StyledSelectbox} from '../styles/Selectbox.styled';
 
-
-
-const log = console.log;
-
 const AddAssistant = () => {
     let [lastName, setLastName] = useState('')
     let [firstName, setFirstName] = useState('')
@@ -57,13 +53,12 @@ const AddAssistant = () => {
         let appointmentsDeletedOnDateTime = "null";
         dispatch(addAssistant({assistantId, email, firstName, isSick, lastName, phone, skillLevel, appointmentsDeletedOnDateTime}));   
         
-        // now reset the form for the next use:
-        // setLastName('')
-        // setFirstName('')
-        // setPhone('')
-        // setEmail('')
-        // setIsSick('')
-        // setRating('')
+        setLastName('');
+        setFirstName('');
+        setPhone('');
+        setEmail('');
+        setIsSick('');
+        setSkillLevel('');
     }
 
   return (
@@ -125,9 +120,6 @@ const AddAssistant = () => {
                         name="skillLevel"
                     > 
                         <option value="" >skill level:</option>
-                        {/* <option value="default" disabled hidden>
-                            Add skill level
-                        </option> */}
                         {skillLevelOptions.map(item => {
                             return (<option key={item.value} value={item.value}>{item.text}</option>);
                         })}

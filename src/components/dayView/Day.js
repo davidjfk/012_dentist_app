@@ -1,10 +1,8 @@
 import React from "react";
-import "./Day.css";
+
 import {AppointmentInDay} from "./AppointmentInDay";
 
-import {log} from "../../utils";
 import {DayStyled } from "./DayView.styled";
-// import "./Day.css"; 
 
 export const Day = ({appointments} ) => {
   const appointmentsJSX = appointments

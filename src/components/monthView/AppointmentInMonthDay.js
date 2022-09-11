@@ -1,19 +1,15 @@
 import React from "react";
 import {useDispatch, useSelector } from "react-redux";
-
 import {deleteAppointmentInReduxToolkit} from "../../redux/appointmentSlice";
 import {deleteDayTimeClient} from "../../redux/clientDayTimeSlice";
 import {deleteDayTimeDentist} from "../../redux/dentistDayTimeSlice";
 import {deleteDayTimeAssistant} from "../../redux/assistantDayTimeSlice";
 import {disableUiControlsDuringAppointmentUpdate, saveAppointmentToReduxToolkit, showComponentUpdateAppointmentReduxToolkit} from '../../redux/updateAppointmentSlice';
 
-import {deleteDentalAppointment, formatTime, generateAppointmentId, log, selectObjectsByArrayObjectKey, updateAppointment_Phase1of2_DisplayComponentUpdateAppointment } from "../../utils";
+import {deleteDentalAppointment, formatTime, generateAppointmentId, selectObjectsByArrayObjectKey, updateAppointment_Phase1of2_DisplayComponentUpdateAppointment } from "../../utils";
 
-// import "./Calendar.css";
 import {AppointmentInMonthDayStyled, AssistantInMonthDayAppointmentStyled, ClientInMonthDayAppointment, DentistInMonthDayAppointment, TimeInMonthViewStyled  } from './AppointmentInMonthDay.styled';
 import {StyledButtonInsideCalendarOrDayView} from '../styles/ButtonInsideCalendarOrDayView';
-// import {StyledButtonWithWordUpdate} from '../styles/ButtonWithWordUpdate';
-
 
 export const AppointmentInMonthDay = ({day, time, client, clientId, dentistId, assistantId }) => {
   let dispatch = useDispatch();
@@ -32,7 +28,6 @@ export const AppointmentInMonthDay = ({day, time, client, clientId, dentistId, a
   let clientIsSick;
   let dentistIsSick;
   let colorToIndicateSickness;
-
 
   let getClient = client => client.clientId === clientId
   let clientFromreduxToolkit = selectObjectsByArrayObjectKey(clientsFromReduxToolkit, getClient)
@@ -61,10 +56,7 @@ export const AppointmentInMonthDay = ({day, time, client, clientId, dentistId, a
 
   return(
     <AppointmentInMonthDayStyled style={{backgroundImage : colorToIndicateSickness}}>
-        <span>
-          {/* <span className="dayAsNumber">day: {day} </span>     */}
-          <TimeInMonthViewStyled>{formatTime(time)}</TimeInMonthViewStyled>
-        </span>
+        <TimeInMonthViewStyled>{formatTime(time)}</TimeInMonthViewStyled>
         <StyledButtonInsideCalendarOrDayView 
           onClick={() => { deleteDentalAppointment(
                               appointmentId, 

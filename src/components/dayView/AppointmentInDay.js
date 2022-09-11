@@ -6,19 +6,13 @@ import {deleteDayTimeDentist} from "../../redux/dentistDayTimeSlice";
 import {deleteDayTimeAssistant} from "../../redux/assistantDayTimeSlice";
 import {disableUiControlsDuringAppointmentUpdate, saveAppointmentToReduxToolkit, showComponentUpdateAppointmentReduxToolkit} from '../../redux/updateAppointmentSlice';
 
-import {deleteDentalAppointment, formatTime, log, selectObjectsByArrayObjectKey, updateAppointment_Phase1of2_DisplayComponentUpdateAppointment } from "../../utils";
+import {deleteDentalAppointment, formatTime, selectObjectsByArrayObjectKey, updateAppointment_Phase1of2_DisplayComponentUpdateAppointment } from "../../utils";
 
-// import "./Day.css"; 
 import {AppointmentInDayStyled, AssistantInDayViewStyled, ClientInDayViewStyled, DayNrInDayViewStyled, DentistInDayViewStyled, TimeInDayViewStyled, TreatmentTypeStyled } from "./DayView.styled";
 import {StyledButtonInsideCalendarOrDayView} from '../styles/ButtonInsideCalendarOrDayView';
-// import {StyledButtonWithWordUpdate} from '../styles/ButtonWithWordUpdate';
-
-
 
 export const AppointmentInDay = ({appointmentId, time, day, client, clientId, dentist, dentistId, assistant, assistantId, treatmentType }) => {
-  
   let dispatch = useDispatch();
-  // log(`comp AppointmentInDay: start`)
   let appointmentsfromReduxToolkit = useSelector((state) => state.appointment.appointments)
   let assistantsFromReduxToolkit  = useSelector((state) => state.assistant.assistants);
   let clientsFromReduxToolkit  = useSelector((state) => state.client.clients);
@@ -96,7 +90,6 @@ export const AppointmentInDay = ({appointmentId, time, day, client, clientId, de
       update appointment
     </StyledButtonInsideCalendarOrDayView>
     <DentistInDayViewStyled >Dentist: {dentist}</DentistInDayViewStyled>
-  
     <AssistantInDayViewStyled>Assistant: {assistant}</AssistantInDayViewStyled>
   </AppointmentInDayStyled>
   )

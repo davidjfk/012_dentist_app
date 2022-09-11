@@ -1,21 +1,29 @@
 import React from 'react';
-import {useState } from 'react';
+import {useRef } from 'react';
 import {useDispatch, useSelector } from "react-redux";
-import {addAppointment } from "../../redux/appointmentSlice";
+
+import {emptyAddAppointmentForm,
+        saveFromNotYetSubmittedAddAppointmentFormTheClientId,
+        saveFromNotYetSubmittedAddAppointmentFormTheTreatmentType,
+        saveFromNotYetSubmittedAddAppointmentFormTheAppointmentPriority,
+        saveFromNotYetSubmittedAddAppointmentFormTheDay,
+        saveFromNotYetSubmittedAddAppointmentFormTheTime,
+        saveFromNotYetSubmittedAddAppointmentFormTheDentistId,
+        saveFromNotYetSubmittedAddAppointmentFormTheAssistantId
+} from '../../redux/appointmentSlice';
+
 import dentalSkillsToAddToNewDentistCreatedViaUI from '../../dataInDentistAppWhenDentistAppStarts/dentalSkillsToAddToNewDentistCreatedViaUI';
 import appointmentPriorityLevelsInSelectbox from '../../dataInDentistAppWhenDentistAppStarts/appointmentPriorityLevelsInSelectbox';
 import listOfValidWorkingDayNumbersInNextMonth from '../../dataInDentistAppWhenDentistAppStarts/listOfValidWorkingDayNumbersInNextMonth';
 import listOfValidWorkingHours from '../../dataInDentistAppWhenDentistAppStarts/listOfValidWorkingHours';
 
 
-import {createAppointment, generateAppointmentId, loadSelectboxWithListOf, selectObjectsByArrayObjectKey, sortArrayWithObjects} from '../../utils';
+import {createAppointment, loadSelectboxWithListOf, sortArrayWithObjects} from '../../utils';
 
 import {Container} from '../styles/Container.styled';
 import {AppointmentAddStyled, Column, Form, Intro} from './AppointmentAdd.styled';
 import {StyledButtonInsideAddOrUpdateComponent} from '../styles/ButtonInsideAddOrUpdateComponent.styled';
 import {StyledSelectbox} from '../styles/Selectbox.styled';
-
-const log = console.log;
 
 const AddAppointment = () => {
     let clientsFromReduxToolkit  = useSelector((state) => state.client);
@@ -38,44 +46,56 @@ const AddAppointment = () => {
     let selectboxWithListOfAssistantIds = loadSelectboxWithListOf("assistantId", assistants);
     let selectboxWithListOfAssistantsSorted = sortArrayWithObjects("text", selectboxWithListOfAssistantIds);
 
-
-
+    let NotYetSubmittedEnteredValuesInAddAppointmentForm  = useSelector((state) => state.appointment);
     
+    let clientId = useRef();
+    clientId.current = NotYetSubmittedEnteredValuesInAddAppointmentForm.addAppoinmentDataThatHaveNotYetBeenSubmitted.clientIdFromAddForm;
+    
+    let treatmentType = useRef();
+    treatmentType.current = NotYetSubmittedEnteredValuesInAddAppointmentForm.addAppoinmentDataThatHaveNotYetBeenSubmitted.treatmentTypeFromAddForm;
 
-    let [clientId, setClientId] = useState("");
-    let [treatmentType, setTreatmentType] = useState("");
-    let [appointmentPriority, setAppointmentPriority] = useState("");
-    let [day, setDay] = useState("");
-    let [time, setTime] = useState("");
-    let [dentistId, setDentistId] = useState("");
-    let [assistantId, setAssistantId] = useState("");
+    let appointmentPriority = useRef();
+    appointmentPriority.current = NotYetSubmittedEnteredValuesInAddAppointmentForm.addAppoinmentDataThatHaveNotYetBeenSubmitted.appointmentPriorityFromAddForm;
+
+    let day = useRef();
+    day.current = NotYetSubmittedEnteredValuesInAddAppointmentForm.addAppoinmentDataThatHaveNotYetBeenSubmitted.dayFromAddForm;
+
+    let time = useRef();
+    time.current = NotYetSubmittedEnteredValuesInAddAppointmentForm.addAppoinmentDataThatHaveNotYetBeenSubmitted.timeFromAddForm;
+
+    let dentistId = useRef();
+    dentistId.current = NotYetSubmittedEnteredValuesInAddAppointmentForm.addAppoinmentDataThatHaveNotYetBeenSubmitted.dentistIdFromAddForm;
+
+    let assistantId = useRef();
+    assistantId.current = NotYetSubmittedEnteredValuesInAddAppointmentForm?.addAppoinmentDataThatHaveNotYetBeenSubmitted?.assistantIdFromAddForm;
+
     const dispatch = useDispatch();
 
     const onSubmit = (e) => {
         e.preventDefault()
     
-        if (!clientId) {
-            alert('Please select a clientId')
+        if (!clientId.current) {
+            alert('Please select a clientId.')
             return
         } 
-        if (!treatmentType) {
-            alert('Please select a treatment type')
+        if (!treatmentType.current) {
+            alert('Please select a treatment type.')
             return
         } 
-        if (!appointmentPriority) {
-            alert('Please select a treatment type')
+        if (!appointmentPriority.current) {
+            alert('Please select appointment priority.')
             return
         } 
-        if (!day) {
-            alert('Please select a day')
+        if (!day.current) {
+            alert('Please select a day.')
             return
         } 
-        if (!time) {
-            alert('Please select a time')
+        if (!time.current) {
+            alert('Please select a time.')
             return
         } 
-        if (!dentistId) {
-            alert('Please select a dentistId')
+        if (!dentistId.current) {
+            alert('Please select a dentistId.')
             return
         } 
 
@@ -83,13 +103,13 @@ const AddAppointment = () => {
         let appointmentLastUpdatedOnDateTime = null;
 
         createAppointment (
-            clientId, 
-            treatmentType,
-            appointmentPriority,
-            day, 
-            time, 
-            dentistId, 
-            assistantId, 
+            clientId.current, 
+            treatmentType.current,
+            appointmentPriority.current,
+            day.current, 
+            time.current, 
+            dentistId.current, 
+            assistantId.current, 
             appointmentLastUpdatedOnDateTime,        
             clientsFromReduxToolkit, 
             dentistsFromReduxToolkit, 
@@ -99,15 +119,20 @@ const AddAppointment = () => {
             assistantDayTimesFromReduxToolkit, 
             dispatch
         )
+        /*
+            Scenario: as a dentist or assistant I want to be able to quickly make multiple appointments for the same client, because complex
+            treatments usually require more than 1 appointment. This is why I do not reset this form with the following lines of code:
+ 
+            setClientId('');
+            setTreatmentType('');
+            setAppointmentPriority('');
+            setDay('');
+            setTime('');
+            setDentistId('');
+            setAssistantId('');
 
-        // now reset the form for the next use:
-        // setClientId('');
-        // setTreatmentType('');
-        // setAppointmentPriority('');
-        // setDay('');
-        // setTime('');
-        // setDentistId('');
-        setAssistantId('');
+            Instead an empty-form button can be used to quickly empty the add-appointment form. 
+        */
     }
 
   return (
@@ -116,15 +141,17 @@ const AddAppointment = () => {
             <Intro>Add Appointment</Intro>
             <Form>
                 <Column>
+                    <StyledButtonInsideAddOrUpdateComponent onClick={(e) =>{dispatch(emptyAddAppointmentForm())}}>
+                        empty form
+                    </StyledButtonInsideAddOrUpdateComponent>                  
+                </Column>
+                <Column>
                     <StyledSelectbox 
-                        value={clientId}
-                        onChange={(e) => setClientId(e.target.value)}
+                        value={clientId.current}
+                        onChange={(e) => {dispatch(saveFromNotYetSubmittedAddAppointmentFormTheClientId(e.target.value))}}
                         name="clientId"
                     > 
                         <option value="" >clientId:</option>
-                        {/* <option value="default" disabled hidden>
-                            Add skill level
-                        </option> */}
                         {selectboxWithListOfClientIdsSorted.map(item => {
                             return (<option key={item.value} value={item.value}>{item.text}</option>);
                         })}
@@ -132,8 +159,8 @@ const AddAppointment = () => {
                 </Column>
                 <Column>
                     <StyledSelectbox 
-                        value={treatmentType}
-                        onChange={(e) => setTreatmentType(e.target.value)}
+                        value={treatmentType.current}
+                        onChange={(e) =>{dispatch(saveFromNotYetSubmittedAddAppointmentFormTheTreatmentType(e.target.value))}}
                         name="treatmentType"
                     > 
                         <option value="" >treatmentType:</option>
@@ -144,14 +171,11 @@ const AddAppointment = () => {
                 </Column>
                 <Column>
                     <StyledSelectbox 
-                        value={appointmentPriority}
-                        onChange={(e) => setAppointmentPriority(e.target.value)}
+                        value={appointmentPriority.current}
+                        onChange={(e) =>{dispatch(saveFromNotYetSubmittedAddAppointmentFormTheAppointmentPriority(e.target.value))}}
                         name="priorityLevel"
                     > 
                         <option value="" >priority:</option>
-                        {/* <option value="default" disabled hidden>
-                            Add skill level
-                        </option> */}
                         {appointmentPriorityLevelsInSelectbox.map(item => {
                             return (<option key={item.value} value={item.value}>{item.text}</option>);
                         })}
@@ -159,14 +183,11 @@ const AddAppointment = () => {
                 </Column>
                 <Column>
                     <StyledSelectbox 
-                        value={day}
-                        onChange={(e) => setDay(e.target.value)}
+                        value={day.current}
+                        onChange={(e) =>{dispatch(saveFromNotYetSubmittedAddAppointmentFormTheDay(e.target.value))}}
                         name="day"
                     > 
                         <option value="" >day:</option>
-                        {/* <option value="default" disabled hidden>
-                            Add skill level
-                        </option> */}
                         {listOfValidWorkingDayNumbersInNextMonth.map(item => {
                             return (<option key={item.value} value={item.value}>{item.text}</option>);
                         })}
@@ -174,14 +195,11 @@ const AddAppointment = () => {
                 </Column>
                 <Column>
                     <StyledSelectbox 
-                        value={time}
-                        onChange={(e) => setTime(e.target.value)}
+                        value={time.current}
+                        onChange={(e) =>{dispatch(saveFromNotYetSubmittedAddAppointmentFormTheTime(e.target.value))}}
                         name="time"
                     > 
                         <option value="" >time:</option>
-                        {/* <option value="default" disabled hidden>
-                            Add skill level
-                        </option> */}
                         {listOfValidWorkingHours.map(item => {
                             return (<option key={item.value} value={item.value}>{item.text}</option>);
                         })}
@@ -189,14 +207,11 @@ const AddAppointment = () => {
                 </Column>
                 <Column>
                     <StyledSelectbox 
-                        value={dentistId}
-                        onChange={(e) => setDentistId(e.target.value)}
+                        value={dentistId.current}
+                        onChange={(e) =>{dispatch(saveFromNotYetSubmittedAddAppointmentFormTheDentistId(e.target.value))}}
                         name="dentistId"
                     > 
                         <option value="" >dentistId:</option>
-                        {/* <option value="default" disabled hidden>
-                            Add skill level
-                        </option> */}
                         {selectboxWithListOfDentistsSorted.map(item => {
                             return (<option key={item.value} value={item.value}>{item.text}</option>);
                         })}
@@ -204,14 +219,11 @@ const AddAppointment = () => {
                 </Column>
                 <Column>
                     <StyledSelectbox 
-                        value={assistantId}
-                        onChange={(e) => setAssistantId(e.target.value)}
+                        value={assistantId.current}
+                        onChange={(e) =>{dispatch(saveFromNotYetSubmittedAddAppointmentFormTheAssistantId(e.target.value))}}
                         name="assistantId"
                     > 
                         <option value="" >assistantId:</option>
-                        {/* <option value="default" disabled hidden>
-                            Add skill level
-                        </option> */}
                         {selectboxWithListOfAssistantsSorted.map(item => {
                             return (<option key={item.value} value={item.value}>{item.text}</option>);
                         })}

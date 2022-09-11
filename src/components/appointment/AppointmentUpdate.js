@@ -1,7 +1,6 @@
 import React from 'react';
 import {useState } from 'react';
 import {useDispatch, useSelector } from "react-redux";
-import {addAppointment } from "../../redux/appointmentSlice";
 
 import {enableUiControlsDuringAppointmentUpdate, hideComponentUpdateAppointmentReduxToolkit } from '../../redux/updateAppointmentSlice';
 
@@ -14,9 +13,7 @@ import {Container} from '../styles/Container.styled';
 import {AppointmentAddStyled, Column, Form, Intro} from './AppointmentAdd.styled';
 import {StyledButtonInsideAddOrUpdateComponent} from '../styles/ButtonInsideAddOrUpdateComponent.styled';
 import {StyledSelectbox} from '../styles/Selectbox.styled';
-import {createAppointment, generateAppointmentId, getSystemDatePlusTime, loadSelectboxWithListOf, selectObjectsByArrayObjectKey, sortArrayWithObjects, updateAppointment_Phase2of2_updateAppointmentRecursivelyUntilUpdateSucceeds} from '../../utils';
-
-const log = console.log;
+import {generateAppointmentId, getSystemDatePlusTime, loadSelectboxWithListOf, log, sortArrayWithObjects, updateAppointment_Phase2of2_updateAppointmentRecursivelyUntilUpdateSucceeds} from '../../utils';
 
 /*
     Compontent AppointmentUpdate has 3 differences compared to component AppointmentAdd:
@@ -27,9 +24,7 @@ const log = console.log;
     I do not merge the 2 components, because they each have a different responsibility.
 */
 
-
 const UpdateAppointment = () => {
-    log(`comp AppointmentUpdate: start: `)
     let clientsFromReduxToolkit  = useSelector((state) => state.client);
     let dentistsFromReduxToolkit  = useSelector((state) => state.dentist);
     let assistantsFromReduxToolkit  = useSelector((state) => state.assistant);
@@ -37,6 +32,7 @@ const UpdateAppointment = () => {
     let clientDayTimesFromReduxToolkit = useSelector((state) => state.clientDayTime);
     let dentistDayTimesFromReduxToolkit = useSelector((state) => state.dentistDayTime);
     let assistantDayTimesFromReduxToolkit = useSelector((state) => state.assistantDayTime);
+
 
     let {clients}  = useSelector((state) => state.client);
     let selectboxWithListOfClientIds = loadSelectboxWithListOf("clientId", clients);
@@ -50,12 +46,13 @@ const UpdateAppointment = () => {
     let selectboxWithListOfAssistantIds = loadSelectboxWithListOf("assistantId", assistants);
     let selectboxWithListOfAssistantsSorted = sortArrayWithObjects("text", selectboxWithListOfAssistantIds);
 
-
+    /*
+        Reason to save appointment-update-data in redux-toolkit, instead of locally inside this component:
+        scenario: a user on page Appointment, clicks on button update to update and appointment, then clicks on e.g. the Dentist page and back to the Appointment page:
+        result: the appointment-update-form will still contain the data of the appointment-being-updated.
+        If the data were saved locally inside this component, then the appointment-update-form would be empty instead, in the same scenario.
+    */
     let {appointmentSavedInReduxToolkit}  = useSelector((state) => state.updateAppointment);
-    // log('02')
-    // log(appointmentSavedInReduxToolkit);
-
-    //2do: load initial data from redux-toolkit updateAppointmentSlice.
     let [clientId, setClientId] = useState(appointmentSavedInReduxToolkit.clientId);
     let [treatmentType, setTreatmentType] = useState(appointmentSavedInReduxToolkit.treatmentType);
     let [appointmentPriority, setAppointmentPriority] = useState(appointmentSavedInReduxToolkit.appointmentPriority);
@@ -63,6 +60,7 @@ const UpdateAppointment = () => {
     let [time, setTime] = useState(appointmentSavedInReduxToolkit.time);
     let [dentistId, setDentistId] = useState(appointmentSavedInReduxToolkit.dentistId);
     let [assistantId, setAssistantId] = useState(appointmentSavedInReduxToolkit.assistantId);
+
     const dispatch = useDispatch();
 
     const onSubmit = (e) => {
@@ -93,24 +91,17 @@ const UpdateAppointment = () => {
             return
         } 
         
-
-        
-
         // alternative with same result: load appointmentId from redux-toolkit updateAppointmentSlice.
         const appointmentId = generateAppointmentId(clientId, day, time);
         let appointmentIdFromReduxToolkitSlice = appointmentSavedInReduxToolkit.appointmentId;
         if (appointmentId !== appointmentIdFromReduxToolkitSlice){
-            log(`So the new appointmentId ${appointmentId} differs from the old appointmentId ${appointmentIdFromReduxToolkitSlice}.
-            Reason:  Appointment has format clientId_day_time, and the appointment client and/or day and/or time have changed. 
-            This is not a problem.`)
+            log(`The new appointmentId ${appointmentId} after the update differs from the old appointmentId ${appointmentIdFromReduxToolkitSlice} before the update.
+            Reason:  Appointment has format clientId_day_time, and in the appointment, the client and/or day and/or time have changed. 
+            This is intended system behavior / not a problem.`)
         }
-        
-        // q: delete this key from obj appointment?    
+          
         let systemDateTime = getSystemDatePlusTime();
         let appointmentLastUpdatedOnDateTime = systemDateTime;
-
-
-        
         
         updateAppointment_Phase2of2_updateAppointmentRecursivelyUntilUpdateSucceeds (
             clientId, 
@@ -132,8 +123,14 @@ const UpdateAppointment = () => {
             dispatch
         )
 
-           
-        // Do not reset the form! So do not:  
+        //backlog idea: save the update to a log, erasing the UIcontrol inputs below.   
+        /*  
+            pitfall: do not reset the update-form (with the commented out code below), because of following scenario: if a person (client and/or dentist and/or assistant) 
+            already has appointment on certain day and time, then alertbox appears with warning. After clicking away the warning, the data in the update form must still be there, 
+            so a change can be made (e.g. select other day and or time), so the new appointment complies with the business rules.
+            But if you reset the form below, then the following (trouble) happens: after clicking away the alert with the warning, the appointment (that you are updating) has been deleted, 
+            and the udpate-form is empty. 
+        */  
         // setClientId('');
         // setTreatmentType('');
         // setAppointmentPriority('');
@@ -155,9 +152,6 @@ const UpdateAppointment = () => {
                         name="clientId"
                     > 
                         <option value="" >clientId:</option>
-                        {/* <option value="default" disabled hidden>
-                            Add skill level
-                        </option> */}
                         {selectboxWithListOfClientIdsSorted.map(item => {
                             return (<option key={item.value} value={item.value}>{item.text}</option>);
                         })}
@@ -182,9 +176,6 @@ const UpdateAppointment = () => {
                         name="priorityLevel"
                     > 
                         <option value="" >priority:</option>
-                        {/* <option value="default" disabled hidden>
-                            Add skill level
-                        </option> */}
                         {appointmentPriorityLevelsInSelectbox.map(item => {
                             return (<option key={item.value} value={item.value}>{item.text}</option>);
                         })}
@@ -197,9 +188,6 @@ const UpdateAppointment = () => {
                         name="day"
                     > 
                         <option value="" >day:</option>
-                        {/* <option value="default" disabled hidden>
-                            Add skill level
-                        </option> */}
                         {listOfValidWorkingDayNumbersInNextMonth.map(item => {
                             return (<option key={item.value} value={item.value}>{item.text}</option>);
                         })}
@@ -212,9 +200,6 @@ const UpdateAppointment = () => {
                         name="time"
                     > 
                         <option value="" >time:</option>
-                        {/* <option value="default" disabled hidden>
-                            Add skill level
-                        </option> */}
                         {listOfValidWorkingHours.map(item => {
                             return (<option key={item.value} value={item.value}>{item.text}</option>);
                         })}
@@ -227,9 +212,6 @@ const UpdateAppointment = () => {
                         name="dentistId"
                     > 
                         <option value="" >dentistId:</option>
-                        {/* <option value="default" disabled hidden>
-                            Add skill level
-                        </option> */}
                         {selectboxWithListOfDentistsSorted.map(item => {
                             return (<option key={item.value} value={item.value}>{item.text}</option>);
                         })}
@@ -237,14 +219,11 @@ const UpdateAppointment = () => {
                 </Column>
                 <Column>
                     <StyledSelectbox 
-                        value={assistantId}
+                        value={assistantId ? assistantId : "" }
                         onChange={(e) => setAssistantId(e.target.value)}
                         name="assistantId"
                     > 
                         <option value="" >assistantId:</option>
-                        {/* <option value="default" disabled hidden>
-                            Add skill level
-                        </option> */}
                         {selectboxWithListOfAssistantsSorted.map(item => {
                             return (<option key={item.value} value={item.value}>{item.text}</option>);
                         })}

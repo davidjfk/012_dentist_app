@@ -1,13 +1,12 @@
 import React from 'react';
-import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {deleteAppointmentInReduxToolkit} from "../../redux/appointmentSlice";
 import {deleteDayTimeClient} from "../../redux/clientDayTimeSlice";
 import {deleteDayTimeDentist} from "../../redux/dentistDayTimeSlice";
 import {deleteDayTimeAssistant} from "../../redux/assistantDayTimeSlice";
 import {disableUiControlsDuringAppointmentUpdate, saveAppointmentToReduxToolkit, showComponentUpdateAppointmentReduxToolkit} from '../../redux/updateAppointmentSlice';
 
-import {deleteDentalAppointment, sortArrayWithObjects, updateAppointment_Phase1of2_DisplayComponentUpdateAppointment} from '../../utils';
+import {deleteDentalAppointment, updateAppointment_Phase1of2_DisplayComponentUpdateAppointment} from '../../utils';
 
 import {Row, Column} from './AppointmentList.styled'
 import { AppointmentInAppointmentListStyled } from './AppointmentInAppointmentList.styled';
@@ -15,25 +14,16 @@ import { StyledFaTimes } from '../styles/FaTimes.styled'
 import { FaTimes } from 'react-icons/fa';
 import { GrUpdate } from "react-icons/gr";
 import {StyledButtonAroundSymbol} from '../styles/ButtonAroundSymbol.styled';
-import "../../App.css";
 
-const log = console.log;
-
-const AppointmentInAppointmentList = ({appointments, item, index}) => {
+const AppointmentInAppointmentList = ({item, index}) => {
   let dispatch = useDispatch();
-  let appointmentsfromReduxToolkit = useSelector((state) => state.appointment.appointments)
-  
+  let appointmentsfromReduxToolkit = useSelector((state) => state.appointment.appointments);
   let appointmentLastUpdatedOnDateTime = (item.appointmentLastUpdatedOnDateTime === null) ? "Not happened yet." : item.appointmentLastUpdatedOnDateTime ;
-  
-  // let appointmentsCopy = [...appointments];
-  // let appointmentsToShow = sortArrayWithObjects("appointmentId", appointmentsCopy  )
-  // log(appointmentsToShow)
 
   return (
     <Row>
         <Column>
           <AppointmentInAppointmentListStyled>
-            {/* {appointments.indexOf(item) + 1 } */}
             {index}
           </AppointmentInAppointmentListStyled>
         </Column>

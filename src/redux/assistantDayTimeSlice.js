@@ -1,7 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const log = console.log;
-
 export const assistantDayTimeSlice = createSlice({
   name: "assistantDayTimes",
   initialState: {
@@ -15,7 +13,6 @@ export const assistantDayTimeSlice = createSlice({
     deleteDayTimeAssistant: (state, action) => {
       const indexOfAssistantDayTimeToDelete = state.assistantDayTimes.indexOf(action.payload);
       state.assistantDayTimes.splice(indexOfAssistantDayTimeToDelete, 1)  
-      // state.assistantDayTimes.splice(action.payload, 1)
     }},
 })
 export const { addDayTimeAssistant, deleteDayTimeAssistant } = assistantDayTimeSlice.actions;

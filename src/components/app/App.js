@@ -3,35 +3,23 @@ import { ThemeProvider } from 'styled-components';
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 
-import Create150Appointments from "./Create150Appointments";
-// import {UseEffectHookCalls} from "./components/obsolete_fnCalls_winc_operations_witout_UI/UseEffectHookCalls";
-import Appointment from "./components/appointment/Appointment";
-import Assistant from "./components/assistant/Assistant";
-import Client from "./components/client/Client";
-import Dentist from "./components/dentist/Dentist";
-import {Calendar} from "./components/monthView/Calendar";
-import {SelectDayNrToDisplay} from "./components/dayView/SelectDayNrToDisplay";
+import Create150Appointments from "../../Create150Appointments";
+import Appointment from "../appointment/Appointment";
+import Assistant from "../assistant/Assistant";
+import {Calendar} from "../monthView/Calendar";
+import Client from "../client/Client";
+import Dentist from "../dentist/Dentist";
 
-import {log} from './utils';
+import {SelectDayNrToDisplay} from "../dayView/SelectDayNrToDisplay";
 
-import {theme} from "./appStyleTheme"
-// import "./App.css";
-import { AppStyled } from "./App.styled";
+import {AppStyled} from "./App.styled";
 import {NavigationStyled} from "./Navigation.styled";
-
+import {StyledNavLink} from "./NavLink.styled";
+import {theme} from "../styles/appStyleTheme";
 
 const App = ()  => {
-
   let uiControlBehaviorDuringAppointmentUpdate = useSelector((state) => state.updateAppointment)
-  log('hierzoho')
-  log(uiControlBehaviorDuringAppointmentUpdate)
-  log(uiControlBehaviorDuringAppointmentUpdate.pointerEvents)
-  log(uiControlBehaviorDuringAppointmentUpdate)
-
-  theme.pointerEvents = "none"; // works
   theme.pointerEvents = uiControlBehaviorDuringAppointmentUpdate.pointerEvents
-
-
   let appointmentsfromReduxToolkit = useSelector((state) => state.appointment)
   return(
     <>
@@ -40,29 +28,26 @@ const App = ()  => {
         <Create150Appointments/>
         <Router>
           <NavigationStyled>
-            <nav className="navBar">
-              <ul>  
-                <li>
+              <ul className="navBar">  
+                <StyledNavLink>
                   <Link to="/">Calendar view</Link>
-                </li>
-                <li>
+                </StyledNavLink>
+                <StyledNavLink>
                   <Link to="/day">Day view</Link>
-                </li>
-                <li>
+                </StyledNavLink>
+                <StyledNavLink>
                   <Link to="/appointment">Appointment</Link>
-                </li> 
-                <li>
+                </StyledNavLink> 
+                <StyledNavLink>
                   <Link to="/assistant">Assistant</Link>
-                </li>
-                <li>
+                </StyledNavLink>
+                <StyledNavLink>
                   <Link to="/client">Client</Link>
-                </li>
-                <li>
+                </StyledNavLink>
+                <StyledNavLink>
                   <Link to="/dentist">Dentist</Link>
-                </li>
+                </StyledNavLink>
               </ul>
-            </nav>
-            <main>
               <Switch>
                 <Route path="/client">  
                   <Client  />
@@ -83,10 +68,9 @@ const App = ()  => {
                   <Calendar appointments={appointmentsfromReduxToolkit.appointments}  />
                 </Route>
               </Switch>
-            </main>
           </NavigationStyled>
         </Router>
-        </AppStyled>
+      </AppStyled>
     </ThemeProvider>
   </>
  );

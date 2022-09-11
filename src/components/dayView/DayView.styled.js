@@ -45,6 +45,7 @@ export const ClientInDayViewStyled = styled.div`
   background: ${({ theme}) => theme.colors.header01 };
   font-size: 1.1rem;
   padding-left: 1vw;
+  padding-bottom: 2rem;
 `;
 
 export const ColorOrange = styled.li`
@@ -104,18 +105,16 @@ export const Header = styled.div`
   padding-left: 22vw;
   color: ${({ theme}) => theme.colors.fontColor01 };
   font-size: ${({ theme}) => theme.fontSize.default }
-  
-  
 `;
 
 export const LegendaStyled = styled.ul`
 display: flex;    
 flex-direction: column;
 list-style: none;
-    // padding-left: 1rem;
-    font-size: 1.4rem;
-    font-weight: 500;
-    border: 1px solid black; 
+font-size: 1.4rem;
+font-weight: 500;
+border: 1px solid black; 
+width: 18rem;
 `;
 
 export const SelectDayNrToDisplayStyled = styled.div`
@@ -144,6 +143,7 @@ export const TimeInDayViewStyled = styled.div`
   float: right;
   background-color: aquamarine;
   font-size: 1.1rem;
+  padding-bottom: 2rem;
 `;
 
 

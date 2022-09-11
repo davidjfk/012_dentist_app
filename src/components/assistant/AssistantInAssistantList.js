@@ -17,14 +17,11 @@ import {StyledCheckbox} from '../styles/Checkbox.styled';
 import { StyledFaTimes } from '../styles/FaTimes.styled'
 import { FaTimes } from 'react-icons/fa';
 import {StyledButtonAroundSymbol} from '../styles/ButtonAroundSymbol.styled';
-import "../../App.css";
 
-const log = console.log;
 
-const AssistantInAssistantList = ({assistants, item, index}) => {
+const AssistantInAssistantList = ({item, index}) => {
   const dispatch = useDispatch();
-  // const [personIsSick, setPersonIsSick] = useState(false);
-  // let checkBoxStatus = useRef(false);
+
   let healthStatus = (item.isSick === "true") ? "sick" : "healthy";
   let appointmentLastUpdatedOnDateTime = (item.appointmentsDeletedOnDateTime === "null") ? "Not happened yet." : item.appointmentsDeletedOnDateTime ;
   let appointmentsfromReduxToolkit = useSelector((state) => state.appointment.appointments);
@@ -33,7 +30,6 @@ const AssistantInAssistantList = ({assistants, item, index}) => {
     <Row>
         <Column>
           <AssistantInAssistantListStyled>
-            {/* {assistants.indexOf(item) + 1 } */}
             {index}
           </AssistantInAssistantListStyled>
         </Column>
@@ -50,9 +46,6 @@ const AssistantInAssistantList = ({assistants, item, index}) => {
         <Column>
           <AssistantInAssistantListStyled>
             {item.skillLevel}
-            {/* <StyledFaTimes>
-              <FaTimes onClick={() => dispatch(deleteAssistant(item.assistantId))} />
-            </StyledFaTimes> */}
             </AssistantInAssistantListStyled>
         </Column>
         <Column>
@@ -67,36 +60,20 @@ const AssistantInAssistantList = ({assistants, item, index}) => {
                 type="checkbox"
                 checked={((item.isSick === "true" ? true: false))}     
                 /*
-                  note to self: because of component AssistantAdd, the initial state of this checkbox -- this checkbox belongs to a just-added-appointment! --  
-                  resides in Redux-toolkit, just like the other values of an appoinment, that are all shown here in component AssistantInAssistantList as props. 
-                  So do not put this state inside e.g. a useState nor useRef inside this component AssistantInAssistantList itself.
-                */
-                // checked={personIsSick}          
-                // checked={checkBoxStatus.current}               
+                  note to self: 
+                  This checkbox belongs to a just-added-appointment by component AssistantAdd. 
+                  So the initial state of this checkbox must reside in Redux-toolkit, just like the other values of an appoinment, that are all shown here in component AssistantInAssistantList as props. 
+                  So do not try to maintain the checkbox state inside e.g. a useState nor useRef inside this component AssistantInAssistantList itself.
+                */          
                 onChange={(e) => {
-                  // setPersonIsSick(e.target.checked)
-                  // checkBoxStatus.current = e.target.checked
-                  console.log(`in the event: ${e.target.checked}`)
                   dispatch(toggleHealthStatusOfAssistant({assistantId: item.assistantId, isSick: e.target.checked ? "true": "false"}))
-                  console.log(`end of the event: ${e.target.checked}`)
                   }
                 }
               />
             </div>
 
-              {/* use case: delete all appointments of a client. pitfall: do not use this code for dentist, assistant, nor appointment !!  */}
-              {/* <p>set To Sick, so all apointments will be deleted of client</p>
-              {item.skillLevel} 
-              <StyledFaTimes>
-                <FaTimes onClick={() => dispatch(deleteAssistant(item.assistantId))} />
-              </StyledFaTimes> */}
-
             </AssistantInAssistantListStyled>
         </Column>
-
-
-
-
         <Column>
           <AssistantInAssistantListStyled>
             {appointmentLastUpdatedOnDateTime}
@@ -104,10 +81,8 @@ const AssistantInAssistantList = ({assistants, item, index}) => {
         </Column>
         <Column>
           <AssistantInAssistantListStyled>
-              {/* use case: delete all appointments of a client. pitfall: do not use this code for dentist, assistant, nor appointment !!   */}
-              <StyledButtonAroundSymbol disabled={true}>
+              <StyledButtonAroundSymbol>
                 <StyledFaTimes>
-                  {/* <FaTimes onClick={() => deleteAllAppointmentsOfClient(item.clientId)} /> */}
                   <FaTimes 
                     onClick={() => {
                       deleteAllAppointmentsOfPerson("assistantId", item.assistantId, appointmentsfromReduxToolkit, deleteAppointmentInReduxToolkit,   deleteDayTimeClient, 
@@ -123,19 +98,18 @@ const AssistantInAssistantList = ({assistants, item, index}) => {
         </Column>
         <Column>
           <AssistantInAssistantListStyled>
-              {/* use case: delete all appointments of a client. pitfall: do not use this code for dentist, assistant, nor appointment !!   */}
               <StyledButtonAroundSymbol >      
                 <StyledFaTimes>
                     <FaTimes 
                       onClick={() => {
                         deleteAllAppointmentsOfPerson("assistantid", item.assistantId, appointmentsfromReduxToolkit, deleteAppointmentInReduxToolkit, deleteDayTimeClient, 
                           deleteDayTimeDentist, deleteDayTimeAssistant,  dispatch);   
-                        let assistantId = item.assistantId;                     
+                        let assistantId = item.assistantId; 
+                        console.log(`bye-bye assistant ${assistantId}, zwaai-zwaai.`);                      
                         dispatch(deleteAssistant({assistantId}))
                       }}  
                       />                                     
-                </StyledFaTimes>
-        
+                </StyledFaTimes>       
               </StyledButtonAroundSymbol>
             </AssistantInAssistantListStyled>
         </Column>

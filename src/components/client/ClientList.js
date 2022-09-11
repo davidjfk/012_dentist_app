@@ -17,11 +17,10 @@ const log = console.log;
 const ClientList = () => {
     const { clients } = useSelector((state) => state.client);
     
-    const [personObjectKeyToSortArrayWithPersons, setSongObjectKeyToSortArrayWithSongs] = useState('');
+    const [personObjectKeyToSortArrayWithPersons, setPersonObjectKeyToSortArrayWithPersons] = useState('');
     const [dataToRenderFromUseEffectPipeline, setDataToRenderFromUseEffectPipeline] = useState([]);
     const [healthStatusToFilterWith, setHealthStatusToFilterWith] = useState([""]);
     const [paymentMethodToFilterWith, setSkillLevelToFilterWith] = useState([""]);
-
 
     const sortAssistantList = (clients, JsxSelectBoxAttributeValue) => {
         if (!JsxSelectBoxAttributeValue) {
@@ -59,10 +58,6 @@ const ClientList = () => {
             console.error(`component clientList: not possible to sort with datatype ${typeof(sortProperty)}. Please investigate. `)
         }
     };
-    
-
-
-
 
     const handleFilterHealthStatusChange = (event) => {    
         let value = Array.from(
@@ -78,7 +73,6 @@ const ClientList = () => {
         setSkillLevelToFilterWith(value);
     };
     
-
     const filterByHealthStatus = (filteredData, healthStatusToFilterWith) => {
         let arrayFilteredOnAllCriteria = [];              
         if (healthStatusToFilterWith[0] === "" ) {
@@ -98,7 +92,6 @@ const ClientList = () => {
         } 
     };
 
-
     const filterByPaymentMethod = (filteredData, paymentMethodToFilterWith) => {
         let arrayFilteredOnAllCriteria = [];  
         if (paymentMethodToFilterWith[0] === "") {
@@ -116,7 +109,6 @@ const ClientList = () => {
             return arrayFilteredOnAllCriteria;
         }
     };
-
 
     useEffect(() => {
             let pipelineData = filterByPaymentMethod(clients, paymentMethodToFilterWith);
@@ -138,9 +130,6 @@ const ClientList = () => {
       setIsHovering(false);
     };
 
-    log(`comp ClientList: data to  render:`)
-    log(dataToRenderFromUseEffectPipeline)
-
     let counterOfClientInList = useRef(0);
     function increment() {
         counterOfClientInList.current +=1;
@@ -154,7 +143,7 @@ const ClientList = () => {
             <FormControlArea>
                 <Section1>
                     <StyledSelectbox                  
-                        onChange={(e) => setSongObjectKeyToSortArrayWithSongs(e.target.value) }                 
+                        onChange={(e) => setPersonObjectKeyToSortArrayWithPersons(e.target.value) }                 
                     >                        
                         <option value="" >Sort by:</option>
                         <option value="" >do not sort</option>
@@ -198,7 +187,7 @@ const ClientList = () => {
                             return (<option key={item.value} value={item.value}>{item.text}</option>);
                         })}
                     </StyledSelectbox>
-                    {isHovering && <h3>Press Ctrl to select multiple skill levels</h3>}
+                    {isHovering && <h3>Press Ctrl or Shift to select multiple skill levels</h3>}
                     </div>
                 </Section3>
             </FormControlArea>
@@ -232,10 +221,6 @@ const ClientList = () => {
                 </Column>
             </Headers>
             <ClientListAreaStyled>
-                {/* { dataToRenderFromUseEffectPipeline.length !== 0 ? dataToRenderFromUseEffectPipeline.map((item, id) => (
-                        <ClientInClientList key={id} item={item} clients={clients} />
-                )): <>Please attract clients.</>} */}
-
                 { dataToRenderFromUseEffectPipeline.length !== 0 ? dataToRenderFromUseEffectPipeline.map((item, id) => {
                     increment()                                          
                     return ( 
