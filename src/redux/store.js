@@ -9,6 +9,7 @@ import dentistDayTimeReducer from "./dentistDayTimeSlice";
 import assistantDayTimeReducer from "./assistantDayTimeSlice";
 import updateAppointmentReducer from "./updateAppointmentSlice";
 import saveLastSelectedDayInDayViewReducer from "./saveLastSelectedDayInDayView";
+import dataFilledOutByUserOnFormToAddAppointmentReducer from "./dataFilledOutByUserOnFormToAddAppointment";
 
 export default configureStore({
   reducer: {
@@ -17,6 +18,7 @@ export default configureStore({
     dentist: dentistReducer,
     assistant: assistantReducer,
     appointment: appointmentReducer,
+    dataFilledOutByUserOnFormToAddAppointment: dataFilledOutByUserOnFormToAddAppointmentReducer,
     clientDayTime: clientDayTimeReducer,
     dentistDayTime: dentistDayTimeReducer,
     assistantDayTime: assistantDayTimeReducer, 

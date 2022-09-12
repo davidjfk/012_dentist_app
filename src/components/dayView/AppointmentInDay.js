@@ -11,7 +11,7 @@ import {deleteDentalAppointment, formatTime, selectObjectsByArrayObjectKey, upda
 import {AppointmentInDayStyled, AssistantInDayViewStyled, ClientInDayViewStyled, DayNrInDayViewStyled, DentistInDayViewStyled, TimeInDayViewStyled, TreatmentTypeStyled } from "./DayView.styled";
 import {StyledButtonInsideCalendarOrDayView} from '../styles/ButtonInsideCalendarOrDayView';
 
-export const AppointmentInDay = ({appointmentId, time, day, client, clientId, dentist, dentistId, assistant, assistantId, treatmentType }) => {
+export const AppointmentInDay = ({appointmentId, time, day, client, dentist, assistant, clientId, dentistId, assistantId, treatmentType }) => {
   let dispatch = useDispatch();
   let appointmentsfromReduxToolkit = useSelector((state) => state.appointment.appointments)
   let assistantsFromReduxToolkit  = useSelector((state) => state.assistant.assistants);

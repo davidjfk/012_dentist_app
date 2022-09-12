@@ -2,6 +2,10 @@ import React from 'react';
 import {useState } from 'react';
 import {useDispatch, useSelector } from "react-redux";
 
+import {addDayTimeDentistToReduxToolkit} from "../../redux/dentistDayTimeSlice";
+import {addDayTimeClientToReduxToolkit} from "../../redux/clientDayTimeSlice";
+import {addDayTimeAssistantToReduxToolkit} from "../../redux/assistantDayTimeSlice";
+import {addAppointmentToReduxToolkit} from "../../redux/appointmentSlice";
 import {enableUiControlsDuringAppointmentUpdate, hideComponentUpdateAppointmentReduxToolkit } from '../../redux/updateAppointmentSlice';
 
 import dentalSkillsToAddToNewDentistCreatedViaUI from '../../dataInDentistAppWhenDentistAppStarts/dentalSkillsToAddToNewDentistCreatedViaUI';
@@ -111,7 +115,11 @@ const UpdateAppointment = () => {
             time, 
             dentistId, 
             assistantId, 
-            appointmentLastUpdatedOnDateTime,        
+            appointmentLastUpdatedOnDateTime, 
+            addDayTimeClientToReduxToolkit,
+            addDayTimeDentistToReduxToolkit,
+            addDayTimeAssistantToReduxToolkit,
+            addAppointmentToReduxToolkit,       
             clientsFromReduxToolkit, 
             dentistsFromReduxToolkit, 
             assistantsFromReduxToolkit, 

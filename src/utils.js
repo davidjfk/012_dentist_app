@@ -1,16 +1,10 @@
-import clientsDentistCompanyBVT from "./dataInDentistAppWhenDentistAppStarts/clients"
-import dentistsDentistCompanyBVT from "./dataInDentistAppWhenDentistAppStarts/dentists"
-import assistantsDentistCompanyBVT from "./dataInDentistAppWhenDentistAppStarts/assistants"
 
-import {addAppointment} from "./redux/appointmentSlice";
-import {addDayTimeClient} from "./redux/clientDayTimeSlice";
-import {addDayTimeDentist} from "./redux/dentistDayTimeSlice";
-import {addDayTimeAssistant} from "./redux/assistantDayTimeSlice";
 
-export const log = console.log;
+
 
 /*
-createAppointment  ------------------------------------------------
+log
+createAppointment
 createCombiOfPersonAndDayAndTime
 deleteAllAppointmentsOfPerson
 deleteDentalAppointment
@@ -18,8 +12,6 @@ formatTime
 generateAppointmentId
 generateRandomPersonId
 generateRandomAppointmentId
-generateRandomAppointmentFromWinc
-generateRandomAppointmentsFromWinc
 getAppointmentObject
 getAppointmentId
 getAssistantId
@@ -28,10 +20,10 @@ getDentistId
 getArrayObjectWithObjectKeyValuePair
 getNrOfRandomElementsFromArray
 getRandomDay
+getNrOfRandomElementsFromArray
 getRandomName
-getRandomPaymentMethod (not in use)
+getRandomPaymentMethod
 getRandomPersonId
-getRandomPersonIdOld
 getRandomPersons
 getRandomUniqueObjectsFromArray
 getRandomTime
@@ -48,7 +40,7 @@ updateAppointment_Phase1of2_DisplayComponentUpdateAppointment
 updateAppointment_Phase2of2_updateAppointmentRecursivelyUntilUpdateSucceeds
 */
 
-
+export const log = console.log;
 
 export function createAppointment (
   clientId, 
@@ -58,7 +50,11 @@ export function createAppointment (
   time, 
   dentistId, 
   assistantId,    
-  appointmentLastUpdatedOnDateTime,         
+  appointmentLastUpdatedOnDateTime, 
+  addDayTimeClientToReduxToolkit,
+  addDayTimeDentistToReduxToolkit,
+  addDayTimeAssistantToReduxToolkit,
+  addAppointmentToReduxToolkit,        
   clientsFromReduxToolkit, 
   dentistsFromReduxToolkit, 
   assistantsFromReduxToolkit, 
@@ -106,15 +102,14 @@ export function createAppointment (
             assistantDayTimesFromReduxToolkit)
           )
       {
-     
           let clientDayTimes = createCombiOfPersonAndDayAndTime(clientId, day, time)
-          dispatch(addDayTimeClient(clientDayTimes));
+          dispatch(addDayTimeClientToReduxToolkit(clientDayTimes));
 
           let dentistDayTimes = createCombiOfPersonAndDayAndTime(dentistId, day, time)
-          dispatch(addDayTimeDentist(dentistDayTimes));
+          dispatch(addDayTimeDentistToReduxToolkit(dentistDayTimes));
 
           let assistantDayTimes = createCombiOfPersonAndDayAndTime(assistantId, day, time)
-          dispatch(addDayTimeAssistant(assistantDayTimes));
+          dispatch(addDayTimeAssistantToReduxToolkit(assistantDayTimes));
 
           let getClient = client => client.clientId === clientId
           let clientForWhomAnAppointmentIsBeingMade = selectObjectsByArrayObjectKey(clientsFromReduxToolkit.clients, getClient)
@@ -136,7 +131,6 @@ export function createAppointment (
           }
 
           let appointmentId = generateAppointmentId(clientId, day, time);
-
           let newAppointmentObject = {
             appointmentId, 
             appointmentLastUpdatedOnDateTime,
@@ -151,15 +145,12 @@ export function createAppointment (
             time, 
             treatmentType, 
           }; 
-          dispatch(addAppointment(newAppointmentObject));
+          dispatch(addAppointmentToReduxToolkit(newAppointmentObject));
           console.log(`create: new (not updating an existing  one) appointment with id: ${appointmentId} (on day ${day} and time ${time} o'clock) has been added to redux-toolkit appointmentSlice.`)
       } 
       else {    
-        
           let warning = `The following persons already have appointment on on day ${day} and ${time} o'clock: `;
-
-           if (!
-            isCombiOfPersonAndDayAndTimeAvailableToCreateAppointmentViaUI(
+           if (! isCombiOfPersonAndDayAndTimeAvailableToCreateAppointmentViaUI(
               clientId, 
               day, 
               time, 
@@ -168,11 +159,8 @@ export function createAppointment (
               dentistDayTimesFromReduxToolkit, 
               assistantDayTimesFromReduxToolkit)){
                 warning += ` client ${clientId}, `
-                log(warning)
             }
-
-
-            if( !isCombiOfPersonAndDayAndTimeAvailableToCreateAppointmentViaUI(
+            if(! isCombiOfPersonAndDayAndTimeAvailableToCreateAppointmentViaUI(
               dentistId, 
               day, 
               time, 
@@ -182,8 +170,6 @@ export function createAppointment (
               assistantDayTimesFromReduxToolkit)){
                 warning += ` dentist ${dentistId}, `
             }
-              
-              
             if(! isCombiOfPersonAndDayAndTimeAvailableToCreateAppointmentViaUI(
               assistantId, 
               day, 
@@ -194,9 +180,7 @@ export function createAppointment (
               assistantDayTimesFromReduxToolkit)){
                 warning += ` assistant ${assistantId}.`
             }
-
-          alert(warning);
-          return;
+            alert(warning);
       }
   } else {
       if (isCombiOfPersonAndDayAndTimeAvailableToCreateAppointmentViaUI(
@@ -218,10 +202,10 @@ export function createAppointment (
       {
 
         let clientDayTimes = createCombiOfPersonAndDayAndTime(clientId, day, time)
-        dispatch(addDayTimeClient(clientDayTimes));
+        dispatch(addDayTimeClientToReduxToolkit(clientDayTimes));
 
         let dentistDayTimes = createCombiOfPersonAndDayAndTime(dentistId, day, time)
-        dispatch(addDayTimeDentist(dentistDayTimes));
+        dispatch(addDayTimeDentistToReduxToolkit(dentistDayTimes));
 
         let getClient = client => client.clientId === clientId
         let clientForWhomAnAppointmentIsBeingMade = selectObjectsByArrayObjectKey(clientsFromReduxToolkit.clients, getClient)
@@ -249,27 +233,24 @@ export function createAppointment (
           time, 
           treatmentType, 
         };
-        dispatch(addAppointment(newAppointmentObject));  
+        dispatch(addAppointmentToReduxToolkit(newAppointmentObject));  
         console.log(`create: new (not updating an existing  one) appointment with id: ${appointmentId} (on day ${day} and time ${time} o'clock) has been added to redux-toolkit appointmentSlice.`)
       }
       else {            
         let warning = `The following persons already have appointment on on day ${day} and ${time} o'clock: `;
-
         if (!
-         isCombiOfPersonAndDayAndTimeAvailableToCreateAppointmentViaUI(
-           clientId, 
-           day, 
-           time, 
-           "client",  
-           clientDayTimesFromReduxToolkit, 
-           dentistDayTimesFromReduxToolkit, 
-           assistantDayTimesFromReduxToolkit)){
-             warning += ` client ${clientId}, `
-             log(warning)
-         }
+          isCombiOfPersonAndDayAndTimeAvailableToCreateAppointmentViaUI(
+            clientId, 
+            day, 
+            time, 
+            "client",  
+            clientDayTimesFromReduxToolkit, 
+            dentistDayTimesFromReduxToolkit, 
+            assistantDayTimesFromReduxToolkit)){
+              warning += ` client ${clientId}, `
+          }
 
-
-         if( !isCombiOfPersonAndDayAndTimeAvailableToCreateAppointmentViaUI(
+        if( !isCombiOfPersonAndDayAndTimeAvailableToCreateAppointmentViaUI(
            dentistId, 
            day, 
            time, 
@@ -278,10 +259,8 @@ export function createAppointment (
            dentistDayTimesFromReduxToolkit, 
            assistantDayTimesFromReduxToolkit)){
              warning += ` dentist ${dentistId}. `
-         }
-
-       alert(warning);
-       return;
+        }
+        alert(warning);
       }
   } 
 } 
@@ -318,7 +297,6 @@ export const deleteAllAppointmentsOfPerson = (
 } 
 
 
-
 export const deleteDentalAppointment = (
   appointmentId, 
   appointmentsfromReduxToolkit, 
@@ -352,32 +330,13 @@ export const generateAppointmentId = (clientId, day, time) => ( `${clientId}_${d
 
 export const generateRandomPersonId = () => Math.floor(1000000 + Math.random() * 900000); // 6 digits
 
-const generateRandomAppointmentFromWinc = () => ({
-  //appointmentId: generateRandomAppointmentId(), // appointmentId not part of the kick-start code. 
-  day: getRandomDay(),
-  time: getRandomTime(),
-  client: getRandomName(clientsDentistCompanyBVT),
-  dentist: getRandomName(dentistsDentistCompanyBVT),
-  assistant: getRandomName(assistantsDentistCompanyBVT),
-});
-
-export const generateRandomAppointmentsFromWinc = num =>
-  Array(num)
-    // .fill(0) // why fill with 0 before mapping? The undefineds are replaced by zeros, but why?
-    /* see MDN ( https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Array ): A JavaScript array is 
-      initialized with the given elements, except in the case where a single argument is passed to the Array constructor and that 
-      argument is a number (see the arrayLength parameter below). 
-      imho: skip fill(0)
-    */
-    .map(_ => generateRandomAppointmentFromWinc());
-
-
 
 export function getAppointmentObject(appointmentsfromReduxToolkit, indexOfAppointment) {
   const appointmentObject = appointmentsfromReduxToolkit.appointments[indexOfAppointment]
   return appointmentObject
 }
 
+// I do not merge the following 4 fns into 1 generic function, because of lesser readability.
 
 export function getAppointmentId(appointmentsfromReduxToolkit, indexOfAppointment) {
   const appointment = appointmentsfromReduxToolkit.appointments[indexOfAppointment]
@@ -436,9 +395,9 @@ export const getNrOfRandomElementsFromArray = (array, nrOfArrayElements = 8) => 
   let arrayWithSelectedElements = [];
 
   for (let i = 0; i < nrOfArrayElements ; i++) {
-    let dentalTreatment = array[Math.floor(Math.random() * array.length)]; 
-    if (!arrayWithSelectedElements.includes(dentalTreatment)){
-      arrayWithSelectedElements.push(dentalTreatment)
+    let randomElementFromArray = array[Math.floor(Math.random() * array.length)]; 
+    if (!arrayWithSelectedElements.includes(randomElementFromArray)){
+      arrayWithSelectedElements.push(randomElementFromArray)
     }
   }
   return arrayWithSelectedElements.sort();
@@ -450,12 +409,6 @@ export const getRandomName = (personCategoryInCompanyBVT) => {
   return `${person["firstName"]} ${person["lastName"]}`;
 };
 
-
-export const getRandomPaymentMethod = (paymentMethodOptions) => {
-  // random paymentmethod for each of the 50 clients is created in Mockaroo, so this fn is obsolete. 
-  let randomPaymentMethod = paymentMethodOptions[Math.floor(Math.random() * paymentMethodOptions.length)];
-  return randomPaymentMethod;
-};
 
 
 export const getRandomPersonId = (personCategoryInCompanyBVT, typeOfPersonId) => {
@@ -469,8 +422,8 @@ export const getRandomPersonId = (personCategoryInCompanyBVT, typeOfPersonId) =>
   }
 }
 
- 
-export const getRandomPersons = (personCategoryInCompanyBVT, nrOfPersons) => {
+
+export const xxgetRandomPersons = (personCategoryInCompanyBVT, nrOfPersons) => {
   let randomPersons = [];
   for (let i = 0; i < nrOfPersons; i++) {
     let randomPerson = personCategoryInCompanyBVT[Math.floor(Math.random() * personCategoryInCompanyBVT.length)];
@@ -480,22 +433,24 @@ export const getRandomPersons = (personCategoryInCompanyBVT, nrOfPersons) => {
 };
 
 
-export const getRandomUniqueObjectsFromArray = (array, nrOfObjectsFromArray) => {
-  let arrayWithFnInput = [...array];
-  let arrayWithFnOutput = [];
+
+
+export const getRandomUniqueObjectsFromArray = (array, nrOfObjectsToSelectFromArray) => {
+  let copyOfInputArray = [...array];
+  let arrayWithRandomUniqueObjectsFromInputArray = [];
   let i = 0;
-  while (i < nrOfObjectsFromArray) {
+  while (i < nrOfObjectsToSelectFromArray) {
     let randomObjectFromArray = array[Math.floor(Math.random() * array.length)];
-    let indexOfRandomObjectinArrayWithFnOutput = arrayWithFnOutput.indexOf(randomObjectFromArray) 
+    let indexOfRandomObjectinArrayWithFnOutput = arrayWithRandomUniqueObjectsFromInputArray.indexOf(randomObjectFromArray) 
 
     if (indexOfRandomObjectinArrayWithFnOutput === -1) {
-      let indexOfRandomObjectFromArray = arrayWithFnInput.indexOf(randomObjectFromArray) 
-      arrayWithFnInput.splice(indexOfRandomObjectFromArray, 1)
-      arrayWithFnOutput.push(randomObjectFromArray)
+      let indexOfRandomObjectFromArray = copyOfInputArray.indexOf(randomObjectFromArray) 
+      copyOfInputArray.splice(indexOfRandomObjectFromArray, 1)
+      arrayWithRandomUniqueObjectsFromInputArray.push(randomObjectFromArray)
       i++;
     }
   };
-  return arrayWithFnOutput;
+  return arrayWithRandomUniqueObjectsFromInputArray;
 };
 
 
@@ -664,7 +619,11 @@ export const loadSelectboxWithListOf = (arrayObjectKey, array) => {
     time, 
     dentistId, 
     assistantId,    
-    appointmentLastUpdatedOnDateTime,        
+    appointmentLastUpdatedOnDateTime,  
+    addDayTimeClientToReduxToolkit, 
+    addDayTimeDentistToReduxToolkit,
+    addDayTimeAssistantToReduxToolkit,
+    addAppointmentToReduxToolkit,     
     clientsFromReduxToolkit, 
     dentistsFromReduxToolkit, 
     assistantsFromReduxToolkit, 
@@ -723,13 +682,13 @@ export const loadSelectboxWithListOf = (arrayObjectKey, array) => {
             )
         {
             let clientDayTimes = createCombiOfPersonAndDayAndTime(clientId, day, time)
-            dispatch(addDayTimeClient(clientDayTimes));
+            dispatch(addDayTimeClientToReduxToolkit(clientDayTimes));
   
             let dentistDayTimes = createCombiOfPersonAndDayAndTime(dentistId, day, time)
-            dispatch(addDayTimeDentist(dentistDayTimes));
+            dispatch(addDayTimeDentistToReduxToolkit(dentistDayTimes));
   
             let assistantDayTimes = createCombiOfPersonAndDayAndTime(assistantId, day, time)
-            dispatch(addDayTimeAssistant(assistantDayTimes));
+            dispatch(addDayTimeAssistantToReduxToolkit(assistantDayTimes));
   
             let getClient = client => client.clientId === clientId
             let clientForWhomAnAppointmentIsBeingMade = selectObjectsByArrayObjectKey(clientsFromReduxToolkit.clients, getClient)
@@ -764,7 +723,7 @@ export const loadSelectboxWithListOf = (arrayObjectKey, array) => {
               time, 
               treatmentType, 
             }; 
-            dispatch(addAppointment(newAppointmentObject));
+            dispatch(addAppointmentToReduxToolkit(newAppointmentObject));
             console.log(`update: updated appointment with new id: ${appointmentId} (on day ${day} and time ${time} o'clock) has been added to redux-toolkit appointmentSlice.`)
             makeComponentUpdateAppointmentInvisible();  // this line is not in fn createAppointment.
             dispatch(enableUiControlsDuringAppointmentUpdate());
@@ -809,9 +768,7 @@ export const loadSelectboxWithListOf = (arrayObjectKey, array) => {
               assistantDayTimesFromReduxToolkit)){
                 warning += ` assistant ${assistantId}.`
             }
-
-          alert(warning);
-          // return;
+            alert(warning);
         }
     } else {
         if (isCombiOfPersonAndDayAndTimeAvailableToCreateAppointmentViaUI(
@@ -833,10 +790,10 @@ export const loadSelectboxWithListOf = (arrayObjectKey, array) => {
         {
   
           let clientDayTimes = createCombiOfPersonAndDayAndTime(clientId, day, time)
-          dispatch(addDayTimeClient(clientDayTimes));
+          dispatch(addDayTimeClientToReduxToolkit(clientDayTimes));
 
           let dentistDayTimes = createCombiOfPersonAndDayAndTime(dentistId, day, time)
-          dispatch(addDayTimeDentist(dentistDayTimes));
+          dispatch(addDayTimeDentistToReduxToolkit(dentistDayTimes));
   
 
           let getClient = client => client.clientId === clientId
@@ -864,41 +821,34 @@ export const loadSelectboxWithListOf = (arrayObjectKey, array) => {
             time, 
             treatmentType, 
           };
-          dispatch(addAppointment(newAppointmentObject));  
+          dispatch(addAppointmentToReduxToolkit(newAppointmentObject));  
           console.log(`update: updated appointment with new id: ${appointmentId} (on day ${day} and time ${time} o'clock) has been added to redux-toolkit appointmentSlice.`) 
           makeComponentUpdateAppointmentInvisible();  // this line is not in fn createAppointment.
           dispatch(enableUiControlsDuringAppointmentUpdate());  // this line is not in fn createAppointment.
         }
         else {            
           let warning = `The following persons already have appointment on on day ${day} and ${time} o'clock: `;
-
-           if (!
-            isCombiOfPersonAndDayAndTimeAvailableToCreateAppointmentViaUI(
-              clientId, 
-              day, 
-              time, 
-              "client",  
-              clientDayTimesFromReduxToolkit, 
-              dentistDayTimesFromReduxToolkit, 
-              assistantDayTimesFromReduxToolkit)){
-                warning += ` client ${clientId}, `
-                log(warning)
+          if (! isCombiOfPersonAndDayAndTimeAvailableToCreateAppointmentViaUI(
+            clientId, 
+            day, 
+            time, 
+            "client",  
+            clientDayTimesFromReduxToolkit, 
+            dentistDayTimesFromReduxToolkit, 
+            assistantDayTimesFromReduxToolkit)){
+              warning += ` client ${clientId}, `
             }
-
-
-            if( !isCombiOfPersonAndDayAndTimeAvailableToCreateAppointmentViaUI(
-              dentistId, 
-              day, 
-              time, 
-              "dentist",  
-              clientDayTimesFromReduxToolkit, 
-              dentistDayTimesFromReduxToolkit, 
-              assistantDayTimesFromReduxToolkit)){
-                warning += ` dentist ${dentistId}. `
+          if( !isCombiOfPersonAndDayAndTimeAvailableToCreateAppointmentViaUI(
+            dentistId, 
+            day, 
+            time, 
+            "dentist",  
+            clientDayTimesFromReduxToolkit, 
+            dentistDayTimesFromReduxToolkit, 
+            assistantDayTimesFromReduxToolkit)){
+              warning += ` dentist ${dentistId}. `
             }
-
           alert(warning);
-          // return;
         }
     } 
   } 

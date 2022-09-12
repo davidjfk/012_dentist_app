@@ -4,10 +4,10 @@ import {addDentalTreatmentsArrayFromExternalSource} from "./redux/dentalTreatmen
 import {addClients } from "./redux/clientSlice";
 import {addDentists } from "./redux/dentistSlice";
 import {addAssistants } from "./redux/assistantSlice";
-import {addDayTimeClient} from "./redux/clientDayTimeSlice";
-import {addDayTimeDentist} from "./redux/dentistDayTimeSlice";
-import {addDayTimeAssistant} from "./redux/assistantDayTimeSlice";
-import {addAppointment } from "./redux/appointmentSlice";
+import {addDayTimeClientToReduxToolkit} from "./redux/clientDayTimeSlice";
+import {addDayTimeDentistToReduxToolkit} from "./redux/dentistDayTimeSlice";
+import {addDayTimeAssistantToReduxToolkit} from "./redux/assistantDayTimeSlice";
+import {addAppointmentToReduxToolkit} from "./redux/appointmentSlice";
 
 import { generateAppointmentId, getNrOfRandomElementsFromArray, getRandomPersonId, getRandomDay, getRandomUniqueObjectsFromArray, getRandomTime, selectObjectsByArrayObjectKey } from './utils';
 import {createCombiOfPersonAndDayAndTime, getRandomTreatmentForRandomAppointment, getRandomTreatmentTypes} from "./utils";
@@ -24,8 +24,8 @@ const Create150Appointments = () => {
         The bigger the nr, the bigger the chance that the automatically generated appointment requires the precence of an assistant.
     */
     const CONFIGNROFASSISTANTS = 2; 
-    const CONFIGNROFRANDOMLYGENERATEDAPPOINTMENTS = 50;
-    const CONFIGNROFCLIENTS = 150;
+    const CONFIGNROFRANDOMLYGENERATEDAPPOINTMENTS = 150;
+    const CONFIGNROFCLIENTS = 50;
     const CONFIGNROFDENTISTS = 4; 
     const CONFIGNROFDIFFERENTTREATMENTSASTHESKILLSOFADENTIST = 12;
 
@@ -42,6 +42,7 @@ const Create150Appointments = () => {
     let dentistsWithTreatmentTypesRef = useRef([]); // see comment below for explanation. 
     useEffect(() => {
         randomClients.current = getRandomUniqueObjectsFromArray(clientsDentistCompanyBVT, CONFIGNROFCLIENTS);
+
         dispatchWithoutMissingDependencyError(addClients(randomClients.current));
         randomDentists.current = getRandomUniqueObjectsFromArray(dentistsDentistCompanyBVT, CONFIGNROFDENTISTS);
         /*
@@ -129,15 +130,15 @@ const Create150Appointments = () => {
                 )
             {
                 let clientDayTimes = createCombiOfPersonAndDayAndTime(clientId, day, time)
-                dispatch(addDayTimeClient(clientDayTimes));
+                dispatch(addDayTimeClientToReduxToolkit(clientDayTimes));
                 clientDayTimesRef.current.push(clientDayTimes)
   
                 let dentistDayTimes = createCombiOfPersonAndDayAndTime(dentistId, day, time)
-                dispatch(addDayTimeDentist(dentistDayTimes));
+                dispatch(addDayTimeDentistToReduxToolkit(dentistDayTimes));
                 dentistDayTimesRef.current.push(dentistDayTimes)
 
                 let assistantDayTimes = createCombiOfPersonAndDayAndTime(assistantId, day, time)
-                dispatch(addDayTimeAssistant(assistantDayTimes));
+                dispatch(addDayTimeAssistantToReduxToolkit(assistantDayTimes));
                 assistantDayTimesRef.current.push(assistantDayTimes)
 
                 let getClient = client => client.clientId === clientId
@@ -173,7 +174,7 @@ const Create150Appointments = () => {
                   time, 
                   treatmentType
                 }; 
-                dispatch(addAppointment(newAppointmentObject));
+                dispatch(addAppointmentToReduxToolkit(newAppointmentObject));
                 
             } else {
                 generateRandomAppointment(); 
@@ -184,11 +185,11 @@ const Create150Appointments = () => {
             {
   
               let clientDayTimes = createCombiOfPersonAndDayAndTime(clientId, day, time)
-              dispatch(addDayTimeClient(clientDayTimes));
+              dispatch(addDayTimeClientToReduxToolkit(clientDayTimes));
               clientDayTimesRef.current.push(clientDayTimes)
 
               let dentistDayTimes = createCombiOfPersonAndDayAndTime(dentistId, day, time)
-              dispatch(addDayTimeDentist(dentistDayTimes));
+              dispatch(addDayTimeDentistToReduxToolkit(dentistDayTimes));
               dentistDayTimesRef.current.push(dentistDayTimes)
 
               let getClient = client => client.clientId === clientId
@@ -219,7 +220,7 @@ const Create150Appointments = () => {
                 time, 
                 treatmentType
               };
-              dispatch(addAppointment(newAppointmentObject));
+              dispatch(addAppointmentToReduxToolkit(newAppointmentObject));
                   
             } else {          
                 generateRandomAppointment();

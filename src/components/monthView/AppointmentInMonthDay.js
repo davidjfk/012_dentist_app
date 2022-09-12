@@ -11,7 +11,7 @@ import {deleteDentalAppointment, formatTime, generateAppointmentId, selectObject
 import {AppointmentInMonthDayStyled, AssistantInMonthDayAppointmentStyled, ClientInMonthDayAppointment, DentistInMonthDayAppointment, TimeInMonthViewStyled  } from './AppointmentInMonthDay.styled';
 import {StyledButtonInsideCalendarOrDayView} from '../styles/ButtonInsideCalendarOrDayView';
 
-export const AppointmentInMonthDay = ({day, time, client, clientId, dentistId, assistantId }) => {
+export const AppointmentInMonthDay = ({day, time, client, dentist, assistant, clientId, dentistId, assistantId }) => {
   let dispatch = useDispatch();
   let appointmentsfromReduxToolkit = useSelector((state) => state.appointment.appointments)
   let assistantsFromReduxToolkit  = useSelector((state) => state.assistant.assistants);
@@ -88,8 +88,8 @@ export const AppointmentInMonthDay = ({day, time, client, clientId, dentistId, a
           update appointment
         </StyledButtonInsideCalendarOrDayView>
         <ClientInMonthDayAppointment> client: {client} </ClientInMonthDayAppointment>
-        <DentistInMonthDayAppointment>dentist: {dentistId}</DentistInMonthDayAppointment> 
-        <AssistantInMonthDayAppointmentStyled>assistant: {assistantId}</AssistantInMonthDayAppointmentStyled> 
+        <DentistInMonthDayAppointment>dentist: {dentist}</DentistInMonthDayAppointment> 
+        <AssistantInMonthDayAppointmentStyled>assistant: {assistant}</AssistantInMonthDayAppointmentStyled> 
       
   </AppointmentInMonthDayStyled>
   );
