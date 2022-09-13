@@ -6,12 +6,12 @@ import {deleteDayTimeDentist} from "../../redux/dentistDayTimeSlice";
 import {deleteDayTimeAssistant} from "../../redux/assistantDayTimeSlice";
 import {disableUiControlsDuringAppointmentUpdate, saveAppointmentToReduxToolkit, showComponentUpdateAppointmentReduxToolkit} from '../../redux/updateAppointmentSlice';
 
-import {deleteDentalAppointment, formatTime, selectObjectsByArrayObjectKey, updateAppointment_Phase1of2_DisplayComponentUpdateAppointment } from "../../utils";
+import {deleteDentalAppointment, formatTime, getDayOfTheWeek, selectObjectsByArrayObjectKey, updateAppointment_Phase1of2_DisplayComponentUpdateAppointment } from "../../utils";
 
 import {AppointmentInDayStyled, AssistantInDayViewStyled, ClientInDayViewStyled, DayNrInDayViewStyled, DentistInDayViewStyled, TimeInDayViewStyled, TreatmentTypeStyled } from "./DayView.styled";
 import {StyledButtonInsideCalendarOrDayView} from '../styles/ButtonInsideCalendarOrDayView';
 
-export const AppointmentInDay = ({appointmentId, time, day, client, clientId, dentist, dentistId, assistant, assistantId, treatmentType }) => {
+export const AppointmentInDay = ({appointmentId, time, day, client, dentist, assistant, clientId, dentistId, assistantId, treatmentType }) => {
   let dispatch = useDispatch();
   let appointmentsfromReduxToolkit = useSelector((state) => state.appointment.appointments)
   let assistantsFromReduxToolkit  = useSelector((state) => state.assistant.assistants);
@@ -56,7 +56,7 @@ export const AppointmentInDay = ({appointmentId, time, day, client, clientId, de
   <AppointmentInDayStyled 
     style={{backgroundImage : colorToIndicateSickness}}>
     <TimeInDayViewStyled>{formatTime(time)}</TimeInDayViewStyled>
-    <DayNrInDayViewStyled>Day: {day}</DayNrInDayViewStyled>
+    <DayNrInDayViewStyled>{`day: ${day}, ${getDayOfTheWeek(day)}`}</DayNrInDayViewStyled>
     <ClientInDayViewStyled>Client: {client}</ClientInDayViewStyled>
     <TreatmentTypeStyled>{treatmentType}</TreatmentTypeStyled>
     <StyledButtonInsideCalendarOrDayView 

@@ -10,22 +10,18 @@ export const theme = {
       fontColor01: "black",
       fontColor02: "white", 
       fontColor03: "darkSalmon",
-  
       header01: "deepskyblue",
-  
       onHoverBackground01: "lightslategray",
       onHoverBackground02: "aquamarine",
-  
-      onHoverFontColor01: "greenyellow"
+      onHoverFontColor01: "white"
     },
     pointerEvents: "auto",
-    font: {
-        font01: "Helvetica"
-    },
     fontSize: {
           tiny: "0.5rem",
           small: "1rem",
+          smallMedium: "1.1rem",
           medium: "1.2rem",
+          mediumDefault: "1.3rem",
           default: "1.4rem",
           big: "1.9rem"
       }

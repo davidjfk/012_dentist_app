@@ -6,7 +6,7 @@ export const clientDayTimeSlice = createSlice({
     clientDayTimes: []  
   },
   reducers: {
-    addDayTimeClient: (state, action) => {
+    addDayTimeClientToReduxToolkit: (state, action) => {
       const stuffToSave = action.payload;
       state.clientDayTimes.push(stuffToSave);
     },
@@ -15,7 +15,7 @@ export const clientDayTimeSlice = createSlice({
       state.clientDayTimes.splice(indexOfClientDayTimeToDelete, 1)  
     }},
 })
-export const { addDayTimeClient, deleteDayTimeClient } = clientDayTimeSlice.actions;
+export const { addDayTimeClientToReduxToolkit, deleteDayTimeClient } = clientDayTimeSlice.actions;
 
 export default clientDayTimeSlice.reducer;    
 

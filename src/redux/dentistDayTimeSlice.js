@@ -6,7 +6,7 @@ export const dentistDayTimeSlice = createSlice({
     dentistDayTimes: []
   },
   reducers: {
-    addDayTimeDentist: (state, action) => {
+    addDayTimeDentistToReduxToolkit: (state, action) => {
       const stuffToSave = action.payload;
       state.dentistDayTimes.push(stuffToSave);
     },
@@ -15,7 +15,7 @@ export const dentistDayTimeSlice = createSlice({
       state.dentistDayTimes.splice(indexOfDentistDayTimeToDelete, 1)  
     }},
 })
-export const { addDayTimeDentist, deleteDayTimeDentist } = dentistDayTimeSlice.actions;
+export const { addDayTimeDentistToReduxToolkit, deleteDayTimeDentist } = dentistDayTimeSlice.actions;
 
 export default dentistDayTimeSlice.reducer;    
 
