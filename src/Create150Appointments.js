@@ -24,10 +24,10 @@ const Create150Appointments = () => {
         The bigger the nr, the bigger the chance that the automatically generated appointment requires the precence of an assistant.
     */
     const CONFIGNROFASSISTANTS = 2; 
-    const CONFIGNROFRANDOMLYGENERATEDAPPOINTMENTS = 350;
+    const CONFIGNROFRANDOMLYGENERATEDAPPOINTMENTS = 150;
     const CONFIGNROFCLIENTS = 50;
     const CONFIGNROFDENTISTS = 4; 
-    const CONFIGNROFDIFFERENTTREATMENTSASTHESKILLSOFADENTIST = 12;
+    const CONFIGNROFDIFFERENTTREATMENTSASTHESKILLSOFADENTIST = 6;
 
     const dispatch = useDispatch();
     let randomClients = useRef([]);
