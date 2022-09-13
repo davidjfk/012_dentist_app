@@ -1,5 +1,8 @@
 import React from "react";
 
+import {generateAppointmentId} from "../../utils";
+
+
 import { DayNrInMonth } from "./DayNrInMonth";
 import {AppointmentInMonthDay} from "./AppointmentInMonthDay";
 
@@ -23,7 +26,7 @@ export const DayInMonth = ({ appointments , dayNrInMonth}) => {
     key={index} />
   ));
   
-  appointmentsJSX.splice(0,0, <DayNrInMonth dayNrInMonth={dayNrInMonth} key={dayNrInMonth }/>)
+  appointmentsJSX.splice(0,0, <DayNrInMonth dayNrInMonth={dayNrInMonth} key={generateAppointmentId() }/>)
       
   return(
     <DayInMonthStyled>

@@ -6,9 +6,9 @@ import {deleteDayTimeDentist} from "../../redux/dentistDayTimeSlice";
 import {deleteDayTimeAssistant} from "../../redux/assistantDayTimeSlice";
 import {disableUiControlsDuringAppointmentUpdate, saveAppointmentToReduxToolkit, showComponentUpdateAppointmentReduxToolkit} from '../../redux/updateAppointmentSlice';
 
-import {deleteDentalAppointment, formatTime, generateAppointmentId, selectObjectsByArrayObjectKey, updateAppointment_Phase1of2_DisplayComponentUpdateAppointment } from "../../utils";
+import {deleteDentalAppointment, formatTime, generateAppointmentId, getDayOfTheWeek, selectObjectsByArrayObjectKey, updateAppointment_Phase1of2_DisplayComponentUpdateAppointment } from "../../utils";
 
-import {AppointmentInMonthDayStyled, AssistantInMonthDayAppointmentStyled, ClientInMonthDayAppointment, DentistInMonthDayAppointment, TimeInMonthViewStyled  } from './AppointmentInMonthDay.styled';
+import {AppointmentInMonthDayStyled, AssistantInMonthDayAppointmentStyled, ClientInMonthDayAppointment, DayInMonthViewStyled, DentistInMonthDayAppointment, TimeInMonthViewStyled  } from './AppointmentInMonthDay.styled';
 import {StyledButtonInsideCalendarOrDayView} from '../styles/ButtonInsideCalendarOrDayView';
 
 export const AppointmentInMonthDay = ({day, time, client, dentist, assistant, clientId, dentistId, assistantId }) => {
@@ -54,8 +54,10 @@ export const AppointmentInMonthDay = ({day, time, client, dentist, assistant, cl
   
   (assistantIsSick && clientIsSick && dentistIsSick) && (colorToIndicateSickness = "linear-gradient(45deg, #ffa500 16.67%, #ff0000 16.67%, #ff0000 33.33%, #c632d1 33.33%, #c632d1 50%, #ffa500 50%, #ffa500 66.67%, #ff0000 66.67%, #ff0000 83.33%, #c632d1 83.33%, #c632d1 100%)");
 
+
   return(
     <AppointmentInMonthDayStyled style={{backgroundImage : colorToIndicateSickness}}>
+        <DayInMonthViewStyled>{`day: ${day}, ${getDayOfTheWeek(day)}`}</DayInMonthViewStyled>
         <TimeInMonthViewStyled>{formatTime(time)}</TimeInMonthViewStyled>
         <StyledButtonInsideCalendarOrDayView 
           onClick={() => { deleteDentalAppointment(

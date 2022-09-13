@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import AppointmentUpdate from '../appointment/AppointmentUpdate';
 import {DayInMonth} from "./DayInMonth";
 
-import {ColorLegendaStyled, HeaderInMonthStyled, MonthViewStyled, OrangeStyled, PurpleStyled, RedStyled,  TableInMonthStyled} from './MonthView.styled';
+import {DayInHeaderInMonthStyled, HeaderInMonthStyled, LegendaTableStyled, MonthViewStyled, OrangeStyled, PurpleStyled, RedStyled,  TableInMonthStyled} from './MonthView.styled';
 
 const divideByDay = appointments => {
   const appointmentsByDay = {};
@@ -119,11 +119,22 @@ export const Calendar = ( {appointments} ) => {
         {isNowUpdatingAppointment ? 
         <>
           <AppointmentUpdate/>
-          <ColorLegendaStyled>
-            <OrangeStyled>orange = assistant is ill</OrangeStyled>  
-            <PurpleStyled className="purple">purple = client is ill</PurpleStyled>  
-            <RedStyled className="red">red = dentist is ill</RedStyled>  
-          </ColorLegendaStyled>
+          <LegendaTableStyled>
+             <tbody>
+                <tr>
+                    <OrangeStyled>orange</OrangeStyled>
+                    <td>assistant is ill</td>
+                </tr>
+                <tr>
+                    <RedStyled>red</RedStyled>
+                    <td>dentist is ill</td>
+                </tr>
+                <tr>
+                    <PurpleStyled>purple</PurpleStyled>
+                    <td>client is ill</td>
+                </tr>
+              </tbody>
+          </LegendaTableStyled>
           <MonthViewStyled>
             <HeaderInMonthStyled>
               <div>Monday</div>
@@ -137,18 +148,29 @@ export const Calendar = ( {appointments} ) => {
         </>
         :
         <>
-          <ColorLegendaStyled>
-            <OrangeStyled>orange = assistant is ill</OrangeStyled>  
-            <PurpleStyled className="purple">purple = client is ill</PurpleStyled>  
-            <RedStyled className="red">red = dentist is ill</RedStyled>  
-          </ColorLegendaStyled>
+          <LegendaTableStyled>
+              <tbody>
+                <tr>
+                    <OrangeStyled>orange</OrangeStyled>
+                    <td>assistant is ill</td>
+                </tr>
+                <tr>
+                    <RedStyled>red</RedStyled>
+                    <td>dentist is ill</td>
+                </tr>
+                <tr>
+                    <PurpleStyled>purple</PurpleStyled>
+                    <td>client is ill</td>
+                </tr>
+              </tbody>
+          </LegendaTableStyled>
           <MonthViewStyled>
             <HeaderInMonthStyled>
-              <div>Monday</div>
-              <div>Tuesday</div>
-              <div>Wednesday</div>
-              <div>Thursday</div>
-              <div>Friday</div>
+              <DayInHeaderInMonthStyled>Monday</DayInHeaderInMonthStyled>
+              <DayInHeaderInMonthStyled>Tuesday</DayInHeaderInMonthStyled>
+              <DayInHeaderInMonthStyled>Wednesday</DayInHeaderInMonthStyled>
+              <DayInHeaderInMonthStyled>Thursday</DayInHeaderInMonthStyled>
+              <DayInHeaderInMonthStyled>Friday</DayInHeaderInMonthStyled>
             </HeaderInMonthStyled>
             { daysInMonthJSX.length !== 0 ? <TableInMonthStyled>{daysInMonthJSX}</TableInMonthStyled> : <>No appointments upcoming month.</>}
           </MonthViewStyled>

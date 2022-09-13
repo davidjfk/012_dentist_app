@@ -19,12 +19,12 @@ getClientId
 getDentistId
 getArrayObjectWithObjectKeyValuePair
 getNrOfRandomElementsFromArray
-getRandomDay
+getDayOfTheWeek
 getNrOfRandomElementsFromArray
+getRandomDay
 getRandomName
 getRandomPaymentMethod
 getRandomPersonId
-getRandomPersons
 getRandomUniqueObjectsFromArray
 getRandomTime
 getRandomTreatmentForRandomAppointment
@@ -375,6 +375,42 @@ export const getArrayObjectWithObjectKeyValuePair = (arrayObjectPropertyKeyToFil
 }
 
 
+export const getDayOfTheWeek = (dayNumber) => {
+  if (dayNumber === ""){ 
+    return
+  } else {
+    dayNumber = parseInt(dayNumber);
+    let dayOfTheWeek;
+    if ([1, 8, 15, 22].includes(dayNumber)) {
+        dayOfTheWeek = 'Monday';
+    } else if ([2, 9, 16, 23].includes(dayNumber)) {
+        dayOfTheWeek = 'Tuesday';
+    } else if ([3, 10, 17, 24].includes(dayNumber)) {
+        dayOfTheWeek = 'Wednesday';
+    } else if ([4, 11, 18, 25].includes(dayNumber)) {
+        dayOfTheWeek = 'Thursday';
+    } else if ([5, 12, 19, 26].includes(dayNumber)) {
+        dayOfTheWeek = 'Friday';
+    } else { console.error(`fn getDayOfTheWeek: dayNumber ${dayNumber} is incorrect. Please investigate.`)
+    }
+    return dayOfTheWeek;
+  }
+}
+
+
+export const getNrOfRandomElementsFromArray = (array, nrOfArrayElements = 8) => {
+  let arrayWithSelectedElements = [];
+
+  for (let i = 0; i < nrOfArrayElements ; i++) {
+    let randomElementFromArray = array[Math.floor(Math.random() * array.length)]; 
+    if (!arrayWithSelectedElements.includes(randomElementFromArray)){
+      arrayWithSelectedElements.push(randomElementFromArray)
+    }
+  }
+  return arrayWithSelectedElements.sort();
+};
+
+
 export const getRandomDay = () => {
   // meets winc-requirement: The practice is closed on the weekend.
   let randomDay = 6;
@@ -389,20 +425,6 @@ export const getRandomDay = () => {
   }
   return randomDay
 }
- 
-
-export const getNrOfRandomElementsFromArray = (array, nrOfArrayElements = 8) => {
-  let arrayWithSelectedElements = [];
-
-  for (let i = 0; i < nrOfArrayElements ; i++) {
-    let randomElementFromArray = array[Math.floor(Math.random() * array.length)]; 
-    if (!arrayWithSelectedElements.includes(randomElementFromArray)){
-      arrayWithSelectedElements.push(randomElementFromArray)
-    }
-  }
-  return arrayWithSelectedElements.sort();
-};
-
 
 export const getRandomName = (personCategoryInCompanyBVT) => {
   const person = personCategoryInCompanyBVT[Math.floor(Math.random() * personCategoryInCompanyBVT.length)];
@@ -421,18 +443,6 @@ export const getRandomPersonId = (personCategoryInCompanyBVT, typeOfPersonId) =>
     console.error(`check fn gerRandomPersonId for array: ${personCategoryInCompanyBVT} with typeOfPersonId: ${typeOfPersonId}`)
   }
 }
-
-
-export const xxgetRandomPersons = (personCategoryInCompanyBVT, nrOfPersons) => {
-  let randomPersons = [];
-  for (let i = 0; i < nrOfPersons; i++) {
-    let randomPerson = personCategoryInCompanyBVT[Math.floor(Math.random() * personCategoryInCompanyBVT.length)];
-    randomPersons.push(randomPerson)
-  };
-  return randomPersons;
-};
-
-
 
 
 export const getRandomUniqueObjectsFromArray = (array, nrOfObjectsToSelectFromArray) => {

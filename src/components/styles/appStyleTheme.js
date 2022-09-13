@@ -19,7 +19,9 @@ export const theme = {
     fontSize: {
           tiny: "0.5rem",
           small: "1rem",
+          smallMedium: "1.1rem",
           medium: "1.2rem",
+          mediumDefault: "1.3rem",
           default: "1.4rem",
           big: "1.9rem"
       }

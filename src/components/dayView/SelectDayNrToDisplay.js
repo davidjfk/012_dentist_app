@@ -5,10 +5,12 @@ import {saveLastSelectedDayInDayView } from '../../redux/saveLastSelectedDayInDa
 
 import listOfValidWorkingDayNumbersInNextMonth from '../../dataInDentistAppWhenDentistAppStarts/listOfValidWorkingDayNumbersInNextMonth';
 
+import {getDayOfTheWeek} from '../../utils';
+
 import AppointmentUpdate from '../appointment/AppointmentUpdate';
 import {Day} from "./Day"; 
 
-import {ColorOrange, ColorPurple, ColorRed, SelectDayNrToDisplayStyled, FlexboxAreaStyled, Header, BoxAroundSelectBox, LegendaStyled } from "./DayView.styled";
+import {DayWordBeneathSelectBoxStyled, LegendaTableStyled, OrangeStyled, PurpleStyled, RedStyled, SelectDayNrToDisplayStyled, FlexboxAreaStyled, Header, BoxAroundSelectBox} from "./DayView.styled";
 import {StyledSelectbox} from '../styles/Selectbox.styled';
 
 
@@ -64,12 +66,26 @@ export const SelectDayNrToDisplay = ({appointments}) => {
                                         return (<option key={item.value} value={item.value}>{item.text}</option>);
                                     })}   
                                 </StyledSelectbox>
+                                <DayWordBeneathSelectBoxStyled>
+                                {getDayOfTheWeek(day)}
+                                </DayWordBeneathSelectBoxStyled>                                
                             </BoxAroundSelectBox> 
-                            <LegendaStyled>
-                                    <ColorOrange>orange: assistant is ill</ColorOrange>  
-                                    <ColorPurple>purple: client is ill</ColorPurple>  
-                                    <ColorRed>red: dentist is ill</ColorRed>   
-                            </LegendaStyled>
+                            <LegendaTableStyled>
+                                <tbody>
+                                    <tr>
+                                        <OrangeStyled>orange</OrangeStyled>
+                                        <td>assistant is ill</td>
+                                    </tr>
+                                    <tr>
+                                        <RedStyled>red</RedStyled>
+                                        <td>dentist is ill</td>
+                                    </tr>
+                                    <tr>
+                                        <PurpleStyled>purple</PurpleStyled>
+                                        <td>client is ill</td>
+                                    </tr>
+                                </tbody>
+                            </LegendaTableStyled>
                         </FlexboxAreaStyled> 
                 </SelectDayNrToDisplayStyled>  
             <AppointmentUpdate/>
@@ -92,12 +108,26 @@ export const SelectDayNrToDisplay = ({appointments}) => {
                                     return (<option key={item.value} value={item.value}>{item.text}</option>);
                                 })}   
                             </StyledSelectbox>
+                            <DayWordBeneathSelectBoxStyled>
+                                {getDayOfTheWeek(day)}
+                            </DayWordBeneathSelectBoxStyled>
                         </BoxAroundSelectBox>
-                        <LegendaStyled>
-                                <ColorOrange>orange: assistant is ill</ColorOrange>  
-                                <ColorPurple>purple: client is ill</ColorPurple>  
-                                <ColorRed>red: dentist is ill</ColorRed>  
-                        </LegendaStyled> 
+                        <LegendaTableStyled>
+                            <tbody>
+                                <tr>
+                                    <OrangeStyled>orange</OrangeStyled>
+                                    <td>assistant is ill</td>
+                                </tr>
+                                <tr>
+                                    <RedStyled>red</RedStyled>
+                                    <td>dentist is ill</td>
+                                </tr>
+                                <tr>
+                                    <PurpleStyled>purple</PurpleStyled>
+                                    <td>client is ill</td>
+                                </tr>
+                            </tbody>
+                        </LegendaTableStyled>
                     </FlexboxAreaStyled>
                 </SelectDayNrToDisplayStyled>  
 

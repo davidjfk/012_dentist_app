@@ -6,7 +6,7 @@ import {deleteDayTimeDentist} from "../../redux/dentistDayTimeSlice";
 import {deleteDayTimeAssistant} from "../../redux/assistantDayTimeSlice";
 import {disableUiControlsDuringAppointmentUpdate, saveAppointmentToReduxToolkit, showComponentUpdateAppointmentReduxToolkit} from '../../redux/updateAppointmentSlice';
 
-import {deleteDentalAppointment, formatTime, selectObjectsByArrayObjectKey, updateAppointment_Phase1of2_DisplayComponentUpdateAppointment } from "../../utils";
+import {deleteDentalAppointment, formatTime, getDayOfTheWeek, selectObjectsByArrayObjectKey, updateAppointment_Phase1of2_DisplayComponentUpdateAppointment } from "../../utils";
 
 import {AppointmentInDayStyled, AssistantInDayViewStyled, ClientInDayViewStyled, DayNrInDayViewStyled, DentistInDayViewStyled, TimeInDayViewStyled, TreatmentTypeStyled } from "./DayView.styled";
 import {StyledButtonInsideCalendarOrDayView} from '../styles/ButtonInsideCalendarOrDayView';
@@ -56,7 +56,7 @@ export const AppointmentInDay = ({appointmentId, time, day, client, dentist, ass
   <AppointmentInDayStyled 
     style={{backgroundImage : colorToIndicateSickness}}>
     <TimeInDayViewStyled>{formatTime(time)}</TimeInDayViewStyled>
-    <DayNrInDayViewStyled>Day: {day}</DayNrInDayViewStyled>
+    <DayNrInDayViewStyled>{`day: ${day}, ${getDayOfTheWeek(day)}`}</DayNrInDayViewStyled>
     <ClientInDayViewStyled>Client: {client}</ClientInDayViewStyled>
     <TreatmentTypeStyled>{treatmentType}</TreatmentTypeStyled>
     <StyledButtonInsideCalendarOrDayView 
