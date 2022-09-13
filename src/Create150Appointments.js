@@ -23,11 +23,11 @@ const Create150Appointments = () => {
     /*  value between 0 (included) and 1 (included). 
         The bigger the nr, the bigger the chance that the automatically generated appointment requires the precence of an assistant.
     */
-    const CONFIGNROFASSISTANTS = 2; 
+    const CONFIGNROFASSISTANTS = 2;  //min: 1 , max: 100
     const CONFIGNROFRANDOMLYGENERATEDAPPOINTMENTS = 150;
-    const CONFIGNROFCLIENTS = 50;
-    const CONFIGNROFDENTISTS = 4; 
-    const CONFIGNROFDIFFERENTTREATMENTSASTHESKILLSOFADENTIST = 6;
+    const CONFIGNROFCLIENTS = 50; //min: 1 , max: 900
+    const CONFIGNROFDENTISTS = 4; //min: 1 , max: 100
+    const CONFIGNROFDIFFERENTTREATMENTSASTHESKILLSOFADENTIST = 6;  //min: 1 , max: 12
 
     const dispatch = useDispatch();
     let randomClients = useRef([]);
