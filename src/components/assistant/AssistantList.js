@@ -14,26 +14,43 @@ const AssistantList = () => {
     const { assistants } = useSelector((state) => state.assistant);
     
     const [personObjectKeyToSortArrayWithPersons, setPersonObjectKeyToSortArrayWithPersons] = useState('');
-    const [dataToRenderFromUseEffectPipeline, setDataToRenderFromUseEffectPipeline] = useState([]);
     const [healthStatusToFilterWith, setHealthStatusToFilterWith] = useState([""]);
     const [skillLevelToFilterWith, setSkillLevelToFilterWith] = useState([""]);
+    const [dataToRenderFromUseEffectPipeline, setDataToRenderFromUseEffectPipeline] = useState([]);
+    const [isHovering, setIsHovering] = useState(false);
 
-    const sortAssistantList = (assistants, JsxSelectBoxAttributeValue) => {
-        if (!JsxSelectBoxAttributeValue) {
+
+    const handleFilterHealthStatusChange = (event) => {    
+        let value = Array.from(
+            event.target.selectedOptions, (option) => option.value
+        )   
+        setHealthStatusToFilterWith(value);
+    };
+    
+    const handleFilterSkillLevelChange = (event) => {
+        let value = Array.from(
+            event.target.selectedOptions, (option) => option.value
+        )   
+        setSkillLevelToFilterWith(value);
+    };
+
+    const sortAssistantList = (assistants, sortCriteriaFromSelectboxAsSpaceSeparatedString) => {
+        if (!sortCriteriaFromSelectboxAsSpaceSeparatedString) {
             return assistants;
         }  
-        let JsxSelectBoxAttributeValueAsArray = JsxSelectBoxAttributeValue.split(' ');
-        let personObjectKey = JsxSelectBoxAttributeValueAsArray[0];
-        let isAscending = JsxSelectBoxAttributeValueAsArray[1] === "ascending" ? true : false;
+       
+        let sortCriteriaFromSelectboxAsArray = sortCriteriaFromSelectboxAsSpaceSeparatedString.split(' ');
+        let personObjectKey = sortCriteriaFromSelectboxAsArray[0];
+        let isAscending = sortCriteriaFromSelectboxAsArray[1] === "ascending" ? true : false;
 
-        const assistantObjectSortCriteriaToSortInUISelectBox = {
+        const lookupTable = {
             assistantId: 'assistantId', 
             firstName: 'firstName', 
             isSick: 'isSick', 
             skillLevel: 'skillLevel' 
         };
 
-        const sortProperty = assistantObjectSortCriteriaToSortInUISelectBox[personObjectKey];  
+        const sortProperty = lookupTable[personObjectKey];  
         let sortedPersons;
         if (!isAscending && (sortProperty === "skillLevel" || sortProperty === ""))  {
             sortedPersons = [...assistants].sort((person1, person2) => person1[sortProperty].localeCompare(person2[sortProperty], 'en', { ignorePunctuation: true }));
@@ -54,19 +71,6 @@ const AssistantList = () => {
         }
     };
     
-    const handleFilterHealthStatusChange = (event) => {    
-        let value = Array.from(
-            event.target.selectedOptions, (option) => option.value
-        )   
-        setHealthStatusToFilterWith(value);
-    };
-    
-    const handleFilterSkillLevelChange = (event) => {
-        let value = Array.from(
-            event.target.selectedOptions, (option) => option.value
-        )   
-        setSkillLevelToFilterWith(value);
-    };
     
     const filterByHealthStatus = (filteredData, healthStatusToFilterWith) => {
         let arrayFilteredOnAllCriteria = [];              
@@ -115,7 +119,6 @@ const AssistantList = () => {
     );
 
 
-    const [isHovering, setIsHovering] = useState(false);
 
     const handleMouseOver = () => {
       setIsHovering(true);
@@ -233,3 +236,6 @@ const AssistantList = () => {
 }
 
 export default AssistantList;
+
+
+ 
