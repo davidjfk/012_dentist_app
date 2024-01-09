@@ -11,34 +11,46 @@ import {ClientListAreaStyled, ClientListStyled, Column, FormControlArea, Headers
 import {StyledSelectbox} from '../styles/Selectbox.styled';
 
 
-
-const log = console.log;
-
 const ClientList = () => {
     const { clients } = useSelector((state) => state.client);
     
     const [personObjectKeyToSortArrayWithPersons, setPersonObjectKeyToSortArrayWithPersons] = useState('');
-    const [dataToRenderFromUseEffectPipeline, setDataToRenderFromUseEffectPipeline] = useState([]);
     const [healthStatusToFilterWith, setHealthStatusToFilterWith] = useState([""]);
     const [paymentMethodToFilterWith, setSkillLevelToFilterWith] = useState([""]);
+    const [dataToRenderFromUseEffectPipeline, setDataToRenderFromUseEffectPipeline] = useState([]);
+    const [isHovering, setIsHovering] = useState(false);
 
-    const sortAssistantList = (clients, JsxSelectBoxAttributeValue) => {
-        if (!JsxSelectBoxAttributeValue) {
+    const handleFilterHealthStatusChange = (event) => {    
+        let value = Array.from(
+            event.target.selectedOptions, (option) => option.value
+        )   
+        setHealthStatusToFilterWith(value);
+    };
+    
+    const handleFilterPaymentMethodlChange = (event) => {
+        let value = Array.from(
+            event.target.selectedOptions, (option) => option.value
+        )   
+        setSkillLevelToFilterWith(value);
+    };
+
+
+    const sortAssistantList = (clients, sortCriteriaFromSelectboxAsSpaceSeparatedString) => {
+        if (!sortCriteriaFromSelectboxAsSpaceSeparatedString) {
             return clients;
         }  
-        let JsxSelectBoxAttributeValueAsArray = JsxSelectBoxAttributeValue.split(' ');
-        let personObjectKey = JsxSelectBoxAttributeValueAsArray[0];
-        let isAscending = JsxSelectBoxAttributeValueAsArray[1] === "ascending" ? true : false;
-        log(`isAscending: ${isAscending}`)
+        let sortCriteriaFromSelectboxAsArray = sortCriteriaFromSelectboxAsSpaceSeparatedString.split(' ');
+        let personObjectKey = sortCriteriaFromSelectboxAsArray[0];
+        let isAscending = sortCriteriaFromSelectboxAsArray[1] === "ascending" ? true : false;
 
-        const clientObjectSortCriteriaToSortInUISelectBox = {
+        const lookupTable = {
             clientId: 'clientId',
             firstName: 'firstName',
             isSick: 'isSick',
             paymentMethod: 'paymentMethod'
         };
 
-        const sortProperty = clientObjectSortCriteriaToSortInUISelectBox[personObjectKey];  
+        const sortProperty = lookupTable[personObjectKey];  
         let sortedPersons;
         if (!isAscending && (sortProperty === "paymentMethod" || sortProperty === ""))  {
             sortedPersons = [...clients].sort((person1, person2) => person1[sortProperty].localeCompare(person2[sortProperty], 'en', { ignorePunctuation: true }));
@@ -59,19 +71,7 @@ const ClientList = () => {
         }
     };
 
-    const handleFilterHealthStatusChange = (event) => {    
-        let value = Array.from(
-            event.target.selectedOptions, (option) => option.value
-        )   
-        setHealthStatusToFilterWith(value);
-    };
-    
-    const handleFilterPaymentMethodlChange = (event) => {
-        let value = Array.from(
-            event.target.selectedOptions, (option) => option.value
-        )   
-        setSkillLevelToFilterWith(value);
-    };
+
     
     const filterByHealthStatus = (filteredData, healthStatusToFilterWith) => {
         let arrayFilteredOnAllCriteria = [];              
@@ -119,8 +119,6 @@ const ClientList = () => {
         [personObjectKeyToSortArrayWithPersons, paymentMethodToFilterWith, healthStatusToFilterWith, clients]
     );
 
-
-    const [isHovering, setIsHovering] = useState(false);
 
     const handleMouseOver = () => {
       setIsHovering(true);

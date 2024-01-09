@@ -15,46 +15,10 @@ const AppointmentList = () => {
     const { appointments } = useSelector((state) => state.appointment);
     
     const [appointmentObjectKeyToSortArrayWithAppointments, setAppointmentObjectKeyToSortArrayWithAppointments] = useState('');
-    const [dataToRenderFromUseEffectPipeline, setDataToRenderFromUseEffectPipeline] = useState([]);
     const [treatmentTypesToFilterWith, setTreatmentTypesToFilterWith] = useState([""]);
     const [priorityLevelToFilterWith, setPriorityLevelToFilterWith] = useState([""]);
-
-
-    const sortAppointmentList = (appointments, JsxSelectBoxAttributeValue) => {
-        if (!JsxSelectBoxAttributeValue) {
-            return appointments;
-        }  
-        let JsxSelectBoxAttributeValueAsArray = JsxSelectBoxAttributeValue.split(' ');
-        let personObjectKey = JsxSelectBoxAttributeValueAsArray[0];
-        let isAscending = JsxSelectBoxAttributeValueAsArray[1] === "ascending" ? true : false;
-
-        const appointmentObjectSortCriteriaToSortInUISelectBox = {
-            appointmentId: 'appointmentId',
-            dentistId: 'dentistId',
-            priorityLevel: 'appointmentPriority',
-            treatmentType: 'treatmentType'
-        };
-
-        const sortProperty = appointmentObjectSortCriteriaToSortInUISelectBox[personObjectKey];  
-        let sortedPersons;
-        if (!isAscending && (sortProperty === "appointmentPriority" || sortProperty === ""))  {
-            sortedPersons = [...appointments].sort((person1, person2) => person1[sortProperty].localeCompare(person2[sortProperty], 'en', { ignorePunctuation: true }));
-            return sortedPersons.reverse();
-        } else if (isAscending && (sortProperty === "appointmentPriority" || sortProperty === ""))  {
-            sortedPersons = [...appointments].sort((person1, person2) => person1[sortProperty].localeCompare(person2[sortProperty], 'en', { ignorePunctuation: true }));
-            return sortedPersons;
-        } else if (isAscending && (sortProperty === "appointmentId" || sortProperty === "dentistId" || sortProperty === "treatmentType")) {
-            sortedPersons = [...appointments].sort((person1, person2) => person1[sortProperty].localeCompare(person2[sortProperty], 'en', { ignorePunctuation: true }));
-            return sortedPersons;
-            // I choose 'en' as  the unicodeLanguage.
-            // unicode allows user to enter any kind of character.
-        } else if (!isAscending && (sortProperty === "appointmentId" || sortProperty === "dentistId" || sortProperty === "treatmentType")) {
-                sortedPersons = [...appointments].sort((person1, person2) => person1[sortProperty].localeCompare(person2[sortProperty], 'en', { ignorePunctuation: true }));
-                return sortedPersons.reverse();
-        } else {
-            console.error(`component AppointmentInAppointmentList: not possible to sort with datatype ${typeof(sortProperty)}. Please investigate. `)
-        }
-    };
+    const [dataToRenderFromUseEffectPipeline, setDataToRenderFromUseEffectPipeline] = useState([]);
+    const [isHovering, setIsHovering] = useState(false);
 
     const handleFilterTreatmentTypeChange = (event) => {    
         let value = Array.from(
@@ -69,7 +33,44 @@ const AppointmentList = () => {
         )   
         setPriorityLevelToFilterWith(value);
     };
-    
+
+
+    const sortAppointmentList = (appointments, sortCriteriaFromSelectboxAsSpaceSeparatedString) => {
+        if (!sortCriteriaFromSelectboxAsSpaceSeparatedString) {
+            return appointments;
+        }  
+        let sortCriteriaFromSelectboxAsArray = sortCriteriaFromSelectboxAsSpaceSeparatedString.split(' ');
+        let personObjectKey = sortCriteriaFromSelectboxAsArray[0];
+        let isAscending = sortCriteriaFromSelectboxAsArray[1] === "ascending" ? true : false;
+
+        const lookupTable = {
+            appointmentId: 'appointmentId',
+            dentistId: 'dentistId',
+            priorityLevel: 'appointmentPriority',
+            treatmentType: 'treatmentType'
+        };
+
+        const sortProperty = lookupTable[personObjectKey];  
+        let sortedAppointments;
+        if (!isAscending && (sortProperty === "appointmentPriority" || sortProperty === ""))  {
+            sortedAppointments = [...appointments].sort((person1, person2) => person1[sortProperty].localeCompare(person2[sortProperty], 'en', { ignorePunctuation: true }));
+            return sortedAppointments.reverse();
+        } else if (isAscending && (sortProperty === "appointmentPriority" || sortProperty === ""))  {
+            sortedAppointments = [...appointments].sort((person1, person2) => person1[sortProperty].localeCompare(person2[sortProperty], 'en', { ignorePunctuation: true }));
+            return sortedAppointments;
+        } else if (isAscending && (sortProperty === "appointmentId" || sortProperty === "dentistId" || sortProperty === "treatmentType")) {
+            sortedAppointments = [...appointments].sort((person1, person2) => person1[sortProperty].localeCompare(person2[sortProperty], 'en', { ignorePunctuation: true }));
+            return sortedAppointments;
+            // I choose 'en' as  the unicodeLanguage.
+            // unicode allows user to enter any kind of character.
+        } else if (!isAscending && (sortProperty === "appointmentId" || sortProperty === "dentistId" || sortProperty === "treatmentType")) {
+                sortedAppointments = [...appointments].sort((person1, person2) => person1[sortProperty].localeCompare(person2[sortProperty], 'en', { ignorePunctuation: true }));
+                return sortedAppointments.reverse();
+        } else {
+            console.error(`component AppointmentInAppointmentList: not possible to sort with datatype ${typeof(sortProperty)}. Please investigate. `)
+        }
+    };
+
 
     const filterByTreatmentTypes = (filteredData, treatmentTypesToFilterWith) => {
         let arrayFilteredOnAllCriteria = [];              
@@ -118,7 +119,6 @@ const AppointmentList = () => {
     );
 
 
-    const [isHovering, setIsHovering] = useState(false);
 
     const handleMouseOver = () => {
       setIsHovering(true);

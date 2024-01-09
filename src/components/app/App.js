@@ -30,7 +30,7 @@ const App = ()  => {
           <NavigationStyled>
               <ul className="navBar">  
                 <StyledNavLink>
-                  <Link to="/">Calendar view</Link>
+                  <Link exact to="/">Calendar view</Link>
                 </StyledNavLink>
                 <StyledNavLink>
                   <Link to="/day">Day view</Link>
@@ -49,7 +49,7 @@ const App = ()  => {
                 </StyledNavLink>
               </ul>
               <Switch>
-                <Route path="/client">  
+                <Route exact path="/client">  
                   <Client  />
                 </Route>
                 <Route path="/assistant">  
